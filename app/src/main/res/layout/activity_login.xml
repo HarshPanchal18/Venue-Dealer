@@ -87,14 +87,27 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginbtn"
+        style="@style/ButtonGrey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15sp"
+        android:layout_marginBottom="128dp"
         android:text="@string/btnlogin"
-        style="@style/ButtonGrey"
         app:layout_constraintBottom_toTopOf="@+id/tv_havent_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/googlesignbtn"
+        style="@style/ButtonGreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Sign in with    "
+        android:paddingHorizontal="20dp"
+        android:drawableEnd="@drawable/common_google_signin_btn_icon_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginbtn" />
 
     <TextView
         android:id="@+id/tv_havent_account"

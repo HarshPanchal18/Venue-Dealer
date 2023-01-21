@@ -17,9 +17,14 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
         auth=FirebaseAuth.getInstance()
 
+        val mail=intent.getStringExtra("email")
+        val displayname=intent.getStringExtra("name")
+
+        account_name.text="$mail"+"\n"+"$displayname"
+
         logoutbtn.setOnClickListener {
             auth.signOut()
-            Intent(this,LoginActivity::class.java).also {
+            Intent(this,MainActivity::class.java).also {
                 it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(it)
                 Toast.makeText(this,"Logged out Successfully", Toast.LENGTH_SHORT).show()

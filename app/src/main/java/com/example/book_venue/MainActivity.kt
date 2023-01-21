@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
         auth= FirebaseAuth.getInstance()
+
         val user=auth.currentUser
 
         if(user!=null)

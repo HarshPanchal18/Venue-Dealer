@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "768845446130-sb4hudg195jbnfofedev8bag0jgfe9d8.apps.googleusercontent.com",
+          "client_id": "768845446130-4bg5l04tccqhppbtbimtjj4gtqkrhlpt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.book_venue",
+            "certificate_hash": "cf4ad2cd6c2861324fb60c82763ecfb2316e3d4c"
+          }
+        },
+        {
+          "client_id": "768845446130-jn044dm1ueucghkrertbgv2427htsar5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "768845446130-sb4hudg195jbnfofedev8bag0jgfe9d8.apps.googleusercontent.com",
+              "client_id": "768845446130-jn044dm1ueucghkrertbgv2427htsar5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
