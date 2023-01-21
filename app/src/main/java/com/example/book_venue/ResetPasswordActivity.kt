@@ -19,6 +19,7 @@ class ResetPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)
 
+        supportActionBar?.hide()
         auth=FirebaseAuth.getInstance()
 
         val emailStream= RxTextView.textChanges(et_mail)

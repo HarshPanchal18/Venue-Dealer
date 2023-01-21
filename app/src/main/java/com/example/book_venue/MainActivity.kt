@@ -13,8 +13,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportActionBar?.hide()
         auth= FirebaseAuth.getInstance()
         val user=auth.currentUser
+
         if(user!=null)
             startActivity(Intent(this,HomeActivity::class.java))
 

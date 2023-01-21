@@ -20,6 +20,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        supportActionBar?.hide()
         // Authentication
         auth=FirebaseAuth.getInstance()
 
@@ -97,10 +98,25 @@ class RegisterActivity : AppCompatActivity() {
                 if(it.isSuccessful){
                     startActivity(Intent(this,LoginActivity::class.java))
                     Toast.makeText(this,"Registered Successfully",Toast.LENGTH_SHORT).show()
+                    sendMailVerification()
                 } else {
                     Toast.makeText(this,it.exception?.message,Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    private fun sendMailVerification() {
+        val user=auth.currentUser
+        if(user!=null){
+            user.sendEmailVerification().addOnCompleteListener {
+                Toast.makeText(applicationContext,"Verification mail is sent, verify and login again",Toast.LENGTH_SHORT).show()
+                auth.signOut()
+                finish()
+                startActivity(Intent(this,LoginActivity::class.java))
+            }
+        } else {
+            Toast.makeText(applicationContext,"Failed to sent mail",Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun showNameExistAlert(isNotValid:Boolean) {

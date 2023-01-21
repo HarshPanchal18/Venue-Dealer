@@ -29,7 +29,7 @@
         android:id="@+id/databtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/show_data"
+        android:text="@string/add_venue"
         style="@style/ButtonGreen"
         android:layout_marginTop="15sp" />
 

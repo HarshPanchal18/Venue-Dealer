@@ -48,5 +48,6 @@
     <string name="first_name">First Name</string>
     <string name="venue_address">Enter venue address</string>
     <string name="venue_name">Enter venue name</string>
+    <string name="add_venue">Add Venue</string>
 
 </resources>
