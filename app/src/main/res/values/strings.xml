@@ -49,5 +49,20 @@
     <string name="venue_address">Enter venue address</string>
     <string name="venue_name">Enter venue name</string>
     <string name="add_venue">Add Venue</string>
+    <string name="dealer_contact_number">Enter your Contact number</string>
 
+    <string-array name="cities">
+        <item>Surat</item>
+        <item>Vadodara</item>
+        <item>Ahmedabad</item>
+        <item>Valsad</item>
+        <item>Navsari</item>
+        <item>Bharuch</item>
+    </string-array>
+
+    <string-array name="states">
+        <item>Gujarat</item>
+        <item>Maharashtra</item>
+        <item>Rajasthan</item>
+    </string-array>
 </resources>

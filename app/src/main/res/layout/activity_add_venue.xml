@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,41 +14,128 @@
         android:lines="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:inputType="text"
+        android:maxLines="1"/>
 
     <EditText
         android:id="@+id/venueLocation"
-        android:hint="@string/venue_address"
-        android:maxLines="5"
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_marginTop="10dp"
-        android:text="Your venue will be available for:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/venueTitle"
+        android:inputType="text"
+        android:layout_marginTop="20dp"
+        android:hint="@string/venue_address"
+        android:maxLines="1" />
 
     <LinearLayout
+        android:id="@+id/cityState"
+        android:layout_below="@id/venueLocation"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dropCity"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="City"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autocompleteCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="none"
+                    android:paddingVertical="16dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dropState"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="State"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autocompleteState"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="none"
+                    android:paddingVertical="16dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/dealerPhNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cityState"
+        android:layout_marginTop="20dp"
+        android:hint="@string/dealer_contact_number"
+        android:inputType="phone"
+        android:maxLines="5" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dealerPhNo"
+        android:layout_marginTop="10dp"
+        android:text="Your venue will be available for:"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/venueTypes"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        android:layout_below="@id/dealerPhNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <CheckBox
+        android:id="@+id/convHall"
         android:text="Convention Hall"
         android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <CheckBox
+        android:id="@+id/wedding"
         android:text="Wedding"
         android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <CheckBox
+        android:id="@+id/festivity"
         android:text="Festivity"
         android:layout_weight="1"
         android:layout_width="wrap_content"
@@ -56,75 +143,66 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:id="@+id/venueTypes1"
         android:orientation="horizontal"
+        android:layout_below="@id/venueTypes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     <CheckBox
+        android:id="@+id/exhibition"
         android:text="Exhibition"
         android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <CheckBox
+        android:id="@+id/sports"
         android:text="Sports"
         android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <CheckBox
+        android:id="@+id/party"
         android:text="Party"
         android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <EditText
+        android:id="@+id/venueCapacity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <TextView
-        android:layout_marginTop="10dp"
-        android:text="Venue capacity:"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-        <RadioGroup
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <RadioButton
-                android:layout_weight="1"
-                android:text="less than 500"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <RadioButton
-                android:layout_weight="1"
-                android:text="500-1000"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <RadioButton
-                android:layout_weight="1"
-                android:text="more than 1000"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </RadioGroup>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/venueTypes1"
+        android:inputType="number"
+        android:hint="Enter venue capacity (in People)" />
 
     <LinearLayout
+        android:id="@+id/availableLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/venueCapacity">
+
         <TextView
-            android:text="Day/Time Availability:"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Day/Time Availability:" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:layout_marginStart="12dp"
+            android:id="@+id/dayTimeAvailability"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" />
     </LinearLayout>
 
-</LinearLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/addbtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:text="Add Venue" />
+
+</RelativeLayout>
