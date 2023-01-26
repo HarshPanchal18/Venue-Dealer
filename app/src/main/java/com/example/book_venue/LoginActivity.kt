@@ -90,6 +90,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signInGoogle() {
+        googleSignInClient.signOut()
         val signInIntent=googleSignInClient.signInIntent
         launcher.launch(signInIntent)
     }

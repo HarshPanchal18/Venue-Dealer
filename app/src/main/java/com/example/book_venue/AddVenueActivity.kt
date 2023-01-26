@@ -2,25 +2,34 @@ package com.example.book_venue
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_add_venue.*
 import kotlinx.android.synthetic.main.activity_add_venue.view.*
+import java.util.*
 
 class AddVenueActivity : AppCompatActivity() {
 
-    private val PICK_IMG_REQUEST=1
-    val summaryResult=StringBuilder()
+    private val PICK_IMG_REQUEST=101
+    private lateinit var summaryResult: ArrayList<String>
     val venue_types=StringBuilder()
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var user: FirebaseUser
+    private lateinit var firestore:FirebaseFirestore
+
+    private lateinit var images: List<Uri>
+    private lateinit var texts: List<String>
+    private lateinit var imageTextUploader: ImageTextUploader
 
     private var imgUri:Uri?=null
     private lateinit var mStorageRef: StorageReference
@@ -31,12 +40,43 @@ class AddVenueActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_venue)
         supportActionBar?.hide()
 
-        mStorageRef=FirebaseStorage.getInstance().getReference("uploads") // save in folder uploads
-        mDatabaseRef=FirebaseDatabase.getInstance().getReference("uploads")
+        auth=FirebaseAuth.getInstance()
+        firestore=FirebaseFirestore.getInstance()
+        user= auth.currentUser!!
+
+        mDatabaseRef=FirebaseDatabase.getInstance().reference
+        summaryResult= ArrayList()
 
         addVenuebtn.setOnClickListener {
-            constructAndValidate()
+            if(constructAndValidate()){
+                if (images.isNotEmpty() && texts.size == images.size) {
+                    imageTextUploader.uploadImages(images, texts)
+                    Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show()
+
+                    /*val documentRef = firestore.collection("Venue")
+                        .document(user.uid)
+                        .collection("Venues")
+                        .document()*/
+
+                    for (s in summaryResult){
+                        mDatabaseRef.child(s[0].toString()).child(s)//.setValue(true)
+                    }
+                    /*documentRef.set(summaryResult).addOnSuccessListener {
+                        Toast.makeText(applicationContext,"Venue is added",Toast.LENGTH_SHORT).show()
+                    }.addOnFailureListener {
+                        Toast.makeText(applicationContext,"Failed to add",Toast.LENGTH_SHORT).show()
+                    }*/
+
+                } else {
+                    Toast.makeText(this, "Please select images and enter texts", Toast.LENGTH_SHORT).show()
+                }
+                clearFields()
+            } else {
+                Toast.makeText(this,"Oops! you haven't entered proper data",Toast.LENGTH_SHORT).show()
+            }
         }
+
+        imageTextUploader = ImageTextUploader()
 
         chooseImage.setOnClickListener {
             openFileChooser()
@@ -48,16 +88,16 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun uploadFile() {
-        val fileRef = mStorageRef.child(System.currentTimeMillis().toString()
-                + "."
-                + getFileExtension(imgUri!!))
+        val fileRef = mStorageRef.child(UUID.randomUUID().toString()//+System.currentTimeMillis().toString()
+                + ".")
+                //+ getFileExtension(imgUri!!))
 
         fileRef.putFile(imgUri!!)
             .addOnSuccessListener {
-                val handler= Handler()
+                /*val handler= Handler()
                 handler.postDelayed({
                         uploadProgressbar.progress=0
-                    },200)
+                    },200)*/
 
                 Toast.makeText(this,"Upload successful",Toast.LENGTH_SHORT).show()
                 val upload=Upload(filename.text.toString().trim(),
@@ -69,10 +109,10 @@ class AddVenueActivity : AppCompatActivity() {
 
             .addOnFailureListener { Toast.makeText(this,it.message,Toast.LENGTH_SHORT).show() }
 
-            .addOnProgressListener {
+            /*.addOnProgressListener {
                 val progress:Double=100.0.times(it.bytesTransferred / it.totalByteCount) // get current progress
                 uploadProgressbar.progress=progress.toInt()
-            }
+            }*/
     }
 
     private fun getFileExtension(uri:Uri) :String {
@@ -82,26 +122,36 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun openFileChooser() {
-        val intent= Intent()
-        intent.type="image/*"
-        intent.action=Intent.ACTION_GET_CONTENT
-        startActivityForResult(intent,PICK_IMG_REQUEST)
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Images"), 101)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(
+        /*if(
             requestCode==PICK_IMG_REQUEST // check for image request
             && resultCode== RESULT_OK // if user actually picked an image
             && data!=null
             && data.data!=null
         ) {
-            imgUri= data.data!!
+            imgUri= data.data
             imageView.setImageURI(imgUri)
+        }*/
+        if (requestCode == 101 && resultCode == RESULT_OK) {
+            images = if (data?.clipData != null) {
+                (0 until data.clipData!!.itemCount)
+                    .map { data.clipData!!.getItemAt(it).uri }
+            } else {
+                listOf(data?.data!!)
+            }
+            texts = List(images.size) { "" }
         }
     }
 
-    private fun constructAndValidate() {
+    private fun constructAndValidate() : Boolean {
 
         val name=venueTitle.text.toString()
         val location=venueLocation.text.toString()
@@ -129,14 +179,20 @@ class AddVenueActivity : AppCompatActivity() {
                     party.isChecked ||
                     exhibition.isChecked ||
                     sports.isChecked)
-            && imgUri?.path!=null
+            //&& imgUri?.path!=null
         ){
-            summaryResult.append(name+"\n",location+"\n",city+"\n",state+"\n",venue_types,capacity+"\n",availability)
+            summaryResult.add(name)
+            summaryResult.add(location)
+            summaryResult.add(city)
+            summaryResult.add(state)
+            summaryResult.add(venue_types.toString())
+            summaryResult.add(capacity)
+            summaryResult.add(availability)
+
             Toast.makeText(this,summaryResult.toString(),Toast.LENGTH_SHORT).show()
-            uploadFile()
-            clearFields()
+            return true
         } else {
-            Toast.makeText(this,"Oops! you haven't entered proper data",Toast.LENGTH_SHORT).show()
+            return false
         }
     }
 
