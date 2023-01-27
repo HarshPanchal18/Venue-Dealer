@@ -16,12 +16,14 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_add_venue.*
 import kotlinx.android.synthetic.main.activity_add_venue.view.*
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class AddVenueActivity : AppCompatActivity() {
 
     private val PICK_IMG_REQUEST=101
-    private lateinit var summaryResult: ArrayList<String>
-    val venue_types=StringBuilder()
+    private lateinit var summaryResult: HashMap<String,Any>
+    private lateinit var venue_types:ArrayList<String>
 
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
@@ -45,38 +47,28 @@ class AddVenueActivity : AppCompatActivity() {
         user= auth.currentUser!!
 
         mDatabaseRef=FirebaseDatabase.getInstance().reference
-        summaryResult= ArrayList()
+        summaryResult= HashMap()
+        venue_types= ArrayList()
 
         addVenuebtn.setOnClickListener {
             if(constructAndValidate()){
-                if (images.isNotEmpty() && texts.size == images.size) {
-                    imageTextUploader.uploadImages(images, texts)
-                    Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show()
 
-                    /*val documentRef = firestore.collection("Venue")
-                        .document(user.uid)
-                        .collection("Venues")
-                        .document()*/
+                val documentRef = firestore.collection("venue")
+                    .document()
+                    //.collection("venue")
+                    //.document()
 
-                    for (s in summaryResult){
-                        mDatabaseRef.child(s[0].toString()).child(s)//.setValue(true)
-                    }
-                    /*documentRef.set(summaryResult).addOnSuccessListener {
-                        Toast.makeText(applicationContext,"Venue is added",Toast.LENGTH_SHORT).show()
-                    }.addOnFailureListener {
-                        Toast.makeText(applicationContext,"Failed to add",Toast.LENGTH_SHORT).show()
-                    }*/
-
-                } else {
-                    Toast.makeText(this, "Please select images and enter texts", Toast.LENGTH_SHORT).show()
+                documentRef.set(summaryResult).addOnSuccessListener {
+                    Toast.makeText(applicationContext,"Venue is Added",Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener {
+                    Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show()
                 }
+
                 clearFields()
             } else {
                 Toast.makeText(this,"Oops! you haven't entered proper data",Toast.LENGTH_SHORT).show()
             }
         }
-
-        imageTextUploader = ImageTextUploader()
 
         chooseImage.setOnClickListener {
             openFileChooser()
@@ -85,40 +77,6 @@ class AddVenueActivity : AppCompatActivity() {
         clearImage.setOnClickListener {
             imageView.setImageDrawable(null)
         }
-    }
-
-    private fun uploadFile() {
-        val fileRef = mStorageRef.child(UUID.randomUUID().toString()//+System.currentTimeMillis().toString()
-                + ".")
-                //+ getFileExtension(imgUri!!))
-
-        fileRef.putFile(imgUri!!)
-            .addOnSuccessListener {
-                /*val handler= Handler()
-                handler.postDelayed({
-                        uploadProgressbar.progress=0
-                    },200)*/
-
-                Toast.makeText(this,"Upload successful",Toast.LENGTH_SHORT).show()
-                val upload=Upload(filename.text.toString().trim(),
-                    it.metadata?.reference?.downloadUrl.toString())
-
-                val uploadId=mDatabaseRef.push().key
-                mDatabaseRef.child(uploadId!!).setValue(upload)
-            }
-
-            .addOnFailureListener { Toast.makeText(this,it.message,Toast.LENGTH_SHORT).show() }
-
-            /*.addOnProgressListener {
-                val progress:Double=100.0.times(it.bytesTransferred / it.totalByteCount) // get current progress
-                uploadProgressbar.progress=progress.toInt()
-            }*/
-    }
-
-    private fun getFileExtension(uri:Uri) :String {
-        val cr=contentResolver
-        val mime=MimeTypeMap.getSingleton()
-        return mime.getExtensionFromMimeType(cr.getType(uri))!!
     }
 
     private fun openFileChooser() {
@@ -154,42 +112,52 @@ class AddVenueActivity : AppCompatActivity() {
     private fun constructAndValidate() : Boolean {
 
         val name=venueTitle.text.toString()
+        val description=venueDescription.text.toString()
         val location=venueLocation.text.toString()
         val city=autocompleteCity.text.toString()
         val state=autocompleteState.text.toString()
         val capacity=venueCapacity.text.toString()
+        val dealerContact=dealerPhNo.text.toString()
         val availability= dayTimeAvailability.isChecked.toString()
+        val rentPerHour=rentPrice.text.toString()
 
-        if(convHall.isChecked) venue_types.append(convHall.text.toString()+"\n")
-        if(wedding.isChecked) venue_types.append(wedding.text.toString()+"\n")
-        if(festivity.isChecked) venue_types.append(festivity.text.toString()+"\n")
-        if(party.isChecked) venue_types.append(party.text.toString()+"\n")
-        if(exhibition.isChecked) venue_types.append(exhibition.text.toString()+"\n")
-        if(sports.isChecked) venue_types.append(sports.text.toString()+"\n")
+        if(convHall.isChecked) venue_types.add(convHall.text.toString()+"\n")
+        if(wedding.isChecked) venue_types.add(wedding.text.toString()+"\n")
+        if(festivity.isChecked) venue_types.add(festivity.text.toString()+"\n")
+        if(party.isChecked) venue_types.add(party.text.toString()+"\n")
+        if(exhibition.isChecked) venue_types.add(exhibition.text.toString()+"\n")
+        if(sports.isChecked) venue_types.add(sports.text.toString()+"\n")
 
         if((name.isNotEmpty() &&
-                location.isNotEmpty() &&
-                city.isNotEmpty() &&
-                state.isNotEmpty() &&
-                capacity.isNotEmpty())
+                    description.isNotEmpty() &&
+                    location.isNotEmpty() &&
+                    city.isNotEmpty() &&
+                    state.isNotEmpty() &&
+                    capacity.isNotEmpty() &&
+                    dealerContact.isNotEmpty() &&
+                    rentPerHour.isNotEmpty())
             && (
                     wedding.isChecked ||
                     festivity.isChecked ||
                     convHall.isChecked ||
                     party.isChecked ||
                     exhibition.isChecked ||
-                    sports.isChecked)
+                    sports.isChecked
+                    )
             //&& imgUri?.path!=null
         ){
-            summaryResult.add(name)
-            summaryResult.add(location)
-            summaryResult.add(city)
-            summaryResult.add(state)
-            summaryResult.add(venue_types.toString())
-            summaryResult.add(capacity)
-            summaryResult.add(availability)
+            summaryResult["Name"]=name
+            summaryResult["Description"]=description
+            summaryResult["Location"]=location
+            summaryResult["City"]=city
+            summaryResult["State"]=state
+            summaryResult["Dealer_Ph"]=dealerContact
+            summaryResult["Types"]=venue_types.toSet().toString()
+            summaryResult["Capacity"]=capacity
+            summaryResult["RentPerHour"]=rentPerHour
+            summaryResult["Availability"]=availability
 
-            Toast.makeText(this,summaryResult.toString(),Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this,summaryResult.toString(),Toast.LENGTH_SHORT).show()
             return true
         } else {
             return false
@@ -199,12 +167,14 @@ class AddVenueActivity : AppCompatActivity() {
     private fun clearFields(){
 
         venueTitle.text.clear()
+        venueDescription.text.clear()
         venueLocation.text.clear()
         dealerPhNo.text.clear()
         venueCapacity.text.clear()
         autocompleteCity.text.clear()
         autocompleteState.text.clear()
         filename.text.clear()
+        rentPrice.text.clear()
 
         convHall.isChecked=false
         sports.isChecked=false
