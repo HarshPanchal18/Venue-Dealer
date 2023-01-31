@@ -34,7 +34,7 @@
         style="@style/SubTitle"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/databtn"
+        android:id="@+id/addVenuebtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_venue"
@@ -42,7 +42,7 @@
         android:layout_marginTop="15sp" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/viewbtn"
+        android:id="@+id/viewVenuebtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="View Venue"

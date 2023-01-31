@@ -31,7 +31,11 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        databtn.setOnClickListener {
+        addVenuebtn.setOnClickListener {
             startActivity(Intent(this,AddVenueActivity::class.java))
+        }
+
+        viewVenuebtn.setOnClickListener {
+            startActivity(Intent(this,ViewVenueActivity::class.java))
         }
     }}

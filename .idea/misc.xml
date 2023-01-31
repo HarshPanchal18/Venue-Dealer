@@ -15,7 +15,9 @@
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_main.xml" value="0.209375" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_register.xml" value="0.25" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_reset_password.xml" value="0.209375" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_view_venue.xml" value="0.209375" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/dropdown_item.xml" value="0.20833333333333334" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/venue_card.xml" value="0.1" />
       </map>
     </option>
   </component>

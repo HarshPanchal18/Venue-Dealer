@@ -55,15 +55,12 @@ class AddVenueActivity : AppCompatActivity() {
 
                 val documentRef = firestore.collection("venue")
                     .document()
-                    //.collection("venue")
-                    //.document()
 
                 documentRef.set(summaryResult).addOnSuccessListener {
                     Toast.makeText(applicationContext,"Venue is Added",Toast.LENGTH_SHORT).show()
                 }.addOnFailureListener {
                     Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show()
                 }
-
                 clearFields()
             } else {
                 Toast.makeText(this,"Oops! you haven't entered proper data",Toast.LENGTH_SHORT).show()
@@ -156,6 +153,7 @@ class AddVenueActivity : AppCompatActivity() {
             summaryResult["Capacity"]=capacity
             summaryResult["RentPerHour"]=rentPerHour
             summaryResult["Availability"]=availability
+            summaryResult["userId"]=user.uid
 
             //Toast.makeText(this,summaryResult.toString(),Toast.LENGTH_SHORT).show()
             return true
@@ -186,7 +184,7 @@ class AddVenueActivity : AppCompatActivity() {
         summaryResult.clear()
         venue_types.clear()
         imageView.setImageResource(android.R.color.transparent)
-        //imageView.setImageDrawable(null)
+        finish()
     }
 
     override fun onResume() {
