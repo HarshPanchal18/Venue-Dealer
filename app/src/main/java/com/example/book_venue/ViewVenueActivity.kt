@@ -20,37 +20,37 @@ class ViewVenueActivity : AppCompatActivity() {
     private lateinit var user: FirebaseUser
     lateinit var db:FirebaseFirestore
     private lateinit var firestore: FirebaseFirestore
-    lateinit var adapter:VenueAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_venue)
 
+        supportActionBar?.hide()
         auth= FirebaseAuth.getInstance()
         user= auth.currentUser!!
         firestore=FirebaseFirestore.getInstance()
         db = FirebaseFirestore.getInstance()
 
         loadVenuesFromDb(user.uid)
-
     }
 
     private fun loadVenuesFromDb(user: String) {
         val venueList=ArrayList<Venue>()
 
         val ref=db.collection("venue")
-        ref.whereEqualTo("userId",user).get()
+        ref.whereEqualTo("userId",user)
+            .get()
             .addOnSuccessListener {
             if(it.isEmpty){
-                Toast.makeText(this,"No venue found",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ViewVenueActivity,"No venue found",Toast.LENGTH_SHORT).show()
                 return@addOnSuccessListener
             }
             for(doc in it){
-                val taskModel=doc.toObject(Venue::class.java)
-                venueList.add(taskModel)
+                val venueModel=doc.toObject(Venue::class.java)
+                venueList.add(venueModel)
             }
             venueRecycler.apply {
-                layoutManager=LinearLayoutManager(this@ViewVenueActivity,RecyclerView.VERTICAL,false)
+                layoutManager=LinearLayoutManager(this@ViewVenueActivity)
                 adapter=VenueAdapter(venueList,this@ViewVenueActivity)
             }
         }

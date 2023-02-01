@@ -1,15 +1,12 @@
 package com.example.book_venue
 
 class Venue (
-    val title:String="",
-    val desc:String="",
-    val location:String="",
-    val city:String="",
-    val state:String="",
-
-    val availableTime:Boolean = false,
-    val dealerName:String="",
-    val dealerContact:String="",
-    val dealerPhNo:String="",
-    val venueType:ArrayList<String> =ArrayList()
+    var title:String?="",
+    var desc:String?="",
+    var location:String?="",
+    var city:String?="",
+    var state:String?="",
+    var availableTime:Boolean=false,
+    var dealerContact:String?="",
+    var venueType:ArrayList<String> = ArrayList()
 )
