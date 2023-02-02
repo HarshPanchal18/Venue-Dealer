@@ -139,9 +139,9 @@ class AddVenueActivity : AppCompatActivity() {
                             val imgdata= hashMapOf("url" to url.toString())
                             //summaryResult["imgurl"]=url.toString()
                             summaryResult.putAll(imgdata)
-                            firestore.collection("venue").document().set(summaryResult)
+                            /*firestore.collection("venue").document().set(summaryResult)
                                 .addOnSuccessListener { Toast.makeText(this,"Added to firestore",Toast.LENGTH_SHORT).show() }
-                                .addOnFailureListener { Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show() }
+                                .addOnFailureListener { Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show() }*/
                         }
                     }
             }
