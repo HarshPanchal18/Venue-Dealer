@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
@@ -27,7 +28,6 @@ class AddVenueActivity : AppCompatActivity() {
     private lateinit var user: FirebaseUser
     private lateinit var firestore:FirebaseFirestore
 
-    private lateinit var imgUri:Uri
     private lateinit var chooseImgList:ArrayList<Uri>
     private lateinit var urlList:ArrayList<String>
 
@@ -54,10 +54,9 @@ class AddVenueActivity : AppCompatActivity() {
         addVenuebtn.setOnClickListener {
             if(constructAndValidate()){
                 //uploadImages()
-                uploadImagesToFirebase(chooseImgList)
+                //uploadImagesToFirebase(chooseImgList)
 
-                val documentRef = firestore.collection("venue")
-                    .document()
+                val documentRef = firestore.collection("venue").document()
                 documentRef.set(summaryResult).addOnSuccessListener {
                     Toast.makeText(applicationContext,"Venue is Added",Toast.LENGTH_SHORT).show()
                 }.addOnFailureListener {
@@ -69,12 +68,8 @@ class AddVenueActivity : AppCompatActivity() {
             }
         }
 
-        //val galleryImage=registerForActivityResult(ActivityResultContracts.GetContent(), ActivityResultCallback { imageView.setImageURI(it) })
-
         chooseImage.setOnClickListener {
-            //openFileChooser()
             CheckPermission()
-            //galleryImage.launch("image/*")
         }
 
         clearImage.setOnClickListener {
@@ -86,9 +81,8 @@ class AddVenueActivity : AppCompatActivity() {
     private fun CheckPermission() {
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),2)
-        } else {
-            openFileChooser()
         }
+        openFileChooser()
     }
 
     private fun uploadImages() {
@@ -134,14 +128,23 @@ class AddVenueActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == RESULT_OK && data!=null) {
-            val count= data.clipData!!.itemCount
-            for(i in 0 until count){
-                imgUri=data.clipData!!.getItemAt(i).uri
-                chooseImgList.add(imgUri)
+        if (requestCode == 1 && resultCode == RESULT_OK ) {
+            val selectedUri=data?.data
+            if(selectedUri!=null){
+                val imageRef=mStorageRef.child("images/venue/*")
+                val uploadTask=imageRef.putFile(selectedUri)
+                    .addOnSuccessListener{
+                        // Get the URL of the uploaded image
+                        imageRef.downloadUrl.addOnSuccessListener { url ->
+                            val imgdata= hashMapOf("url" to url.toString())
+                            //summaryResult["imgurl"]=url.toString()
+                            summaryResult.putAll(imgdata)
+                            firestore.collection("venue").document().set(summaryResult)
+                                .addOnSuccessListener { Toast.makeText(this,"Added to firestore",Toast.LENGTH_SHORT).show() }
+                                .addOnFailureListener { Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show() }
+                        }
+                    }
             }
-        } else if(data?.data!=null){
-            chooseImgList.add(data.data!!)
         }
     }
 
@@ -194,7 +197,7 @@ class AddVenueActivity : AppCompatActivity() {
             summaryResult["Availability"]=availability
             summaryResult["userId"]=user.uid
 
-            //Toast.makeText(this,summaryResult.toString(),Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext,summaryResult.toString(),Toast.LENGTH_LONG).show()
             return true
         } else {
             return false
