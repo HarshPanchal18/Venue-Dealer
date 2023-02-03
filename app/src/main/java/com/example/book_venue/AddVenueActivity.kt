@@ -12,7 +12,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
@@ -68,17 +67,13 @@ class AddVenueActivity : AppCompatActivity() {
             }
         }
 
-        chooseImage.setOnClickListener {
-            CheckPermission()
-        }
+        chooseImage.setOnClickListener { CheckPermissionAndGo() }
 
-        clearImage.setOnClickListener {
-            //imageView.setImageDrawable(null)
-        }
+        clearImage.setOnClickListener { selectedImg.setImageDrawable(null) }
 
     }
 
-    private fun CheckPermission() {
+    private fun CheckPermissionAndGo() {
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),2)
         }
@@ -130,18 +125,16 @@ class AddVenueActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == RESULT_OK ) {
             val selectedUri=data?.data
+            selectedImg.setImageURI(selectedUri)
+
             if(selectedUri!=null){
-                val imageRef=mStorageRef.child("images/venue/*")
+                val imageRef=mStorageRef.child("images/venue/${System.currentTimeMillis()}.jpg")
                 val uploadTask=imageRef.putFile(selectedUri)
                     .addOnSuccessListener{
                         // Get the URL of the uploaded image
                         imageRef.downloadUrl.addOnSuccessListener { url ->
                             val imgdata= hashMapOf("url" to url.toString())
-                            //summaryResult["imgurl"]=url.toString()
                             summaryResult.putAll(imgdata)
-                            /*firestore.collection("venue").document().set(summaryResult)
-                                .addOnSuccessListener { Toast.makeText(this,"Added to firestore",Toast.LENGTH_SHORT).show() }
-                                .addOnFailureListener { Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show() }*/
                         }
                     }
             }
@@ -224,14 +217,31 @@ class AddVenueActivity : AppCompatActivity() {
 
         summaryResult.clear()
         venue_types.clear()
-//        imageView.setImageResource(android.R.color.transparent)
         finish()
     }
 
     override fun onResume() {
         super.onResume()
-        val cities=resources.getStringArray(R.array.cities)
+        var cities: Array<String> =resources.getStringArray(R.array.states)
         val states=resources.getStringArray(R.array.states)
+
+        when(autocompleteState.text.toString()){
+            "Gujarat" -> {
+                cities=resources.getStringArray(R.array.gj_cities)
+                val adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
+                autocompleteCity.setAdapter(adapter)
+            }
+            "Maharashtra" -> {
+                cities=resources.getStringArray(R.array.mh_cities)
+                val adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
+                autocompleteCity.setAdapter(adapter)
+            }
+            "Rajasthan" -> {
+                cities=resources.getStringArray(R.array.rj_cities)
+                val adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
+                autocompleteCity.setAdapter(adapter)
+            }
+        }
 
         var adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
         autocompleteCity.setAdapter(adapter)

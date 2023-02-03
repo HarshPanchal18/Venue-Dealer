@@ -275,12 +275,6 @@
                 android:layout_marginStart="5dp"
                 tools:srcCompat="@tools:sample/avatars" />-->
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/imagePager"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/chooseImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
             <Button
                 android:id="@+id/clearImage"
                 android:layout_width="wrap_content"
@@ -299,6 +293,13 @@
                 android:layout_below="@id/chooseImage"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="17dp" />
+
+            <ImageView
+                android:id="@+id/selectedImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/chooseImage"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
     </ScrollView>
 

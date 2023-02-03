@@ -33,7 +33,7 @@
     <string name="btnregister">Register</string>
     <string name="logoutbtn">Logout</string>
 
-    <string name="home_title">Hello World!</string>
+    <string name="home_title">Hello Dealer!</string>
     <string name="home_subtitle">Welcome to Home</string>
 
     <string name="reset_title">Reset your password</string>
@@ -51,13 +51,29 @@
     <string name="add_venue">Add Venue</string>
     <string name="dealer_contact_number">Enter your Contact number</string>
 
-    <string-array name="cities">
+    <string-array name="gj_cities">
         <item>Surat</item>
         <item>Vadodara</item>
         <item>Ahmedabad</item>
         <item>Valsad</item>
         <item>Navsari</item>
         <item>Bharuch</item>
+    </string-array>
+
+    <string-array name="mh_cities">
+        <item>Bandra</item>
+        <item>Borivali</item>
+        <item>Charni Road</item>
+        <item>Goregaon</item>
+        <item>Navi Mumbai</item>
+        <item>Church Gate</item>
+
+    </string-array><string-array name="rj_cities">
+        <item>Jaipur</item>
+        <item>Ajmer</item>
+        <item>Bhilwara</item>
+        <item>Jodhpur</item>
+        <item>Udaipur</item>
     </string-array>
 
     <string-array name="states">
