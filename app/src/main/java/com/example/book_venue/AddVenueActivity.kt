@@ -114,29 +114,36 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun openFileChooser() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        intent.action = Intent.ACTION_GET_CONTENT
+        val intent = Intent().apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            action = Intent.ACTION_GET_CONTENT
+        }
         startActivityForResult(Intent.createChooser(intent, "Select Images"), 1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == RESULT_OK ) {
-            val selectedUri=data?.data
-            selectedImg.setImageURI(selectedUri)
+            if(data?.clipData!=null) {
+                // Get the URIs of the selected images
+                val imgUris=ArrayList<Uri>()
+                for(i in 0 until data.clipData!!.itemCount) {
+                    val item=data.clipData!!.getItemAt(i)
+                    imgUris.add(item.uri)
+                }
 
-            if(selectedUri!=null){
-                val imageRef=mStorageRef.child("images/venue/${System.currentTimeMillis()}.jpg")
-                val uploadTask=imageRef.putFile(selectedUri)
-                    .addOnSuccessListener{
+            for(i in 0 until imgUris.size) {
+                val imageRef=mStorageRef.child("images/venue/${System.currentTimeMillis()}_$i.jpg")
+                val uploadTask=imageRef.putFile(imgUris[i])
+                    .addOnSuccessListener {
                         // Get the URL of the uploaded image
                         imageRef.downloadUrl.addOnSuccessListener { url ->
-                            val imgdata= hashMapOf("url" to url.toString())
+                            val imgdata= hashMapOf("url$i" to url.toString())
                             summaryResult.putAll(imgdata)
                         }
                     }
+            }
             }
         }
     }
@@ -222,10 +229,10 @@ class AddVenueActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        var cities: Array<String> =resources.getStringArray(R.array.states)
+        var cities: Array<String> =resources.getStringArray(R.array.gj_cities)
         val states=resources.getStringArray(R.array.states)
 
-        when(autocompleteState.text.toString()){
+        /*when(autocompleteState.text.toString()){
             "Gujarat" -> {
                 cities=resources.getStringArray(R.array.gj_cities)
                 val adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
@@ -241,7 +248,7 @@ class AddVenueActivity : AppCompatActivity() {
                 val adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
                 autocompleteCity.setAdapter(adapter)
             }
-        }
+        }*/
 
         var adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
         autocompleteCity.setAdapter(adapter)
