@@ -30,7 +30,7 @@
                 android:id="@+id/venueDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/venueTitle"
+                android:layout_below="@id/cityState"
                 android:layout_marginTop="10dp"
                 android:hint="Enter venue description"
                 android:inputType="text"
@@ -38,18 +38,18 @@
                 android:maxLines="1" />
 
             <EditText
-                android:id="@+id/venueLocation"
+                android:id="@+id/venueLandmark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/venueDescription"
+                android:layout_below="@id/venueTitle"
                 android:layout_marginTop="10dp"
-                android:hint="@string/venue_address"
+                android:hint="@string/venue_landmark"
                 android:inputType="text"
                 android:maxLines="1" />
 
             <LinearLayout
                 android:id="@+id/cityState"
-                android:layout_below="@id/venueLocation"
+                android:layout_below="@id/venueLandmark"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -115,7 +115,7 @@
                 android:id="@+id/dealerPhNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cityState"
+                android:layout_below="@id/availableLayout"
                 android:layout_marginTop="10dp"
                 android:hint="@string/dealer_contact_number"
                 android:inputType="phone"
@@ -124,7 +124,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/dealerPhNo"
+                android:layout_below="@id/venueDescription"
                 android:layout_marginTop="10dp"
                 android:text="Your venue will be available for:"
                 android:textStyle="bold" />
@@ -133,7 +133,7 @@
                 android:id="@+id/venueTypes"
                 android:orientation="horizontal"
                 android:layout_marginTop="20dp"
-                android:layout_below="@id/dealerPhNo"
+                android:layout_below="@id/venueDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -188,19 +188,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/venueTypes1"
+                android:layout_marginVertical="10dp"
                 android:hint="Venue capacity (Person)"
                 android:inputType="number"
+                android:lines="1"
                 android:maxLength="10" />
+
+            <EditText
+                android:id="@+id/restRooms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/venueCapacity"
+                android:hint="No. of Rest Rooms"
+                android:inputType="number"
+                android:lines="1"
+                android:maxLength="3" />
 
             <LinearLayout
                 android:layout_marginTop="5dp"
                 android:id="@+id/availableLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/venueCapacity">
+                android:layout_below="@id/restRooms">
 
                 <LinearLayout
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -214,8 +226,8 @@
                     android:id="@+id/dayTimeAvailability"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:layout_marginStart="6dp" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -225,7 +237,7 @@
                     android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="$"
+                    android:text="@string/indian_ruppee"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:layout_marginStart="20dp"
@@ -249,38 +261,21 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/rentLayout"
-                android:orientation="horizontal"
-                android:layout_below="@id/availableLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </LinearLayout>
-
             <Button
                 android:id="@+id/chooseImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/availableLayout"
+                android:layout_below="@id/dealerPhNo"
                 android:layout_marginTop="15dp"
-                android:text="Select image" />
-
-            <!--<ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/chooseImage"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="5dp"
-                tools:srcCompat="@tools:sample/avatars" />-->
+                android:text="Upload image" />
 
             <Button
                 android:id="@+id/clearImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/availableLayout"
+                android:layout_below="@id/dealerPhNo"
                 android:layout_marginStart="68dp"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="15dp"
                 android:layout_toEndOf="@id/chooseImage"
                 android:text="Clear images" />
@@ -294,12 +289,20 @@
                 android:layout_centerInParent="true"
                 android:layout_marginTop="17dp" />
 
-            <ImageView
+            <!--<ImageView
                 android:id="@+id/selectedImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/chooseImage"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true" />-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/selected_images_Rview"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:padding="5dp"
+                android:layout_below="@id/chooseImage"
+                android:layout_marginTop="16sp" />
         </RelativeLayout>
     </ScrollView>
 

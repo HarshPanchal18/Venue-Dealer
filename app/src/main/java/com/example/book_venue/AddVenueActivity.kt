@@ -1,34 +1,34 @@
 package com.example.book_venue
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_add_venue.*
+import kotlin.random.Random
 
 class AddVenueActivity : AppCompatActivity() {
 
     private lateinit var summaryResult: HashMap<String,Any>
     private lateinit var venue_types:ArrayList<String>
+    private lateinit var imgUris:ArrayList<Uri>
 
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
     private lateinit var firestore:FirebaseFirestore
-
-    private lateinit var chooseImgList:ArrayList<Uri>
-    private lateinit var urlList:ArrayList<String>
 
     private lateinit var mStorageRef: StorageReference
     private lateinit var mStorage: FirebaseStorage
@@ -47,29 +47,69 @@ class AddVenueActivity : AppCompatActivity() {
 
         summaryResult= HashMap()
         venue_types= ArrayList()
-        urlList=ArrayList()
-        chooseImgList=ArrayList()
 
         addVenuebtn.setOnClickListener {
-            if(constructAndValidate()){
-                //uploadImages()
-                //uploadImagesToFirebase(chooseImgList)
+            if(validateAndBind()){
 
                 val documentRef = firestore.collection("venue").document()
                 documentRef.set(summaryResult).addOnSuccessListener {
-                    Toast.makeText(applicationContext,"Venue is Added",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"Venue is Added :)",Toast.LENGTH_SHORT).show()
                 }.addOnFailureListener {
                     Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show()
                 }
                 clearFields()
+                finish()
             } else {
-                Toast.makeText(this,"Oops! you haven't entered proper data",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Oops! you haven't entered required data :(",Toast.LENGTH_SHORT).show()
             }
         }
 
+        val adapter=ImageAdapter(ArrayList())
+        selected_images_Rview.adapter=adapter
+        selected_images_Rview.layoutManager=LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+
         chooseImage.setOnClickListener { CheckPermissionAndGo() }
 
-        clearImage.setOnClickListener { selectedImg.setImageDrawable(null) }
+        clearImage.setOnClickListener {
+            imgUris.clear()
+            selected_images_Rview?.adapter?.notifyDataSetChanged()
+        }
+
+        autocompleteState.onItemSelectedListener=object: AdapterView.OnItemSelectedListener{
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val cities: Array<String> =resources.getStringArray(R.array.gj_cities)+
+                        resources.getStringArray(R.array.mh_cities)+
+                        resources.getStringArray(R.array.rj_cities)
+
+                val states=resources.getStringArray(R.array.states)
+
+                val adapter1= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities.sorted())
+                autocompleteCity.setAdapter(adapter1)
+
+                val adapter2= ArrayAdapter(applicationContext,R.layout.dropdown_item,states)
+                autocompleteState.setAdapter(adapter2)
+
+                if(position==0){
+                    adapter1.clear()
+                    adapter1.add(resources.getStringArray(R.array.gj_cities).toString())
+                    autocompleteCity.setAdapter(adapter1)
+                }
+                if(position==1){
+                    adapter1.clear()
+                    adapter1.add(resources.getStringArray(R.array.mh_cities).toString())
+                    autocompleteCity.setAdapter(adapter1)
+                }
+                if(position==2){
+                    adapter1.clear()
+                    adapter1.add(resources.getStringArray(R.array.rj_cities).toString())
+                    autocompleteCity.setAdapter(adapter1)
+                }
+                adapter1.notifyDataSetChanged()
+            }
+        }
 
     }
 
@@ -78,39 +118,6 @@ class AddVenueActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),2)
         }
         openFileChooser()
-    }
-
-    private fun uploadImages() {
-        for(i in 0..chooseImgList.size){
-            val individualUri = chooseImgList[i]
-            if(individualUri!=null){
-                val imageFolder=FirebaseStorage.getInstance().reference.child("ItemImages")
-                val imageName=imageFolder.child("Image $i:")
-                imageName.putFile(individualUri).addOnSuccessListener {
-                    imageName.downloadUrl.addOnSuccessListener {
-                        urlList.add(it.toString())
-                        if(urlList.size==chooseImgList.size) {
-                            storeLinks(urlList)
-                        }
-                    }
-                }
-            } else {
-                Toast.makeText(this,"Unable to process :(",Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun storeLinks(urlList: ArrayList<String>) {
-        val model=ItemModel("",urlList)
-        firestore.collection("venue").add(model)
-            .addOnSuccessListener {
-                model.id=it.id
-                firestore.collection("venue").document(model.id)
-                    .set(model, SetOptions.merge()).addOnSuccessListener {
-                        // If image uploaded successfully
-                        Toast.makeText(this,"Images Uploaded",Toast.LENGTH_SHORT).show()
-                    }
-            }
     }
 
     private fun openFileChooser() {
@@ -127,14 +134,17 @@ class AddVenueActivity : AppCompatActivity() {
         if (requestCode == 1 && resultCode == RESULT_OK ) {
             if(data?.clipData!=null) {
                 // Get the URIs of the selected images
-                val imgUris=ArrayList<Uri>()
+                imgUris=ArrayList()
                 for(i in 0 until data.clipData!!.itemCount) {
                     val item=data.clipData!!.getItemAt(i)
                     imgUris.add(item.uri)
                 }
 
+                val adapter=ImageAdapter(imgUris)
+                selected_images_Rview.adapter=adapter
+
             for(i in 0 until imgUris.size) {
-                val imageRef=mStorageRef.child("images/venue/${System.currentTimeMillis()}_$i.jpg")
+                val imageRef=mStorageRef.child("images/venue/${System.currentTimeMillis()}_${Random(10000)}_$i.jpg")
                 val uploadTask=imageRef.putFile(imgUris[i])
                     .addOnSuccessListener {
                         // Get the URL of the uploaded image
@@ -143,22 +153,23 @@ class AddVenueActivity : AppCompatActivity() {
                             summaryResult.putAll(imgdata)
                         }
                     }
-            }
+                }
             }
         }
     }
 
-    private fun constructAndValidate() : Boolean {
+    private fun validateAndBind() : Boolean {
 
         val name=venueTitle.text.toString()
         val description=venueDescription.text.toString()
-        val location=venueLocation.text.toString()
+        val landmark=venueLandmark.text.toString()
         val city=autocompleteCity.text.toString()
         val state=autocompleteState.text.toString()
         val capacity=venueCapacity.text.toString()
         val dealerContact=dealerPhNo.text.toString()
         val availability= dayTimeAvailability.isChecked.toString()
         val rentPerHour=rentPrice.text.toString()
+        val restRooms=restRooms.text.toString()
 
         if(convHall.isChecked) venue_types.add(convHall.text.toString()+"\n")
         if(wedding.isChecked) venue_types.add(wedding.text.toString()+"\n")
@@ -169,12 +180,14 @@ class AddVenueActivity : AppCompatActivity() {
 
         if((name.isNotEmpty() &&
                     description.isNotEmpty() &&
-                    location.isNotEmpty() &&
+                    landmark.isNotEmpty() &&
                     city.isNotEmpty() &&
                     state.isNotEmpty() &&
                     capacity.isNotEmpty() &&
                     dealerContact.isNotEmpty() &&
-                    rentPerHour.isNotEmpty())
+                    rentPerHour.isNotEmpty() &&
+                    restRooms.isNotEmpty() &&
+                    imgUris.isNotEmpty())
             && (
                     wedding.isChecked ||
                     festivity.isChecked ||
@@ -183,37 +196,37 @@ class AddVenueActivity : AppCompatActivity() {
                     exhibition.isChecked ||
                     sports.isChecked
                     )
-            //&& imgUri?.path!=null
         ){
             summaryResult["Name"]=name
             summaryResult["Description"]=description
-            summaryResult["Location"]=location
+            summaryResult["Landmark"]=landmark
             summaryResult["City"]=city
             summaryResult["State"]=state
-            summaryResult["Dealer_Ph"]=dealerContact
+            summaryResult["DealerContact"]=dealerContact
             summaryResult["Types"]=venue_types.toSet().toString()
             summaryResult["Capacity"]=capacity
             summaryResult["RentPerHour"]=rentPerHour
+            summaryResult["RestRooms"]=restRooms
             summaryResult["Availability"]=availability
             summaryResult["userId"]=user.uid
 
-            Toast.makeText(applicationContext,summaryResult.toString(),Toast.LENGTH_LONG).show()
+            //Toast.makeText(applicationContext,summaryResult.toString(),Toast.LENGTH_LONG).show()
             return true
-        } else {
-            return false
         }
+        return false
     }
 
     private fun clearFields(){
 
         venueTitle.text.clear()
         venueDescription.text.clear()
-        venueLocation.text.clear()
+        venueLandmark.text.clear()
         dealerPhNo.text.clear()
         venueCapacity.text.clear()
         autocompleteCity.text.clear()
         autocompleteState.text.clear()
         rentPrice.text.clear()
+        restRooms.text.clear()
 
         convHall.isChecked=false
         sports.isChecked=false
@@ -221,34 +234,22 @@ class AddVenueActivity : AppCompatActivity() {
         wedding.isChecked=false
         festivity.isChecked=false
         party.isChecked=false
+        dayTimeAvailability.isChecked=true
 
         summaryResult.clear()
         venue_types.clear()
-        finish()
+        imgUris.clear()
+        selected_images_Rview?.adapter?.notifyDataSetChanged()
     }
 
     override fun onResume() {
         super.onResume()
-        var cities: Array<String> =resources.getStringArray(R.array.gj_cities)
-        val states=resources.getStringArray(R.array.states)
 
-        /*when(autocompleteState.text.toString()){
-            "Gujarat" -> {
-                cities=resources.getStringArray(R.array.gj_cities)
-                val adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
-                autocompleteCity.setAdapter(adapter)
-            }
-            "Maharashtra" -> {
-                cities=resources.getStringArray(R.array.mh_cities)
-                val adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
-                autocompleteCity.setAdapter(adapter)
-            }
-            "Rajasthan" -> {
-                cities=resources.getStringArray(R.array.rj_cities)
-                val adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
-                autocompleteCity.setAdapter(adapter)
-            }
-        }*/
+        val cities: Array<String> =(resources.getStringArray(R.array.gj_cities)+
+                                   resources.getStringArray(R.array.mh_cities)+
+                                   resources.getStringArray(R.array.rj_cities)).sortedArray()
+
+        val states=resources.getStringArray(R.array.states).sortedArray()
 
         var adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
         autocompleteCity.setAdapter(adapter)
