@@ -1,9 +1,11 @@
 package com.example.book_venue
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -47,18 +49,33 @@ class AddVenueActivity : AppCompatActivity() {
 
         summaryResult= HashMap()
         venue_types= ArrayList()
+        imgUris= ArrayList()
 
         addVenuebtn.setOnClickListener {
             if(validateAndBind()){
-
-                val documentRef = firestore.collection("venue").document()
-                documentRef.set(summaryResult).addOnSuccessListener {
-                    Toast.makeText(applicationContext,"Venue is Added :)",Toast.LENGTH_SHORT).show()
-                }.addOnFailureListener {
-                    Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show()
+                if(isOnline()){
+                    val documentRef = firestore.collection("venue").document()
+                    documentRef.set(summaryResult)
+                        .addOnSuccessListener {
+                        Toast.makeText(applicationContext,"Venue is Added :)",Toast.LENGTH_SHORT).show()
+                    }
+                        .addOnFailureListener {
+                        Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show()
+                    }
+                    clearFields()
+                    finish()
+                } else {
+                    try {
+                        val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
+                        alertDialog.apply{
+                            setTitle("Info")
+                            setMessage("Internet not available, Cross check your internet connectivity and try again")
+                            setIcon(android.R.drawable.ic_dialog_alert)
+                            setButton("OK") { dialog, which -> /*finish()*/ }
+                            show()
+                        }
+                    } catch (e: Exception) { e.printStackTrace() }
                 }
-                clearFields()
-                finish()
             } else {
                 Toast.makeText(this,"Oops! you haven't entered required data :(",Toast.LENGTH_SHORT).show()
             }
@@ -68,7 +85,7 @@ class AddVenueActivity : AppCompatActivity() {
         selected_images_Rview.adapter=adapter
         selected_images_Rview.layoutManager=LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 
-        chooseImage.setOnClickListener { CheckPermissionAndGo() }
+        chooseImage.setOnClickListener { checkPermissionAndGo() }
 
         clearImage.setOnClickListener {
             imgUris.clear()
@@ -113,7 +130,7 @@ class AddVenueActivity : AppCompatActivity() {
 
     }
 
-    private fun CheckPermissionAndGo() {
+    private fun checkPermissionAndGo() {
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),2)
         }
@@ -257,5 +274,16 @@ class AddVenueActivity : AppCompatActivity() {
         adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,states)
         autocompleteState.setAdapter(adapter)
 
+    }
+
+    private fun isOnline(): Boolean {
+        val connManager =
+            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = connManager.activeNetworkInfo
+        if (netInfo == null || !netInfo.isConnected || !netInfo.isAvailable) {
+            //Toast.makeText(this, "No Internet connection!", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
     }
 }

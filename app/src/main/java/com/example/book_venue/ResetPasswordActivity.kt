@@ -1,7 +1,10 @@
 package com.example.book_venue
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
@@ -22,6 +25,9 @@ class ResetPasswordActivity : AppCompatActivity() {
         supportActionBar?.hide()
         auth=FirebaseAuth.getInstance()
 
+        val mail=intent.getStringExtra("Mail")
+        et_mail.setText(mail)
+
         val emailStream= RxTextView.textChanges(et_mail)
             .skipInitialValue()
             .map { mail -> !Patterns.EMAIL_ADDRESS.matcher(mail).matches() }
@@ -29,18 +35,31 @@ class ResetPasswordActivity : AppCompatActivity() {
 
         reset_pw_btn.setOnClickListener {
             val mail=et_mail.text.toString().trim()
-            auth.sendPasswordResetEmail(mail)
-                .addOnCompleteListener(this){ reset ->
-                    if(reset.isSuccessful){
-                        Intent(this,LoginActivity::class.java).also {
-                            it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(it)
-                            Toast.makeText(this,"Check email for password reset", Toast.LENGTH_SHORT).show()
+            if(isOnline()){
+                auth.sendPasswordResetEmail(mail)
+                    .addOnCompleteListener(this){ reset ->
+                        if(reset.isSuccessful){
+                            Intent(this,LoginActivity::class.java).also {
+                                it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(it)
+                                Toast.makeText(this,"Check email for password reset", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(this,reset.exception?.message, Toast.LENGTH_SHORT).show()
                         }
-                    } else {
-                        Toast.makeText(this,reset.exception?.message, Toast.LENGTH_SHORT).show()
                     }
-                }
+            } else {
+                try {
+                    val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
+                    alertDialog.apply{
+                        setTitle("Info")
+                        setMessage("Internet not available, Cross check your internet connectivity and try again")
+                        setIcon(android.R.drawable.ic_dialog_alert)
+                        setButton("OK") { dialog, which -> /*finish()*/ }
+                        show()
+                    }
+                } catch (e: Exception) { e.printStackTrace() }
+            }
         }
 
         back_login.setOnClickListener {
@@ -58,5 +77,16 @@ class ResetPasswordActivity : AppCompatActivity() {
             reset_pw_btn.isEnabled=true
             reset_pw_btn.backgroundTintList=ContextCompat.getColorStateList(this,R.color.primary_color)
         }
+    }
+
+    private fun isOnline(): Boolean {
+        val conMgr =
+            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = conMgr.activeNetworkInfo
+        if (netInfo == null || !netInfo.isConnected || !netInfo.isAvailable) {
+            //Toast.makeText(this, "No Internet connection!", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
     }
 }

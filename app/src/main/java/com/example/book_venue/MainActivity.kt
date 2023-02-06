@@ -1,10 +1,14 @@
 package com.example.book_venue
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth:FirebaseAuth
@@ -18,8 +22,11 @@ class MainActivity : AppCompatActivity() {
 
         val user=auth.currentUser
 
-        if(user!=null)
-            startActivity(Intent(this,HomeActivity::class.java))
+        if(isOnline()){
+            if(user!=null) {
+                startActivity(Intent(this, HomeActivity::class.java))
+            }
+        }
 
         loginbtn.setOnClickListener{
             startActivity(Intent(this,LoginActivity::class.java))
@@ -38,5 +45,16 @@ class MainActivity : AppCompatActivity() {
                 startActivity(it)
             }
         }
+    }
+
+    private fun isOnline(): Boolean {
+        val conMgr =
+            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = conMgr.activeNetworkInfo
+        if (netInfo == null || !netInfo.isConnected || !netInfo.isAvailable) {
+            //Toast.makeText(this, "No Internet connection!", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
     }
 }

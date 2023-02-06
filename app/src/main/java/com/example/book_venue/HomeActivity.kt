@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var user: FirebaseUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,11 +18,9 @@ class HomeActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
         auth=FirebaseAuth.getInstance()
+        user= auth.currentUser!!
 
-        val mail=intent.getStringExtra("email")
-        val displayname=intent.getStringExtra("name")
-
-        account_name.text="$mail"+"\n"+"$displayname"
+        account_name.text="${user.displayName}\n${user.email}"
 
         logoutbtn.setOnClickListener {
             auth.signOut()

@@ -1,7 +1,10 @@
 package com.example.book_venue
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
@@ -35,10 +38,10 @@ class RegisterActivity : AppCompatActivity() {
             .map { mail -> !Patterns.EMAIL_ADDRESS.matcher(mail).matches() }
         emailStream.subscribe{ showEmailValidAlert(it) }
 
-        val userNameStream=RxTextView.textChanges(et_username)
+        /*val userNameStream=RxTextView.textChanges(et_username)
             .skipInitialValue()
             .map { username -> username.length < 6 }
-        userNameStream.subscribe { showTextMinimalAlert(it,"Username") }
+        userNameStream.subscribe { showTextMinimalAlert(it,"Username") }*/
 
         val passwordStream = RxTextView.textChanges(et_password)
             .skipInitialValue()
@@ -58,17 +61,17 @@ class RegisterActivity : AppCompatActivity() {
         val invalidFieldsStream : Observable<Boolean> = Observable.combineLatest(
             nameStream,
             emailStream,
-            userNameStream,
+            //userNameStream,
             passwordStream,
             passwordConfirmStream
         ) {
                 nameInvalid: Boolean,
                 emailInvalid: Boolean,
-                usernameInvalid: Boolean,
+                //usernameInvalid: Boolean,
                 passwordInvalid: Boolean,
                 cpasswordInvalid: Boolean
             ->
-            !nameInvalid && !emailInvalid && !usernameInvalid && !passwordInvalid && !cpasswordInvalid
+            !nameInvalid && !emailInvalid && /*!usernameInvalid &&*/ !passwordInvalid && !cpasswordInvalid
         }
 
         invalidFieldsStream.subscribe { isValid:Boolean ->
@@ -84,7 +87,21 @@ class RegisterActivity : AppCompatActivity() {
         registerbtn.setOnClickListener {
             val mail=et_mail.text.toString().trim()
             val pass=et_password.text.toString().trim()
-            registerUser(mail,pass)
+
+            if(isOnline()){
+                registerUser(mail,pass)
+            } else {
+                try {
+                    val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
+                    alertDialog.apply{
+                        setTitle("Info")
+                        setMessage("Internet not available, Cross check your internet connectivity and try again")
+                        setIcon(android.R.drawable.ic_dialog_alert)
+                        setButton("OK") { dialog, which -> /*finish()*/ }
+                        show()
+                    }
+                } catch (e: Exception) { e.printStackTrace() }
+            }
         }
 
         tv_have_account.setOnClickListener {
@@ -124,9 +141,9 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun showTextMinimalAlert(isNotValid: Boolean,text:String) {
-        if(text=="Username")
+        /*if(text=="Username")
             et_username.error=if(isNotValid) "$text must be more than 6 letters!" else null
-        else if(text=="Password")
+        else*/ if(text=="Password")
             et_password.error=if(isNotValid) "$text must be more than 8 letters!" else null
     }
 
@@ -136,5 +153,16 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun showPasswordConfirmAlert(isNotValid: Boolean) {
         et_password.error=if(isNotValid) "Password are not the same" else null
+    }
+
+    private fun isOnline(): Boolean {
+        val conMgr =
+            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = conMgr.activeNetworkInfo
+        if (netInfo == null || !netInfo.isConnected || !netInfo.isAvailable) {
+            //Toast.makeText(this, "No Internet connection!", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
     }
 }
