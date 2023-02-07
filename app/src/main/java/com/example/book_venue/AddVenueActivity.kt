@@ -185,6 +185,7 @@ class AddVenueActivity : AppCompatActivity() {
         val capacity=venueCapacity.text.toString()
         val dealerContact=dealerPhNo.text.toString()
         val availability= dayTimeAvailability.isChecked.toString()
+        val parkingAvailability= parkingToggle.isChecked.toString()
         val rentPerHour=rentPrice.text.toString()
         val restRooms=restRooms.text.toString()
 
@@ -224,6 +225,7 @@ class AddVenueActivity : AppCompatActivity() {
             summaryResult["Capacity"]=capacity
             summaryResult["RentPerHour"]=rentPerHour
             summaryResult["RestRooms"]=restRooms
+            summaryResult["Parking"]=parkingAvailability
             summaryResult["Availability"]=availability
             summaryResult["userId"]=user.uid
 
@@ -252,6 +254,7 @@ class AddVenueActivity : AppCompatActivity() {
         festivity.isChecked=false
         party.isChecked=false
         dayTimeAvailability.isChecked=true
+        parkingToggle.isChecked=true
 
         summaryResult.clear()
         venue_types.clear()

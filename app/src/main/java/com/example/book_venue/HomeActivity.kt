@@ -37,5 +37,6 @@ class HomeActivity : AppCompatActivity() {
 
         viewVenuebtn.setOnClickListener {
             startActivity(Intent(this,ViewVenueActivity::class.java))
+            //Toast.makeText(this,"Thand rakh bhaii\nLaa rha hun sabb",Toast.LENGTH_SHORT).show()
         }
     }}

@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.venue_card.view.*
 
-class VenueAdapter(val venueList:ArrayList<Venue>, val context: Context)
+/*class VenueAdapter(val venueList:ArrayList<Venue>, val context: Context)
     : RecyclerView.Adapter<VenueAdapter.venueViewHolder>() {
 
     private lateinit var auth: FirebaseAuth
@@ -43,5 +43,20 @@ class VenueAdapter(val venueList:ArrayList<Venue>, val context: Context)
 
     override fun getItemCount(): Int {
         return venueList.size
+    }
+}
+*/
+
+class VenueAdapter(private val items:ArrayList<Venue>) : RecyclerView.Adapter<MyViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.venue_card, parent, false)
+        return MyViewHolder(view)
+    }
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.bind(items[position])
+    }
+
+    override fun getItemCount(): Int {
+        return items.size
     }
 }

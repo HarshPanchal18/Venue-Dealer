@@ -1,5 +1,7 @@
 package com.example.book_venue
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -20,7 +22,10 @@ class ViewVenueActivity : AppCompatActivity() {
     private lateinit var user: FirebaseUser
     lateinit var db:FirebaseFirestore
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var adapter: VenueAdapter
+    private var venues = ArrayList<Venue>()
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_venue)
@@ -31,60 +36,63 @@ class ViewVenueActivity : AppCompatActivity() {
         firestore=FirebaseFirestore.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        loadVenuesFromDb(user.uid)
+        venues= ArrayList()
+        adapter=VenueAdapter(venues)
+
+        //loadVenuesFromDb(user.uid)
+
+        venueRecycler.apply {
+            layoutManager=LinearLayoutManager(this@ViewVenueActivity)
+            adapter=adapter
+        }
+
+        try {
+            val ref=db.collection("venue")
+            ref.whereEqualTo("userId",user.uid)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    if(result.isEmpty){
+                        Toast.makeText(this@ViewVenueActivity,"No venue found",Toast.LENGTH_SHORT).show()
+                        return@addOnSuccessListener
+                    }
+
+                    for(doc in result){
+                        val venueModel=doc.toObject(Venue::class.java)
+                        venues.add(venueModel)
+                    }
+                    adapter.notifyDataSetChanged()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this,it.message.toString(),Toast.LENGTH_SHORT).show()
+                }
+        } catch (e:Exception){
+            Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
+        }
+
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun loadVenuesFromDb(user: String) {
         val venueList=ArrayList<Venue>()
 
         val ref=db.collection("venue")
         ref.whereEqualTo("userId",user)
             .get()
-            .addOnSuccessListener {
-            if(it.isEmpty){
+            .addOnSuccessListener { result ->
+            if(result.isEmpty){
                 Toast.makeText(this@ViewVenueActivity,"No venue found",Toast.LENGTH_SHORT).show()
                 return@addOnSuccessListener
             }
-            for(doc in it){
+            for(doc in result){
                 val venueModel=doc.toObject(Venue::class.java)
                 venueList.add(venueModel)
             }
+                adapter.notifyDataSetChanged()
             venueRecycler.apply {
                 layoutManager=LinearLayoutManager(this@ViewVenueActivity)
-                adapter=VenueAdapter(venueList,this@ViewVenueActivity)
+                adapter=adapter//VenueAdapter(venueList)//, this@ViewVenueActivity)
             }
         }
     }
-
-    class VenueViewHolder(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val venueTitle: TextView
-        val venueDesc: TextView
-        val availability: TextView
-        val nameDealer: TextView
-        val contactDealer: TextView
-        val loc: TextView
-        val city: TextView
-        val state: TextView
-        val types: TextView
-        var mVenue: LinearLayout
-
-        init {
-            venueTitle = itemView.findViewById(R.id.venueTitle)
-            venueDesc = itemView.findViewById(R.id.venueDescription)
-            availability=itemView.findViewById(R.id.availableTime)
-            nameDealer=itemView.findViewById(R.id.nameDealer)
-            contactDealer=itemView.findViewById(R.id.contactDealer)
-            loc=itemView.findViewById(R.id.Location)
-            city=itemView.findViewById(R.id.City)
-            state=itemView.findViewById(R.id.State)
-            types=itemView.findViewById(R.id.types)
-            mVenue = itemView.findViewById(R.id.card)
-
-            //Animate Recyclerview
-            /*val translateAnim: Animation =
-                AnimationUtils.loadAnimation(itemView.context, R.anim.translate_anim)
-            mnote.animation = translateAnim*/
-        }
-    }
-
 }

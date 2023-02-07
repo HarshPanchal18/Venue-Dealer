@@ -115,10 +115,10 @@
                 android:id="@+id/dealerPhNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/availableLayout"
+                android:layout_below="@id/parkingLayout"
                 android:layout_marginTop="10dp"
                 android:hint="@string/dealer_contact_number"
-                android:inputType="phone"
+                android:inputType="phone|textEmailAddress"
                 android:maxLines="1" />
 
             <TextView
@@ -183,33 +183,45 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_below="@id/venueTypes1"
+                android:id="@+id/capacity"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
             <EditText
                 android:id="@+id/venueCapacity"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/venueTypes1"
                 android:layout_marginVertical="10dp"
-                android:hint="Venue capacity (Person)"
-                android:inputType="number"
+                android:layout_weight="2"
+                android:layout_marginEnd="5dp"
+                android:layout_gravity="center"
+                android:hint="Venue capacity(Person)"
+                android:inputType="phone|number"
                 android:lines="1"
                 android:maxLength="10" />
 
-            <EditText
-                android:id="@+id/restRooms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/venueCapacity"
-                android:hint="No. of Rest Rooms"
-                android:inputType="number"
-                android:lines="1"
-                android:maxLength="3" />
+                <EditText
+                    android:id="@+id/restRooms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:layout_gravity="center"
+                    android:hint="No. of Rest Rooms"
+                    android:inputType="number"
+                    android:lines="1"
+                    android:maxLength="3" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_marginTop="5dp"
                 android:id="@+id/availableLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/restRooms">
+                android:layout_below="@id/capacity">
 
                 <LinearLayout
                     android:layout_weight="1"
@@ -249,6 +261,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:hint="Rent"/>
                 <TextView
@@ -259,6 +272,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parkingLayout"
+                android:layout_below="@id/availableLayout"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="Parking is available ?" />
+
+                <!--
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/parkingSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:layout_marginStart="16dp" />
+                -->
+
+                <ToggleButton
+                    android:id="@+id/parkingToggle"
+                    android:textOn="Yes"
+                    android:textOff="No"
+                    android:checked="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <Button
@@ -300,9 +346,9 @@
                 android:id="@+id/selected_images_Rview"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:padding="5dp"
                 android:layout_below="@id/chooseImage"
-                android:layout_marginTop="16sp" />
+                android:layout_marginTop="16sp"
+                android:padding="5dp" />
         </RelativeLayout>
     </ScrollView>
 

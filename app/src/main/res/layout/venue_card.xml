@@ -25,7 +25,7 @@
 
         <TextView
             android:layout_weight="3"
-            android:id="@+id/venueTitle"
+            android:id="@+id/venueTitle_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -55,7 +55,7 @@
             </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/venueLocation"
+            android:id="@+id/venueLandmark_card"
             android:orientation="horizontal"
             android:layout_marginTop="20dp"
             android:padding="5dp"
@@ -65,20 +65,20 @@
 
             <TextView
                 android:paddingHorizontal="8dp"
-                android:id="@+id/Location"
+                android:id="@+id/landmark_card"
                 android:text="Location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:id="@+id/City"
+                android:id="@+id/city_card"
                 android:paddingHorizontal="8dp"
                 android:text="City"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:id="@+id/State"
+                android:id="@+id/state_card"
                 android:text="State"
                 android:paddingHorizontal="8dp"
                 android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/venueDescription"
+            android:id="@+id/venueDescription_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -107,7 +107,7 @@
                 android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/availableTime"
+                    android:id="@+id/availableTime_card"
                     android:layout_marginTop="10dp"
                     android:layout_marginStart="20sp"
                     android:layout_width="wrap_content"
@@ -124,7 +124,7 @@
             android:text="We're organising for: " />
 
         <TextView
-            android:id="@+id/types"
+            android:id="@+id/types_card"
             android:layout_marginTop="16dp"
             android:layout_marginHorizontal="20dp"
             android:layout_width="match_parent"
