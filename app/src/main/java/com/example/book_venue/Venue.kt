@@ -1,51 +1,45 @@
 package com.example.book_venue
 
-class Venue {
-    var title:String?=null
-    var desc: String?=null
-    var location: String?=null
-    var city: String?=null
-    var state: String?=null
-    var availableTime: Boolean=false
-    var dealerContact: String?=null
-    lateinit var venueType: ArrayList<String>
+/*data class Venue(
+    var title: String = "",
+    var desc: String = "",
+    var landmark: String = "",
+    var city: String = "",
+    var state: String = "",
+    var availableTime: Boolean = false,
+    var dealerContact: String = "",
+    var venueTypes: ArrayList<String> = ArrayList(),
+)
+*/
 
-    constructor(
-                title: String?=null,
-                desc: String?=null,
-                location: String?=null,
-                city: String?=null,
-                state: String?=null,
-                availableTime: Boolean,
-                dealerContact: String?=null,
-                venueType: ArrayList<String> ){
+class Venue {
+    var title: String = ""
+    var desc: String = ""
+    var landmark: String = ""
+    var city: String = ""
+    var state: String = ""
+    var availableTime: Boolean = false
+    var dealerContact: String = ""
+    var venueTypes: ArrayList<String> = ArrayList()
+
+    constructor(title: String = "",
+                 desc: String = "",
+                 landmark: String = "",
+                 city: String = "",
+                 state: String = "",
+                 availableTime: Boolean = false,
+                 dealerContact: String = "",
+                 venueTypes: ArrayList<String> = ArrayList()){
+
         this.title=title
         this.desc=desc
-        this.location=location
+        this.landmark=landmark
         this.city=city
         this.state=state
         this.dealerContact=dealerContact
-        this.venueType=venueType
+        this.venueTypes=venueTypes
+        this.availableTime=availableTime
     }
 
     constructor(){}
 }
-/*
-class ChatMessage {
-    var messageText: String?=null
-    var messageUser: String?=null? = null
-    var messageTime: Long = 0
-
-    constructor(messageText: String?=null, messageUser: String?=null?) {
-        this.messageText = messageText
-        this.messageUser = messageUser
-        messageTime = Date().getTime()
-    }
-
-    constructor(messageText: String?=null) {
-        this.messageText = messageText
-    }
-
-    constructor(){}
-}
-*/

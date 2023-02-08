@@ -61,6 +61,7 @@ class ViewVenueActivity : AppCompatActivity() {
                         val venueModel=doc.toObject(Venue::class.java)
                         venues.add(venueModel)
                     }
+                    refreshAdapter(venues)
                     adapter.notifyDataSetChanged()
                 }
                 .addOnFailureListener {
@@ -72,7 +73,6 @@ class ViewVenueActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun loadVenuesFromDb(user: String) {
         val venueList=ArrayList<Venue>()
 
@@ -94,5 +94,10 @@ class ViewVenueActivity : AppCompatActivity() {
                 adapter=adapter//VenueAdapter(venueList)//, this@ViewVenueActivity)
             }
         }
+    }
+
+    private fun refreshAdapter(list : ArrayList<Venue>) {
+        adapter = VenueAdapter(list)
+        venueRecycler.adapter = adapter
     }
 }

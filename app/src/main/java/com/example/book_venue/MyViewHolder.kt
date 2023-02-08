@@ -1,10 +1,8 @@
 package com.example.book_venue
 
 import android.view.View
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.venue_card.view.*
 
 class MyViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -16,8 +14,13 @@ class MyViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.apply {
             venueTitle_card.text=venue.title
             venueDescription_card.text=venue.desc
+            landmark_card.text=venue.landmark
+            city_card.text=venue.city
+            state_card.text=venue.state
             nameDealer.text=user?.displayName
+            availableTime_card.text= venue.availableTime.toString()
             contactDealer.text=user?.email.toString()
+            types_card.text=venue.venueTypes.toString()
         }
     }
 }
