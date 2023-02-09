@@ -1,45 +1,28 @@
 package com.example.book_venue
 
-/*data class Venue(
-    var title: String = "",
-    var desc: String = "",
-    var landmark: String = "",
-    var city: String = "",
-    var state: String = "",
-    var availableTime: Boolean = false,
-    var dealerContact: String = "",
-    var venueTypes: ArrayList<String> = ArrayList(),
-)
-*/
-
-class Venue {
-    var title: String = ""
-    var desc: String = ""
-    var landmark: String = ""
-    var city: String = ""
-    var state: String = ""
-    var availableTime: Boolean = false
-    var dealerContact: String = ""
-    var venueTypes: ArrayList<String> = ArrayList()
-
-    constructor(title: String = "",
-                 desc: String = "",
-                 landmark: String = "",
-                 city: String = "",
-                 state: String = "",
-                 availableTime: Boolean = false,
-                 dealerContact: String = "",
-                 venueTypes: ArrayList<String> = ArrayList()){
-
-        this.title=title
-        this.desc=desc
-        this.landmark=landmark
-        this.city=city
-        this.state=state
-        this.dealerContact=dealerContact
-        this.venueTypes=venueTypes
-        this.availableTime=availableTime
-    }
-
-    constructor(){}
+data class Venue(
+    val Name: String,
+    val Description: String,//? = null,
+    val Landmark: String,
+    val City: String,
+    val State: String,
+    val Capacity: String,
+    val Availability: String,
+    val Dealer_Ph: String,
+    val RentPerHour: String,
+    //val Types: ArrayList<String>
+) {
+    constructor():this(
+        "",
+        "",
+        "",
+        "",
+        "",
+        "0",
+        "",
+        "",
+        "0",
+        //arrayListOf<String>()
+        //listOf<String>()/* = java.util.ArrayList<kotlin.String> */
+    )
 }
