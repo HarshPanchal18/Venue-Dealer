@@ -21,9 +21,9 @@ class MyViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
             state_card.text=venue.State
             nameDealer.text=user?.displayName
             capacity_card.text= venue.Capacity
-            availableTime_card.text= venue.Availability
+            availableTime_card.text= venue.Availability.toString()
             contactDealer.text=user?.email.toString()
-            //types_card.text= venue.Types.toString()
+            types_card.text= venue.Types.removePrefix("[").removeSuffix("]")
             /*for (i in 0..venue.Types.size){
                 sBuilder.append(venue.Types[i]).toString()
             }

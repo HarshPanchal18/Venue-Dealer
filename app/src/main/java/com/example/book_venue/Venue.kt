@@ -2,16 +2,18 @@ package com.example.book_venue
 
 data class Venue(
     val Name: String,
-    val Description: String,//? = null,
+    val Description: String,
     val Landmark: String,
     val City: String,
     val State: String,
     val Capacity: String,
-    val Availability: String,
+    val Availability: Boolean,
     val Dealer_Ph: String,
     val RentPerHour: String,
-    //val Types: ArrayList<String>
+    val Types: String,
+    val parking: Boolean
 ) {
+    val sBuilder=StringBuilder()
     constructor():this(
         "",
         "",
@@ -19,10 +21,10 @@ data class Venue(
         "",
         "",
         "0",
-        "",
+        false,
         "",
         "0",
-        //arrayListOf<String>()
-        //listOf<String>()/* = java.util.ArrayList<kotlin.String> */
+        "",
+        false
     )
 }

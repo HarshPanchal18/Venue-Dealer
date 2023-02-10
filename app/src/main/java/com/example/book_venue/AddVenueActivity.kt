@@ -94,7 +94,7 @@ class AddVenueActivity : AppCompatActivity() {
 
         autocompleteState.onItemSelectedListener=object: AdapterView.OnItemSelectedListener{
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onNothingSelected(adapter: AdapterView<*>?) {}
 
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val cities: Array<String> =resources.getStringArray(R.array.gj_cities)+
@@ -184,17 +184,17 @@ class AddVenueActivity : AppCompatActivity() {
         val state=autocompleteState.text.toString()
         val capacity=venueCapacity.text.toString()
         val dealerContact=dealerPhNo.text.toString()
-        val availability= dayTimeAvailability.isChecked.toString()
-        val parkingAvailability= parkingToggle.isChecked.toString()
+        val availability= dayTimeAvailability.isChecked
+        val parkingAvailability= parkingToggle.isChecked
         val rentPerHour=rentPrice.text.toString()
         val restRooms=restRooms.text.toString()
 
-        if(convHall.isChecked) venue_types.add(convHall.text.toString()+"\n")
-        if(wedding.isChecked) venue_types.add(wedding.text.toString()+"\n")
-        if(festivity.isChecked) venue_types.add(festivity.text.toString()+"\n")
-        if(party.isChecked) venue_types.add(party.text.toString()+"\n")
-        if(exhibition.isChecked) venue_types.add(exhibition.text.toString()+"\n")
-        if(sports.isChecked) venue_types.add(sports.text.toString()+"\n")
+        if(convHall.isChecked) venue_types.add(convHall.text.toString())
+        if(wedding.isChecked) venue_types.add(wedding.text.toString())
+        if(festivity.isChecked) venue_types.add(festivity.text.toString())
+        if(party.isChecked) venue_types.add(party.text.toString())
+        if(exhibition.isChecked) venue_types.add(exhibition.text.toString())
+        if(sports.isChecked) venue_types.add(sports.text.toString())
 
         if((name.isNotEmpty() &&
                     description.isNotEmpty() &&
@@ -215,19 +215,20 @@ class AddVenueActivity : AppCompatActivity() {
                     sports.isChecked
                     )
         ){
-            summaryResult["Name"]=name
-            summaryResult["Description"]=description
-            summaryResult["Landmark"]=landmark
-            summaryResult["City"]=city
-            summaryResult["State"]=state
-            summaryResult["DealerContact"]=dealerContact
-            summaryResult["Types"]=venue_types.toSet().toString()
-            summaryResult["Capacity"]=capacity
-            summaryResult["RentPerHour"]=rentPerHour
-            summaryResult["RestRooms"]=restRooms
-            summaryResult["Parking"]=parkingAvailability
-            summaryResult["Availability"]=availability
-            summaryResult["userId"]=user.uid
+            summaryResult.apply {
+                put("Name",name)
+                put("Description",description)
+                put("Landmark",landmark)
+                put("City",city)
+                put("State",state)
+                put("DealerContact",dealerContact)
+                put("Types",venue_types.toSet().toString())
+                put("RentPerHour",rentPerHour)
+                put("RestRooms",restRooms)
+                put("Parking",parkingAvailability)
+                put("Availability",availability)
+                put("userId",user.uid)
+            }
 
             //Toast.makeText(applicationContext,summaryResult.toString(),Toast.LENGTH_LONG).show()
             return true
