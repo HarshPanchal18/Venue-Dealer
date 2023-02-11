@@ -10,8 +10,6 @@ class MyViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
     val auth=FirebaseAuth.getInstance()
     val user=auth.currentUser
 
-    val sBuilder=StringBuilder()
-
     fun bind(venue:Venue){
         itemView.apply {
             venueTitle_card.text=venue.Name
@@ -19,15 +17,16 @@ class MyViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
             landmark_card.text=venue.Landmark
             city_card.text=venue.City
             state_card.text=venue.State
-            nameDealer.text=user?.displayName
             capacity_card.text= venue.Capacity
-            availableTime_card.text= venue.Availability.toString()
-            contactDealer.text=user?.email.toString()
+            parking_card.text= venue.Parking
+            availableTime_card.text= venue.Availability
+            //nameDealer.text=user?.displayName
+            //contactDealer.text=user?.email.toString()
             types_card.text= venue.Types.removePrefix("[").removeSuffix("]")
-            /*for (i in 0..venue.Types.size){
-                sBuilder.append(venue.Types[i]).toString()
-            }
-            types_card.text=sBuilder*/
         }
+    }
+
+    init {
+        itemView.setOnClickListener {  }
     }
 }

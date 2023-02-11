@@ -7,13 +7,12 @@ data class Venue(
     val City: String,
     val State: String,
     val Capacity: String,
-    val Availability: Boolean,
+    val Availability: String,
     val Dealer_Ph: String,
     val RentPerHour: String,
     val Types: String,
-    val parking: Boolean
+    val Parking: String
 ) {
-    val sBuilder=StringBuilder()
     constructor():this(
         "",
         "",
@@ -21,10 +20,10 @@ data class Venue(
         "",
         "",
         "0",
-        false,
+        "",
         "",
         "0",
         "",
-        false
+        ""
     )
 }

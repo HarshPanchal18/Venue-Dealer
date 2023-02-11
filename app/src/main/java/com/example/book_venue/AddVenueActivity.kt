@@ -177,17 +177,17 @@ class AddVenueActivity : AppCompatActivity() {
 
     private fun validateAndBind() : Boolean {
 
-        val name=venueTitle.text.toString()
-        val description=venueDescription.text.toString()
-        val landmark=venueLandmark.text.toString()
-        val city=autocompleteCity.text.toString()
-        val state=autocompleteState.text.toString()
-        val capacity=venueCapacity.text.toString()
-        val dealerContact=dealerPhNo.text.toString()
-        val availability= dayTimeAvailability.isChecked
-        val parkingAvailability= parkingToggle.isChecked
-        val rentPerHour=rentPrice.text.toString()
-        val restRooms=restRooms.text.toString()
+        val name = venueTitle.text.toString()
+        val description = venueDescription.text.toString()
+        val landmark = venueLandmark.text.toString()
+        val city = autocompleteCity.text.toString()
+        val state = autocompleteState.text.toString()
+        val capacity = venueCapacity.text.toString()
+        val dealerContact = dealerPhNo.text.toString()
+        val availability = if(dayTimeAvailability.isChecked) "Yes" else "No"
+        val parkingAvailability = if(parkingToggle.isChecked) "Yes" else "No"
+        val rentPerHour = rentPrice.text.toString()
+        val restRooms = restRooms.text.toString()
 
         if(convHall.isChecked) venue_types.add(convHall.text.toString())
         if(wedding.isChecked) venue_types.add(wedding.text.toString())
@@ -221,6 +221,7 @@ class AddVenueActivity : AppCompatActivity() {
                 put("Landmark",landmark)
                 put("City",city)
                 put("State",state)
+                put("VenueCapacity",capacity)
                 put("DealerContact",dealerContact)
                 put("Types",venue_types.toSet().toString())
                 put("RentPerHour",rentPerHour)
@@ -230,7 +231,6 @@ class AddVenueActivity : AppCompatActivity() {
                 put("userId",user.uid)
             }
 
-            //Toast.makeText(applicationContext,summaryResult.toString(),Toast.LENGTH_LONG).show()
             return true
         }
         return false

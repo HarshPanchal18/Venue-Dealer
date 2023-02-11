@@ -1,14 +1,17 @@
 package com.example.book_venue
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_view_venue.*
+import kotlinx.android.synthetic.main.venue_card.*
 
 class ViewVenueActivity : AppCompatActivity() {
 
@@ -33,11 +36,14 @@ class ViewVenueActivity : AppCompatActivity() {
         venues= ArrayList()
         adapter=VenueAdapter(venues)
 
-        //loadVenuesFromDb(user.uid)
-
         venueRecycler.apply {
             layoutManager=LinearLayoutManager(this@ViewVenueActivity)
             adapter=adapter
+        }
+
+        addVenueFAB.setOnClickListener {
+            startActivity(Intent(this,AddVenueActivity::class.java))
+            finish()
         }
 
         try {
@@ -47,7 +53,9 @@ class ViewVenueActivity : AppCompatActivity() {
                 .addOnSuccessListener { result ->
 
                     if(result.isEmpty){
-                        Toast.makeText(this@ViewVenueActivity,"No venue found",Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(this@ViewVenueActivity,"No venue found",Toast.LENGTH_SHORT).show()
+                        zeroVenues.visibility= View.VISIBLE
+                        addVenueFAB.visibility= View.VISIBLE
                         return@addOnSuccessListener
                     }
 
@@ -65,30 +73,6 @@ class ViewVenueActivity : AppCompatActivity() {
             Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
         }
 
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun loadVenuesFromDb(user: String) {
-        val venueList=ArrayList<Venue>()
-
-        val ref=db.collection("venue")
-        ref.whereEqualTo("userId",user)
-            .get()
-            .addOnSuccessListener { result ->
-            if(result.isEmpty){
-                Toast.makeText(this@ViewVenueActivity,"No venue found",Toast.LENGTH_SHORT).show()
-                return@addOnSuccessListener
-            }
-            for(doc in result){
-                val venueModel=doc.toObject(Venue::class.java)
-                venueList.add(venueModel)
-            }
-                adapter.notifyDataSetChanged()
-            venueRecycler.apply {
-                layoutManager=LinearLayoutManager(this@ViewVenueActivity)
-                adapter=adapter//VenueAdapter(venueList)//, this@ViewVenueActivity)
-            }
-        }
     }
 
     private fun refreshAdapter(list : ArrayList<Venue>) {
