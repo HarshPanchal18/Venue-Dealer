@@ -2,16 +2,17 @@ package com.example.book_venue
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_view_venue.*
-import kotlinx.android.synthetic.main.venue_card.*
+
 
 class ViewVenueActivity : AppCompatActivity() {
 
@@ -40,6 +41,9 @@ class ViewVenueActivity : AppCompatActivity() {
             layoutManager=LinearLayoutManager(this@ViewVenueActivity)
             adapter=adapter
         }
+
+        val touchHelper = ItemTouchHelper(TouchHelper(adapter))
+        touchHelper.attachToRecyclerView(venueRecycler)
 
         addVenueFAB.setOnClickListener {
             startActivity(Intent(this,AddVenueActivity::class.java))

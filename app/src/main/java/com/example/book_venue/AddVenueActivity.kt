@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -34,6 +35,7 @@ class AddVenueActivity : AppCompatActivity() {
 
     private lateinit var mStorageRef: StorageReference
     private lateinit var mStorage: FirebaseStorage
+    private lateinit var documentRef: DocumentReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,11 +52,12 @@ class AddVenueActivity : AppCompatActivity() {
         summaryResult= HashMap()
         venue_types= ArrayList()
         imgUris= ArrayList()
+        documentRef=firestore.collection("venue").document()
 
         addVenuebtn.setOnClickListener {
             if(validateAndBind()){
                 if(isOnline()){
-                    val documentRef = firestore.collection("venue").document()
+                    //documentRef = firestore.collection("venue").document()
                     documentRef.set(summaryResult)
                         .addOnSuccessListener {
                         Toast.makeText(applicationContext,"Venue is Added :)",Toast.LENGTH_SHORT).show()
@@ -77,7 +80,7 @@ class AddVenueActivity : AppCompatActivity() {
                     } catch (e: Exception) { e.printStackTrace() }
                 }
             } else {
-                Toast.makeText(this,"Oops! you haven't entered required data :(",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Empty fields are not allowed :(",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -229,6 +232,7 @@ class AddVenueActivity : AppCompatActivity() {
                 put("Parking",parkingAvailability)
                 put("Availability",availability)
                 put("userId",user.uid)
+                put("docId",documentRef.id)
             }
 
             return true

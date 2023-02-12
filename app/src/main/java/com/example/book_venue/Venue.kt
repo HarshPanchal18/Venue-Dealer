@@ -11,7 +11,8 @@ data class Venue(
     val Dealer_Ph: String,
     val RentPerHour: String,
     val Types: String,
-    val Parking: String
+    val Parking: String,
+    val docId: String
 ) {
     constructor():this(
         "",
@@ -23,6 +24,7 @@ data class Venue(
         "",
         "",
         "0",
+        "",
         "",
         ""
     )

@@ -25,8 +25,4 @@ class MyViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
             types_card.text= venue.Types.removePrefix("[").removeSuffix("]")
         }
     }
-
-    init {
-        itemView.setOnClickListener {  }
-    }
 }
