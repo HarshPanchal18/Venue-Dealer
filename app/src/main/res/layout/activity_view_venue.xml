@@ -10,8 +10,7 @@
         android:id="@+id/venueRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E9EC8D"
-        android:paddingHorizontal="10sp" />
+        android:background="#E9EC8D" />
 
     <TextView
         android:id="@+id/zeroVenues"

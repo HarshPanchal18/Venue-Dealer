@@ -5,17 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 
-class VenueAdapter(private val items:ArrayList<Venue>) : RecyclerView.Adapter<MyViewHolder>() {
+class VenueAdapter(private val items:ArrayList<Venue>) : RecyclerView.Adapter<VenueViewHolder>() {
 
     private lateinit var activtiy:ViewVenueActivity
-    private lateinit var mList:ArrayList<Venue>
     private val db:FirebaseFirestore=FirebaseFirestore.getInstance()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VenueViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.venue_card, parent, false)
-        return MyViewHolder(view)
+        return VenueViewHolder(view)
     }
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
+    override fun onBindViewHolder(holder: VenueViewHolder, position: Int) {
         holder.bind(items[position])
     }
 

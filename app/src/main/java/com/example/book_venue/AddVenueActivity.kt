@@ -57,14 +57,9 @@ class AddVenueActivity : AppCompatActivity() {
         addVenuebtn.setOnClickListener {
             if(validateAndBind()){
                 if(isOnline()){
-                    //documentRef = firestore.collection("venue").document()
                     documentRef.set(summaryResult)
-                        .addOnSuccessListener {
-                        Toast.makeText(applicationContext,"Venue is Added :)",Toast.LENGTH_SHORT).show()
-                    }
-                        .addOnFailureListener {
-                        Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show()
-                    }
+                        .addOnSuccessListener { Toast.makeText(applicationContext,"Venue is Added :)",Toast.LENGTH_SHORT).show() }
+                        .addOnFailureListener { Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show() }
                     clearFields()
                     finish()
                 } else {
@@ -289,7 +284,6 @@ class AddVenueActivity : AppCompatActivity() {
             applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = connManager.activeNetworkInfo
         if (netInfo == null || !netInfo.isConnected || !netInfo.isAvailable) {
-            //Toast.makeText(this, "No Internet connection!", Toast.LENGTH_LONG).show()
             return false
         }
         return true

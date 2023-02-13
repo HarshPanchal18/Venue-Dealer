@@ -6,7 +6,7 @@ data class Venue(
     val Landmark: String,
     val City: String,
     val State: String,
-    val Capacity: String,
+    val VenueCapacity: String,
     val Availability: String,
     val Dealer_Ph: String,
     val RentPerHour: String,
