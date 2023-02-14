@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_view_venue.*
 
-
 class ViewVenueActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -34,49 +33,57 @@ class ViewVenueActivity : AppCompatActivity() {
         firestore=FirebaseFirestore.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        venues= ArrayList()
-        adapter=VenueAdapter(venues)
 
         venueRecycler.apply {
+            setHasFixedSize(true)
             layoutManager=LinearLayoutManager(this@ViewVenueActivity)
-            adapter=adapter
+            //adapter=adapter
         }
+
+        venues= ArrayList()
+        adapter=VenueAdapter(venues)
+        venueRecycler.adapter=adapter
 
         val touchHelper = ItemTouchHelper(TouchHelper(adapter))
         touchHelper.attachToRecyclerView(venueRecycler)
+
+        loadVenuesFromDb(user.uid)
 
         addVenueFAB.setOnClickListener {
             startActivity(Intent(this,AddVenueActivity::class.java))
             finish()
         }
+    }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun loadVenuesFromDb(user: String) {
         try {
-            val ref=db.collection("venue")
-            ref.whereEqualTo("userId",user.uid)
+            val ref = db.collection("venue")
+            ref.whereEqualTo("userId", user)
                 .get()
                 .addOnSuccessListener { result ->
-
-                    if(result.isEmpty){
-                        //Toast.makeText(this@ViewVenueActivity,"No venue found",Toast.LENGTH_SHORT).show()
-                        zeroVenues.visibility= View.VISIBLE
-                        addVenueFAB.visibility= View.VISIBLE
+                    if (result.isEmpty) {
+                        Toast.makeText(this@ViewVenueActivity, "No venue found", Toast.LENGTH_SHORT).show()
+                        zeroVenues.visibility = View.VISIBLE
+                        addVenueFAB.visibility = View.VISIBLE
                         return@addOnSuccessListener
                     }
 
-                    for(doc in result){
-                        val venueModel=doc.toObject(Venue::class.java)
+                    for (doc in result) {
+                        val venueModel = doc.toObject(Venue::class.java)
                         venues.add(venueModel)
                     }
+
                     refreshAdapter(venues)
                     adapter.notifyDataSetChanged()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this,it.message.toString(),Toast.LENGTH_SHORT).show()
+                    /*venueRecycler.apply {
+                    layoutManager=LinearLayoutManager(this@ViewVenueActivity)
+                    adapter=adapter//VenueAdapter(venueList)//, this@ViewVenueActivity)
+                }*/
                 }
         } catch (e:Exception){
             Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun refreshAdapter(list : ArrayList<Venue>) {
