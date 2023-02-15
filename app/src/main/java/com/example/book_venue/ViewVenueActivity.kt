@@ -17,7 +17,7 @@ class ViewVenueActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
-    lateinit var db:FirebaseFirestore
+    private lateinit var db:FirebaseFirestore
     private lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: VenueAdapter
     private var venues = ArrayList<Venue>()
@@ -33,16 +33,13 @@ class ViewVenueActivity : AppCompatActivity() {
         firestore=FirebaseFirestore.getInstance()
         db = FirebaseFirestore.getInstance()
 
-
+        venues= ArrayList()
+        adapter=VenueAdapter(this,venues)
         venueRecycler.apply {
             setHasFixedSize(true)
             layoutManager=LinearLayoutManager(this@ViewVenueActivity)
-            //adapter=adapter
+            adapter=adapter
         }
-
-        venues= ArrayList()
-        adapter=VenueAdapter(venues)
-        venueRecycler.adapter=adapter
 
         val touchHelper = ItemTouchHelper(TouchHelper(adapter))
         touchHelper.attachToRecyclerView(venueRecycler)
@@ -64,6 +61,7 @@ class ViewVenueActivity : AppCompatActivity() {
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
                         Toast.makeText(this@ViewVenueActivity, "No venue found", Toast.LENGTH_SHORT).show()
+                        venueRecycler.visibility=View.INVISIBLE // for in case of delete card
                         zeroVenues.visibility = View.VISIBLE
                         addVenueFAB.visibility = View.VISIBLE
                         return@addOnSuccessListener
@@ -76,18 +74,43 @@ class ViewVenueActivity : AppCompatActivity() {
 
                     refreshAdapter(venues)
                     adapter.notifyDataSetChanged()
-                    /*venueRecycler.apply {
-                    layoutManager=LinearLayoutManager(this@ViewVenueActivity)
-                    adapter=adapter//VenueAdapter(venueList)//, this@ViewVenueActivity)
-                }*/
                 }
+                /*.addOnCompleteListener {
+                    venues.clear()
+                    for(snapshot in it.result){
+                        val venueModel = Venue(
+                            snapshot.getString("Name"),
+                            snapshot.getString("Description"),
+                            snapshot.getString("Landmark"),
+                            snapshot.getString("Name"),
+                            snapshot.getString("Name"),
+                            snapshot.getString("Name"),
+                            snapshot.getString("Name"),
+                            snapshot.getString("Name"),
+                            snapshot.getString("Name"),
+                            snapshot.getString("Name"),
+                            snapshot.getString("Name"),
+                        )
+                            //snapshot.toObject(Venue::class.java)
+                        venues.add(venueModel)
+                    }
+                    adapter.notifyDataSetChanged()
+                }*/
         } catch (e:Exception){
             Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun refreshAdapter(list : ArrayList<Venue>) {
-        adapter = VenueAdapter(list)
+        adapter = VenueAdapter(this,list)
+        //adapter.notifyItemRemoved()
         venueRecycler.adapter = adapter
+    }
+
+    fun restart(){
+        finish()
+        startActivity(intent)
+        overridePendingTransition(0,0) // Call immediately after one of the flavors of #startActivity(Intent) or #finish to specify an explicit transition animation to perform next.
     }
 }

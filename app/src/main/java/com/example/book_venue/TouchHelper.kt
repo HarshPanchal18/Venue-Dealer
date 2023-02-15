@@ -20,8 +20,8 @@ class TouchHelper(adapter: VenueAdapter) :
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
         if (direction == ItemTouchHelper.LEFT) {
-            //adapter.updateData(position)
-            //adapter.notifyDataSetChanged()
+            adapter.updateData(position)
+            adapter.notifyDataSetChanged()
         } else {
             adapter.deleteData(position)
         }
