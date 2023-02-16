@@ -8,7 +8,7 @@
     tools:context=".AddVenueActivity">
 
     <ScrollView
-        android:layout_above="@id/addVenuebtn"
+        android:layout_above="@id/add_update_venue_btn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
@@ -22,10 +22,12 @@
                 android:id="@+id/venueTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp"
                 android:hint="@string/venue_name"
                 android:inputType="text"
                 android:lines="1"
-                android:maxLines="1"/>
+                android:maxLines="1" />
 
             <EditText
                 android:id="@+id/venueDescription"
@@ -52,64 +54,23 @@
                 android:id="@+id/cityState"
                 android:layout_below="@id/venueLandmark"
                 android:orientation="horizontal"
+                android:layout_marginTop="5sp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/spinnerState"
+                    android:layout_weight="2"
+                    android:layout_marginHorizontal="2sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/dropCity"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="City"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/autocompleteCity"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:inputType="none"
-                            android:paddingVertical="16dp" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/dropState"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="State"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginStart="10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/autocompleteState"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:inputType="none"
-                            android:paddingVertical="16dp" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
+                <Spinner
+                    android:id="@+id/spinnerCity"
+                    android:layout_weight="2"
+                    android:layout_marginHorizontal="2sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             </LinearLayout>
 
             <EditText
@@ -251,7 +212,7 @@
 
                 <TextView
                     android:text="@string/indian_ruppee"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_marginStart="20dp"
                     android:layout_width="wrap_content"
@@ -266,7 +227,7 @@
                     android:maxLines="1"
                     android:hint="Rent"/>
                 <TextView
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:text="/ hour"
                     android:textStyle="bold"
                     android:layout_marginStart="5dp"
@@ -288,15 +249,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:text="Parking is available ?" />
-
-                <!--
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/parkingSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:layout_marginStart="16dp" />
-                -->
 
                 <ToggleButton
                     android:id="@+id/parkingToggle"
@@ -321,11 +273,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dealerPhNo"
-                android:layout_marginStart="68dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="15dp"
-                android:layout_toEndOf="@id/chooseImage"
                 android:text="Clear images" />
+
             <ProgressBar
                 android:id="@+id/uploadProgressbar"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -335,13 +286,6 @@
                 android:layout_below="@id/chooseImage"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="17dp" />
-
-            <!--<ImageView
-                android:id="@+id/selectedImg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/chooseImage"
-                android:layout_centerHorizontal="true" />-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/selected_images_Rview"
@@ -354,7 +298,7 @@
     </ScrollView>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/addVenuebtn"
+        android:id="@+id/add_update_venue_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

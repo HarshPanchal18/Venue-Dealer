@@ -54,13 +54,30 @@ class AddVenueActivity : AppCompatActivity() {
         imgUris= ArrayList()
         documentRef=firestore.collection("venue").document()
 
-        addVenuebtn.setOnClickListener {
+        val cities: Array<String> =(resources.getStringArray(R.array.gj_cities)+
+                resources.getStringArray(R.array.mh_cities)+
+                resources.getStringArray(R.array.rj_cities)).sortedArray()
+
+        val states=resources.getStringArray(R.array.states).sortedArray()
+
+        var spinnerAdapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
+        spinnerCity.adapter = spinnerAdapter
+
+        spinnerAdapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,states)
+        spinnerState.adapter = spinnerAdapter
+
+        val bundle: Bundle? = intent?.extras
+        if(bundle!=null){
+            add_update_venue_btn.text = "Update Venue"
+        }
+
+        add_update_venue_btn.setOnClickListener {
             if(validateAndBind()){
                 if(isOnline()){
                     documentRef.set(summaryResult)
                         .addOnSuccessListener { Toast.makeText(applicationContext,"Venue is Added :)",Toast.LENGTH_SHORT).show() }
                         .addOnFailureListener { Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show() }
-                    clearFields()
+                    //clearFields()
                     finish()
                 } else {
                     try {
@@ -90,37 +107,27 @@ class AddVenueActivity : AppCompatActivity() {
             selected_images_Rview?.adapter?.notifyDataSetChanged()
         }
 
-        autocompleteState.onItemSelectedListener=object: AdapterView.OnItemSelectedListener{
+        val spinStates=resources.getStringArray(R.array.states)
+        val adapter2= ArrayAdapter(applicationContext,R.layout.dropdown_item,spinStates)
+        spinnerState.adapter = adapter2
+
+        spinnerState.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
 
             override fun onNothingSelected(adapter: AdapterView<*>?) {}
 
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val cities: Array<String> =resources.getStringArray(R.array.gj_cities)+
-                        resources.getStringArray(R.array.mh_cities)+
-                        resources.getStringArray(R.array.rj_cities)
 
-                val states=resources.getStringArray(R.array.states)
-
-                val adapter1= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities.sorted())
-                autocompleteCity.setAdapter(adapter1)
-
-                val adapter2= ArrayAdapter(applicationContext,R.layout.dropdown_item,states)
-                autocompleteState.setAdapter(adapter2)
-
+                var adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.gj_cities).sorted())
                 if(position==0){
-                    adapter1.clear()
-                    adapter1.add(resources.getStringArray(R.array.gj_cities).toString())
-                    autocompleteCity.setAdapter(adapter1)
+                    spinnerCity.adapter = adapter1
                 }
                 if(position==1){
-                    adapter1.clear()
-                    adapter1.add(resources.getStringArray(R.array.mh_cities).toString())
-                    autocompleteCity.setAdapter(adapter1)
+                    adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.mh_cities).sorted())
+                    spinnerCity.adapter = adapter1
                 }
                 if(position==2){
-                    adapter1.clear()
-                    adapter1.add(resources.getStringArray(R.array.rj_cities).toString())
-                    autocompleteCity.setAdapter(adapter1)
+                    adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.rj_cities).sorted())
+                    spinnerCity.adapter = adapter1
                 }
                 adapter1.notifyDataSetChanged()
             }
@@ -178,8 +185,8 @@ class AddVenueActivity : AppCompatActivity() {
         val name = venueTitle.text.toString()
         val description = venueDescription.text.toString()
         val landmark = venueLandmark.text.toString()
-        val city = autocompleteCity.text.toString()
-        val state = autocompleteState.text.toString()
+        val city = spinnerCity.selectedItem.toString()
+        val state = spinnerState.selectedItem.toString()
         val capacity = venueCapacity.text.toString()
         val dealerContact = dealerPhNo.text.toString()
         val availability = if(dayTimeAvailability.isChecked) "Yes" else "No"
@@ -242,8 +249,8 @@ class AddVenueActivity : AppCompatActivity() {
         venueLandmark.text.clear()
         dealerPhNo.text.clear()
         venueCapacity.text.clear()
-        autocompleteCity.text.clear()
-        autocompleteState.text.clear()
+        spinnerCity.adapter=null // reset
+        spinnerState.adapter=null
         rentPrice.text.clear()
         restRooms.text.clear()
 
@@ -264,18 +271,6 @@ class AddVenueActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        val cities: Array<String> =(resources.getStringArray(R.array.gj_cities)+
-                                   resources.getStringArray(R.array.mh_cities)+
-                                   resources.getStringArray(R.array.rj_cities)).sortedArray()
-
-        val states=resources.getStringArray(R.array.states).sortedArray()
-
-        var adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
-        autocompleteCity.setAdapter(adapter)
-
-        adapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,states)
-        autocompleteState.setAdapter(adapter)
 
     }
 
