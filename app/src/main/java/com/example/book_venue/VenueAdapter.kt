@@ -73,8 +73,10 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
     private fun notifyRemoved(position: Int){
         items.removeAt(position)
         //notifyDataSetChanged()
-        activity.venueRecycler.adapter?.notifyItemRemoved(position)
+        notifyItemRemoved(position)
+        //activity.venueRecycler.adapter?.notifyItemRemoved(position)
+        //activity.venueRecycler.adapter?.notifyDataSetChanged()
         //activity.loadVenuesFromDb(user.uid)
-        activity.restart()
+        //activity.restart()
     }
 }

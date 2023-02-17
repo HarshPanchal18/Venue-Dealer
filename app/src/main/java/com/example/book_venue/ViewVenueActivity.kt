@@ -75,27 +75,6 @@ class ViewVenueActivity : AppCompatActivity() {
                     refreshAdapter(venues)
                     adapter.notifyDataSetChanged()
                 }
-                /*.addOnCompleteListener {
-                    venues.clear()
-                    for(snapshot in it.result){
-                        val venueModel = Venue(
-                            snapshot.getString("Name"),
-                            snapshot.getString("Description"),
-                            snapshot.getString("Landmark"),
-                            snapshot.getString("Name"),
-                            snapshot.getString("Name"),
-                            snapshot.getString("Name"),
-                            snapshot.getString("Name"),
-                            snapshot.getString("Name"),
-                            snapshot.getString("Name"),
-                            snapshot.getString("Name"),
-                            snapshot.getString("Name"),
-                        )
-                            //snapshot.toObject(Venue::class.java)
-                        venues.add(venueModel)
-                    }
-                    adapter.notifyDataSetChanged()
-                }*/
         } catch (e:Exception){
             Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
         }

@@ -8,8 +8,8 @@
         android:id="@+id/venueCard"
         android:elevation="5dp"
         app:cardCornerRadius="10dp"
-        android:layout_margin="10dp"
         app:cardMaxElevation="5dp"
+        android:layout_marginVertical="5sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -201,6 +201,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_weight="1"
+                    android:background="#F15050"
+                    android:paddingStart="5sp"
+                    android:textStyle="bold"
+                    android:text="Swipe right to delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_weight="1"
+                    android:textAlignment="viewEnd"
+                    android:background="#4CAF50"
+                    android:textStyle="bold"
+                    android:paddingEnd="5sp"
+                    android:text="Swipe left to edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
 

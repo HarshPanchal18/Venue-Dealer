@@ -54,18 +54,6 @@ class AddVenueActivity : AppCompatActivity() {
         imgUris= ArrayList()
         documentRef=firestore.collection("venue").document()
 
-        val cities: Array<String> =(resources.getStringArray(R.array.gj_cities)+
-                resources.getStringArray(R.array.mh_cities)+
-                resources.getStringArray(R.array.rj_cities)).sortedArray()
-
-        val states=resources.getStringArray(R.array.states).sortedArray()
-
-        var spinnerAdapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,cities)
-        spinnerCity.adapter = spinnerAdapter
-
-        spinnerAdapter= ArrayAdapter(applicationContext,R.layout.dropdown_item,states)
-        spinnerState.adapter = spinnerAdapter
-
         val bundle: Bundle? = intent?.extras
         if(bundle!=null){
             add_update_venue_btn.text = "Update Venue"
@@ -267,11 +255,6 @@ class AddVenueActivity : AppCompatActivity() {
         venue_types.clear()
         imgUris.clear()
         selected_images_Rview?.adapter?.notifyDataSetChanged()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
     }
 
     private fun isOnline(): Boolean {
