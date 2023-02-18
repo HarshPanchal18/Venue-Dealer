@@ -28,6 +28,8 @@ class AddVenueActivity : AppCompatActivity() {
     private lateinit var summaryResult: HashMap<String,Any>
     private lateinit var venue_types:ArrayList<String>
     private lateinit var imgUris:ArrayList<Uri>
+    private lateinit var docId:String
+    private var bundle: Bundle? = null
 
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
@@ -54,19 +56,79 @@ class AddVenueActivity : AppCompatActivity() {
         imgUris= ArrayList()
         documentRef=firestore.collection("venue").document()
 
-        val bundle: Bundle? = intent?.extras
+        bundle = intent?.extras!!
         if(bundle!=null){
+
             add_update_venue_btn.text = "Update Venue"
+            venueTitle.setText(bundle!!.getString("name"))
+            venueDescription.setText(bundle!!.getString("description"))
+            venueLandmark.setText(bundle!!.getString("landmark"))
+            dealerPhNo.setText(bundle!!.getString("dealerPh"))
+            rentPrice.setText(bundle!!.getString("rentHour"))
+            venueCapacity.setText(bundle!!.getString("capacity"))
+            restRooms.setText(bundle!!.getString("restRooms"))
+
+            docId= bundle!!.getString("docId").toString()
+
+            if(bundle!!.getString("parking") != "Yes")
+                parkingToggle.isChecked=false
+
+            if(bundle!!.getString("available") != "Yes")
+                dayTimeAvailability.isChecked=false
+
+            if(bundle!!.getString("types")!!.contains("Convention Hall"))
+                convHall.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Sports"))
+                sports.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Exhibition"))
+                exhibition.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Wedding"))
+                wedding.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Festivity"))
+                festivity.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Party"))
+                party.isChecked=true
+
+            chooseImage.visibility=View.INVISIBLE
+            clearImage.visibility=View.INVISIBLE
+            selected_images_Rview.visibility=View.INVISIBLE
         }
 
         add_update_venue_btn.setOnClickListener {
-            if(validateAndBind()){
-                if(isOnline()){
-                    documentRef.set(summaryResult)
-                        .addOnSuccessListener { Toast.makeText(applicationContext,"Venue is Added :)",Toast.LENGTH_SHORT).show() }
-                        .addOnFailureListener { Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show() }
-                    //clearFields()
-                    finish()
+            if(validateAndBind()) {
+                if(isOnline()) {
+                    if(bundle!=null) {
+
+                        if(convHall.isChecked) venue_types.add(convHall.text.toString())
+                        if(wedding.isChecked) venue_types.add(wedding.text.toString())
+                        if(festivity.isChecked) venue_types.add(festivity.text.toString())
+                        if(party.isChecked) venue_types.add(party.text.toString())
+                        if(exhibition.isChecked) venue_types.add(exhibition.text.toString())
+                        if(sports.isChecked) venue_types.add(sports.text.toString())
+
+                        summaryResult.clear()
+                        summaryResult.apply {
+                            put("Name",venueTitle.text)
+                            put("Description",venueDescription.text.toString())
+                            put("Landmark",venueLandmark.text.toString())
+                            put("City",spinnerCity.selectedItem.toString())
+                            put("State",spinnerState.selectedItem.toString())
+                            put("VenueCapacity",venueCapacity.text.toString())
+                            put("DealerContact",dealerPhNo.text.toString())
+                            put("Types",venue_types.toSet().toString())
+                            put("RentPerHour",rentPrice.text.toString())
+                            put("RestRooms",restRooms.text.toString())
+                            put("Parking",if(parkingToggle.isChecked) "Yes" else "No")
+                            put("Availability",if(dayTimeAvailability.isChecked) "Yes" else "No")
+                        }
+                        updateToFireStore(summaryResult)
+                        finish()
+                    } else {
+                        documentRef.set(summaryResult)
+                            .addOnSuccessListener { Toast.makeText(applicationContext,"Venue is Added :)",Toast.LENGTH_SHORT).show() }
+                            .addOnFailureListener { Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show() }
+                        finish()
+                    }
                 } else {
                     try {
                         val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
@@ -128,6 +190,32 @@ class AddVenueActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),2)
         }
         openFileChooser()
+    }
+
+    private fun updateToFireStore(updateList:HashMap<String,Any>) {
+        if(validateAndBind()){
+            val query=firestore.collection("venue").whereEqualTo("docId",docId)
+                query.get().addOnSuccessListener { querySnapshot ->
+                    val batch=firestore.batch()
+                    for(doc in querySnapshot) {
+                        val docRef=firestore.collection("venue").document(doc.id)
+                        batch.update(docRef,updateList)
+                    }
+                    batch.commit()
+                }
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Data Updated!!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this,
+                            "Error : " + task.exception?.message,
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 
     private fun openFileChooser() {
@@ -197,8 +285,9 @@ class AddVenueActivity : AppCompatActivity() {
                     capacity.isNotEmpty() &&
                     dealerContact.isNotEmpty() &&
                     rentPerHour.isNotEmpty() &&
-                    restRooms.isNotEmpty() &&
-                    imgUris.isNotEmpty())
+                    restRooms.isNotEmpty()
+                    //imgUris.isNotEmpty()
+                    )
             && (
                     wedding.isChecked ||
                     festivity.isChecked ||

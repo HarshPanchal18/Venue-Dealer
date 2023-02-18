@@ -59,10 +59,12 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
             putString("state",item.State)
             putString("capacity",item.VenueCapacity)
             putString("available",item.Availability)
-            putString("dealerPh",item.Dealer_Ph)
+            putString("dealerPh",item.DealerContact)
             putString("rentHour",item.RentPerHour)
+            putString("restRooms",item.RestRooms)
             putString("types",item.Types)
             putString("parking",item.Parking)
+            putString("docId",item.docId)
         }
 
         val intent= Intent(activity,AddVenueActivity::class.java)
