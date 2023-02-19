@@ -10,30 +10,32 @@ import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.example.book_venue.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var binding:ActivityRegisterBinding
 
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        binding=ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.hide()
         // Authentication
         auth=FirebaseAuth.getInstance()
 
         // Validation starts here
-        val nameStream= RxTextView.textChanges(et_fullname)
+        val nameStream= RxTextView.textChanges(binding.etFullname)
             .skipInitialValue()
             .map { name -> name.isEmpty() }
         nameStream.subscribe{ showNameExistAlert(it) }
 
-        val emailStream=RxTextView.textChanges(et_mail)
+        val emailStream=RxTextView.textChanges(binding.etMail)
             .skipInitialValue()
             .map { mail -> !Patterns.EMAIL_ADDRESS.matcher(mail).matches() }
         emailStream.subscribe{ showEmailValidAlert(it) }
@@ -43,18 +45,18 @@ class RegisterActivity : AppCompatActivity() {
             .map { username -> username.length < 6 }
         userNameStream.subscribe { showTextMinimalAlert(it,"Username") }*/
 
-        val passwordStream = RxTextView.textChanges(et_password)
+        val passwordStream = RxTextView.textChanges(binding.etPassword)
             .skipInitialValue()
             .map { password -> password.length < 8 }
         passwordStream.subscribe { showTextMinimalAlert(it,"Password") }
 
         val passwordConfirmStream =
             Observable.merge(
-                RxTextView.textChanges(et_password).skipInitialValue()
-                    .map { password -> password.toString() != et_conf_password.text.toString() },
+                RxTextView.textChanges(binding.etPassword).skipInitialValue()
+                    .map { password -> password.toString() != binding.etConfPassword.text.toString() },
 
-                RxTextView.textChanges(et_conf_password).skipInitialValue()
-                    .map { confirmPassword -> confirmPassword.toString() != et_password.text.toString() })
+                RxTextView.textChanges(binding.etConfPassword).skipInitialValue()
+                    .map { confirmPassword -> confirmPassword.toString() != binding.etPassword.text.toString() })
         passwordConfirmStream.subscribe { showPasswordConfirmAlert(it) }
 
         // Button Enable/Disable
@@ -76,17 +78,17 @@ class RegisterActivity : AppCompatActivity() {
 
         invalidFieldsStream.subscribe { isValid:Boolean ->
             if (isValid) {
-                registerbtn.isEnabled=true
-                registerbtn.backgroundTintList= ContextCompat.getColorStateList(this,R.color.primary_color)
+                binding.registerbtn.isEnabled=true
+                binding.registerbtn.backgroundTintList= ContextCompat.getColorStateList(this,R.color.primary_color)
             } else {
-                registerbtn.isEnabled=false
-                registerbtn.backgroundTintList=ContextCompat.getColorStateList(this,android.R.color.darker_gray)
+                binding.registerbtn.isEnabled=false
+                binding.registerbtn.backgroundTintList=ContextCompat.getColorStateList(this,android.R.color.darker_gray)
             }
         }
 
-        registerbtn.setOnClickListener {
-            val mail=et_mail.text.toString().trim()
-            val pass=et_password.text.toString().trim()
+        binding.registerbtn.setOnClickListener {
+            val mail=binding.etMail.text.toString().trim()
+            val pass=binding.etPassword.text.toString().trim()
 
             if(isOnline()){
                 registerUser(mail,pass)
@@ -104,7 +106,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        tv_have_account.setOnClickListener {
+        binding.tvHaveAccount.setOnClickListener {
             startActivity(Intent(this,LoginActivity::class.java))
         }
     }
@@ -137,22 +139,22 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun showNameExistAlert(isNotValid:Boolean) {
-        et_fullname.error=if(isNotValid) "Name cannot be empty" else null
+        binding.etFullname.error=if(isNotValid) "Name cannot be empty" else null
     }
 
     private fun showTextMinimalAlert(isNotValid: Boolean,text:String) {
         /*if(text=="Username")
             et_username.error=if(isNotValid) "$text must be more than 6 letters!" else null
         else*/ if(text=="Password")
-            et_password.error=if(isNotValid) "$text must be more than 8 letters!" else null
+            binding.etPassword.error=if(isNotValid) "$text must be more than 8 letters!" else null
     }
 
     private fun showEmailValidAlert(isNotValid: Boolean) {
-        et_mail.error=if(isNotValid) "Email is not valid!" else null
+        binding.etMail.error=if(isNotValid) "Email is not valid!" else null
     }
 
     private fun showPasswordConfirmAlert(isNotValid: Boolean) {
-        et_password.error=if(isNotValid) "Password are not the same" else null
+        binding.etPassword.error=if(isNotValid) "Password are not the same" else null
     }
 
     private fun isOnline(): Boolean {

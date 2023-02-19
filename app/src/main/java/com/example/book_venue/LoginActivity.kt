@@ -17,6 +17,7 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.example.book_venue.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -27,16 +28,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var binding : ActivityLoginBinding
 
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.hide()
 
         // Authentication
@@ -49,12 +51,12 @@ class LoginActivity : AppCompatActivity() {
 
         googleSignInClient= GoogleSignIn.getClient(this,gso)
 
-        val userNameStream = RxTextView.textChanges(et_mail)
+        val userNameStream = RxTextView.textChanges(binding.etMail)
             .skipInitialValue()
             .map { username -> username.isEmpty() }
         userNameStream.subscribe { showTextMinimalAlert(it,"Email/Username") }
 
-        val passwordStream = RxTextView.textChanges(et_password)
+        val passwordStream = RxTextView.textChanges(binding.etPassword)
             .skipInitialValue()
             .map { password -> password.isEmpty() }
         passwordStream.subscribe { showTextMinimalAlert(it,"Password") }
@@ -67,17 +69,17 @@ class LoginActivity : AppCompatActivity() {
 
         invalidFieldsStream.subscribe { isValid:Boolean ->
             if(isValid) {
-                loginbtn.isEnabled=true
-                loginbtn.backgroundTintList= ContextCompat.getColorStateList(this,R.color.primary_color)
+                binding.loginbtn.isEnabled=true
+                binding.loginbtn.backgroundTintList= ContextCompat.getColorStateList(this,R.color.primary_color)
             } else {
-                loginbtn.isEnabled=false
-                loginbtn.backgroundTintList= ContextCompat.getColorStateList(this,android.R.color.darker_gray)
+                binding.loginbtn.isEnabled=false
+                binding.loginbtn.backgroundTintList= ContextCompat.getColorStateList(this,android.R.color.darker_gray)
             }
         }
 
-        loginbtn.setOnClickListener {
-            val mail=et_mail.text.toString().trim()
-            val pass=et_password.text.toString().trim()
+        binding.loginbtn.setOnClickListener {
+            val mail=binding.etMail.text.toString().trim()
+            val pass=binding.etPassword.text.toString().trim()
             if(isOnline()){
                 loginUser(mail,pass)
             } else {
@@ -94,7 +96,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        googlesignbtn.setOnClickListener {
+        binding.googlesignbtn.setOnClickListener {
             if(isOnline()){
                 signInGoogle()
             } else {
@@ -111,13 +113,13 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        tv_havent_account.setOnClickListener {
+        binding.tvHaventAccount.setOnClickListener {
             startActivity(Intent(this,RegisterActivity::class.java))
         }
 
-        tv_forgot_password.setOnClickListener {
+        binding.tvForgotPassword.setOnClickListener {
             val intent=Intent(this,ResetPasswordActivity::class.java)
-            intent.putExtra("Mail",et_mail.text.toString().trim())
+            intent.putExtra("Mail",binding.etMail.text.toString().trim())
             startActivity(intent)
         }
     }
@@ -180,7 +182,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this,"Login Successfully", Toast.LENGTH_SHORT).show()
             }
         } else {
-            val snackbar= Snackbar.make(loginScreen,"Verify your mail first",Snackbar.LENGTH_SHORT)
+            val snackbar= Snackbar.make(binding.loginScreen,"Verify your mail first",Snackbar.LENGTH_SHORT)
             val snackBarView: View =snackbar.view
             val params=snackBarView.layoutParams as FrameLayout.LayoutParams
             params.gravity= Gravity.TOP
@@ -196,9 +198,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showTextMinimalAlert(isNotValid: Boolean,text:String) {
         if(text == "Email/Username")
-            et_mail.error=if(isNotValid) "$text cannot be empty!" else null
+            binding.etMail.error=if(isNotValid) "$text cannot be empty!" else null
         else if(text=="Password")
-            et_password.error=if(isNotValid) "$text cannot be empty!" else null
+            binding.etPassword.error=if(isNotValid) "$text cannot be empty!" else null
     }
 
     private fun isOnline(): Boolean {

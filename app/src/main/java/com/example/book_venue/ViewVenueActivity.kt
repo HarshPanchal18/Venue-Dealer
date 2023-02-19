@@ -8,10 +8,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.book_venue.databinding.ActivityAddVenueBinding
+import com.example.book_venue.databinding.ActivityViewVenueBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_view_venue.*
 
 class ViewVenueActivity : AppCompatActivity() {
 
@@ -21,11 +22,13 @@ class ViewVenueActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: VenueAdapter
     private var venues = ArrayList<Venue>()
+    private lateinit var binding: ActivityViewVenueBinding
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view_venue)
+        binding= ActivityViewVenueBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.hide()
         auth= FirebaseAuth.getInstance()
@@ -35,18 +38,18 @@ class ViewVenueActivity : AppCompatActivity() {
 
         venues= ArrayList()
         adapter=VenueAdapter(this,venues)
-        venueRecycler.apply {
+        binding.venueRecycler.apply {
             setHasFixedSize(true)
             layoutManager=LinearLayoutManager(this@ViewVenueActivity)
             adapter=adapter
         }
 
         val touchHelper = ItemTouchHelper(TouchHelper(adapter))
-        touchHelper.attachToRecyclerView(venueRecycler)
+        touchHelper.attachToRecyclerView(binding.venueRecycler)
 
         loadVenuesFromDb(user.uid)
 
-        addVenueFAB.setOnClickListener {
+        binding.addVenueFAB.setOnClickListener {
             startActivity(Intent(this,AddVenueActivity::class.java))
             finish()
         }
@@ -61,18 +64,17 @@ class ViewVenueActivity : AppCompatActivity() {
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
                         Toast.makeText(this@ViewVenueActivity, "No venue found", Toast.LENGTH_SHORT).show()
-                        venueRecycler.visibility=View.INVISIBLE // for in case of delete card
-                        zeroVenues.visibility = View.VISIBLE
-                        addVenueFAB.visibility = View.VISIBLE
+                        binding.venueRecycler.visibility=View.INVISIBLE // for in case of delete card
+                        binding.zeroVenues.visibility = View.VISIBLE
+                        binding.addVenueFAB.visibility = View.VISIBLE
                         return@addOnSuccessListener
                     }
 
+                    refreshAdapter(venues)
                     for (doc in result) {
                         val venueModel = doc.toObject(Venue::class.java)
                         venues.add(venueModel)
                     }
-
-                    refreshAdapter(venues)
                     adapter.notifyDataSetChanged()
                 }
         } catch (e:Exception){
@@ -84,7 +86,7 @@ class ViewVenueActivity : AppCompatActivity() {
     private fun refreshAdapter(list : ArrayList<Venue>) {
         adapter = VenueAdapter(this,list)
         //adapter.notifyItemRemoved()
-        venueRecycler.adapter = adapter
+        binding.venueRecycler.adapter = adapter
     }
 
     fun restart(){

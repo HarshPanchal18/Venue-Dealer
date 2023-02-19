@@ -10,31 +10,33 @@ import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.example.book_venue.databinding.ActivityResetPasswordBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.jakewharton.rxbinding2.widget.RxTextView
-import kotlinx.android.synthetic.main.activity_reset_password.*
 
 class ResetPasswordActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var binding: ActivityResetPasswordBinding
 
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reset_password)
+        binding= ActivityResetPasswordBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.hide()
         auth=FirebaseAuth.getInstance()
 
         val mail=intent.getStringExtra("Mail")
-        et_mail.setText(mail)
+        binding.etMail.setText(mail)
 
-        val emailStream= RxTextView.textChanges(et_mail)
+        val emailStream= RxTextView.textChanges(binding.etMail)
             .skipInitialValue()
             .map { mail -> !Patterns.EMAIL_ADDRESS.matcher(mail).matches() }
         emailStream.subscribe{ showEmailValidAlert(it) }
 
-        reset_pw_btn.setOnClickListener {
-            val mail=et_mail.text.toString().trim()
+        binding.resetPwBtn.setOnClickListener {
+            val mail=binding.etMail.text.toString().trim()
             if(isOnline()){
                 auth.sendPasswordResetEmail(mail)
                     .addOnCompleteListener(this){ reset ->
@@ -62,20 +64,20 @@ class ResetPasswordActivity : AppCompatActivity() {
             }
         }
 
-        back_login.setOnClickListener {
+        binding.backLogin.setOnClickListener {
             startActivity(Intent(this,LoginActivity::class.java))
         }
     }
 
     private fun showEmailValidAlert(isNotValid: Boolean) {
         if(isNotValid){
-            et_mail.error="Email is not valid"
-            reset_pw_btn.isEnabled=false
-            reset_pw_btn.backgroundTintList= ContextCompat.getColorStateList(this,android.R.color.darker_gray)
+            binding.etMail.error="Email is not valid"
+            binding.resetPwBtn.isEnabled=false
+            binding.resetPwBtn.backgroundTintList= ContextCompat.getColorStateList(this,android.R.color.darker_gray)
         } else {
-            et_mail.error=null
-            reset_pw_btn.isEnabled=true
-            reset_pw_btn.backgroundTintList=ContextCompat.getColorStateList(this,R.color.primary_color)
+            binding.etMail.error=null
+            binding.resetPwBtn.isEnabled=true
+            binding.resetPwBtn.backgroundTintList=ContextCompat.getColorStateList(this,R.color.primary_color)
         }
     }
 

@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.book_venue.databinding.VenueCardBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_view_venue.*
 
 class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
 
@@ -25,8 +25,8 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VenueViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.venue_card, parent, false)
-        return VenueViewHolder(view)
+        val binding = VenueCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return VenueViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: VenueViewHolder, position: Int) {
@@ -76,9 +76,9 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         items.removeAt(position)
         //notifyDataSetChanged()
         notifyItemRemoved(position)
-        //activity.venueRecycler.adapter?.notifyItemRemoved(position)
+        //venueRecycler.adapter?.notifyItemRemoved(position)
         //activity.venueRecycler.adapter?.notifyDataSetChanged()
-        //activity.loadVenuesFromDb(user.uid)
+        activity.loadVenuesFromDb(user.uid)
         //activity.restart()
     }
 }

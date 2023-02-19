@@ -6,16 +6,17 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.book_venue.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth:FirebaseAuth
+    private lateinit var binding:ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding=ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.hide()
         auth= FirebaseAuth.getInstance()
@@ -28,11 +29,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        loginbtn.setOnClickListener{
+        binding.loginbtn.setOnClickListener{
             startActivity(Intent(this,LoginActivity::class.java))
         }
 
-        registerbtn.setOnClickListener{
+        binding.registerbtn.setOnClickListener{
             startActivity(Intent(this,RegisterActivity::class.java))
         }
     }

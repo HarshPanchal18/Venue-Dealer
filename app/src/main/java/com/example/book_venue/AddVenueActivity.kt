@@ -14,13 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.book_venue.databinding.ActivityAddVenueBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.activity_add_venue.*
 import kotlin.random.Random
 
 class AddVenueActivity : AppCompatActivity() {
@@ -29,6 +29,7 @@ class AddVenueActivity : AppCompatActivity() {
     private lateinit var venue_types:ArrayList<String>
     private lateinit var imgUris:ArrayList<Uri>
     private lateinit var docId:String
+    private lateinit var binding: ActivityAddVenueBinding
     private var bundle: Bundle? = null
 
     private lateinit var auth: FirebaseAuth
@@ -41,7 +42,8 @@ class AddVenueActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_venue)
+        binding= ActivityAddVenueBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.hide()
 
         auth=FirebaseAuth.getInstance()
@@ -56,70 +58,77 @@ class AddVenueActivity : AppCompatActivity() {
         imgUris= ArrayList()
         documentRef=firestore.collection("venue").document()
 
-        bundle = intent?.extras!!
+        bundle = intent.extras
         if(bundle!=null){
 
-            add_update_venue_btn.text = "Update Venue"
-            venueTitle.setText(bundle!!.getString("name"))
-            venueDescription.setText(bundle!!.getString("description"))
-            venueLandmark.setText(bundle!!.getString("landmark"))
-            dealerPhNo.setText(bundle!!.getString("dealerPh"))
-            rentPrice.setText(bundle!!.getString("rentHour"))
-            venueCapacity.setText(bundle!!.getString("capacity"))
-            restRooms.setText(bundle!!.getString("restRooms"))
+            binding.apply {
+                addUpdateVenueBtn.text = "Update Venue"
+                venueTitle.setText(bundle!!.getString("name"))
+                venueDescription.setText(bundle!!.getString("description"))
+                venueLandmark.setText(bundle!!.getString("landmark"))
+                dealerPhNo.setText(bundle!!.getString("dealerPh"))
+                rentPrice.setText(bundle!!.getString("rentHour"))
+                venueCapacity.setText(bundle!!.getString("capacity"))
+                restRooms.setText(bundle!!.getString("restRooms"))
+            }
 
             docId= bundle!!.getString("docId").toString()
 
             if(bundle!!.getString("parking") != "Yes")
-                parkingToggle.isChecked=false
+                binding.parkingToggle.isChecked=false
 
             if(bundle!!.getString("available") != "Yes")
-                dayTimeAvailability.isChecked=false
+                binding.dayTimeAvailability.isChecked=false
 
             if(bundle!!.getString("types")!!.contains("Convention Hall"))
-                convHall.isChecked=true
-            if(bundle!!.getString("types")!!.contains("Sports"))
-                sports.isChecked=true
-            if(bundle!!.getString("types")!!.contains("Exhibition"))
-                exhibition.isChecked=true
+                binding.convHall.isChecked=true
+            if(bundle!!.getString("types")!!.contains("binding.sports"))
+                binding.sports.isChecked=true
+            if(bundle!!.getString("types")!!.contains("binding.exhibition"))
+                binding.exhibition.isChecked=true
             if(bundle!!.getString("types")!!.contains("Wedding"))
-                wedding.isChecked=true
+                binding.wedding.isChecked=true
             if(bundle!!.getString("types")!!.contains("Festivity"))
-                festivity.isChecked=true
+                binding.festivity.isChecked=true
             if(bundle!!.getString("types")!!.contains("Party"))
-                party.isChecked=true
+                binding.party.isChecked=true
 
-            chooseImage.visibility=View.INVISIBLE
-            clearImage.visibility=View.INVISIBLE
-            selected_images_Rview.visibility=View.INVISIBLE
+            binding.chooseImage.visibility=View.INVISIBLE
+            binding.clearImage.visibility=View.INVISIBLE
+            binding.selectedImagesRview.visibility=View.INVISIBLE
         }
 
-        add_update_venue_btn.setOnClickListener {
+        binding.addUpdateVenueBtn.setOnClickListener {
             if(validateAndBind()) {
                 if(isOnline()) {
                     if(bundle!=null) {
 
-                        if(convHall.isChecked) venue_types.add(convHall.text.toString())
-                        if(wedding.isChecked) venue_types.add(wedding.text.toString())
-                        if(festivity.isChecked) venue_types.add(festivity.text.toString())
-                        if(party.isChecked) venue_types.add(party.text.toString())
-                        if(exhibition.isChecked) venue_types.add(exhibition.text.toString())
-                        if(sports.isChecked) venue_types.add(sports.text.toString())
+                        binding.apply {
+                            if (convHall.isChecked) venue_types.add(convHall.text.toString())
+                            if (wedding.isChecked) venue_types.add(wedding.text.toString())
+                            if (festivity.isChecked) venue_types.add(festivity.text.toString())
+                            if (party.isChecked) venue_types.add(party.text.toString())
+                            if (exhibition.isChecked) venue_types.add(exhibition.text.toString())
+                            if (sports.isChecked) venue_types.add(sports.text.toString())
+                        }
 
                         summaryResult.clear()
-                        summaryResult.apply {
-                            put("Name",venueTitle.text)
-                            put("Description",venueDescription.text.toString())
-                            put("Landmark",venueLandmark.text.toString())
-                            put("City",spinnerCity.selectedItem.toString())
-                            put("State",spinnerState.selectedItem.toString())
-                            put("VenueCapacity",venueCapacity.text.toString())
-                            put("DealerContact",dealerPhNo.text.toString())
-                            put("Types",venue_types.toSet().toString())
-                            put("RentPerHour",rentPrice.text.toString())
-                            put("RestRooms",restRooms.text.toString())
-                            put("Parking",if(parkingToggle.isChecked) "Yes" else "No")
-                            put("Availability",if(dayTimeAvailability.isChecked) "Yes" else "No")
+                        binding.apply {
+                            summaryResult.apply {
+                                put("Name", venueTitle.text)
+                                put("Description", venueDescription.text.toString())
+                                put("Landmark", venueLandmark.text.toString())
+                                put("City", spinnerCity.selectedItem.toString())
+                                put("State", spinnerState.selectedItem.toString())
+                                put("VenueCapacity", venueCapacity.text.toString())
+                                put("DealerContact", dealerPhNo.text.toString())
+                                put("Types", venue_types.toSet().toString())
+                                put("RentPerHour", rentPrice.text.toString())
+                                put("RestRooms", restRooms.text.toString())
+                                put("Parking", if (parkingToggle.isChecked) "Yes" else "No")
+                                put("Availability",
+                                    if (dayTimeAvailability.isChecked) "Yes" else "No")
+                            }
                         }
                         updateToFireStore(summaryResult)
                         finish()
@@ -147,21 +156,21 @@ class AddVenueActivity : AppCompatActivity() {
         }
 
         val adapter=ImageAdapter(ArrayList())
-        selected_images_Rview.adapter=adapter
-        selected_images_Rview.layoutManager=LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        binding.selectedImagesRview.adapter=adapter
+        binding.selectedImagesRview.layoutManager=LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 
-        chooseImage.setOnClickListener { checkPermissionAndGo() }
+        binding.chooseImage.setOnClickListener { checkPermissionAndGo() }
 
-        clearImage.setOnClickListener {
+        binding.clearImage.setOnClickListener {
             imgUris.clear()
-            selected_images_Rview?.adapter?.notifyDataSetChanged()
+            binding.selectedImagesRview.adapter?.notifyDataSetChanged()
         }
 
         val spinStates=resources.getStringArray(R.array.states)
         val adapter2= ArrayAdapter(applicationContext,R.layout.dropdown_item,spinStates)
-        spinnerState.adapter = adapter2
+        binding.spinnerState.adapter = adapter2
 
-        spinnerState.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+        binding.spinnerState.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
 
             override fun onNothingSelected(adapter: AdapterView<*>?) {}
 
@@ -169,15 +178,15 @@ class AddVenueActivity : AppCompatActivity() {
 
                 var adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.gj_cities).sorted())
                 if(position==0){
-                    spinnerCity.adapter = adapter1
+                    binding.spinnerCity.adapter = adapter1
                 }
                 if(position==1){
                     adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.mh_cities).sorted())
-                    spinnerCity.adapter = adapter1
+                    binding.spinnerCity.adapter = adapter1
                 }
                 if(position==2){
                     adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.rj_cities).sorted())
-                    spinnerCity.adapter = adapter1
+                    binding.spinnerCity.adapter = adapter1
                 }
                 adapter1.notifyDataSetChanged()
             }
@@ -239,7 +248,7 @@ class AddVenueActivity : AppCompatActivity() {
                 }
 
                 val adapter=ImageAdapter(imgUris)
-                selected_images_Rview.adapter=adapter
+                binding.selectedImagesRview.adapter=adapter
 
             for(i in 0 until imgUris.size) {
                 val imageRef=mStorageRef.child("images/venue/${System.currentTimeMillis()}_${Random(10000)}_$i.jpg")
@@ -258,92 +267,96 @@ class AddVenueActivity : AppCompatActivity() {
 
     private fun validateAndBind() : Boolean {
 
-        val name = venueTitle.text.toString()
-        val description = venueDescription.text.toString()
-        val landmark = venueLandmark.text.toString()
-        val city = spinnerCity.selectedItem.toString()
-        val state = spinnerState.selectedItem.toString()
-        val capacity = venueCapacity.text.toString()
-        val dealerContact = dealerPhNo.text.toString()
-        val availability = if(dayTimeAvailability.isChecked) "Yes" else "No"
-        val parkingAvailability = if(parkingToggle.isChecked) "Yes" else "No"
-        val rentPerHour = rentPrice.text.toString()
-        val restRooms = restRooms.text.toString()
+        binding.apply {
 
-        if(convHall.isChecked) venue_types.add(convHall.text.toString())
-        if(wedding.isChecked) venue_types.add(wedding.text.toString())
-        if(festivity.isChecked) venue_types.add(festivity.text.toString())
-        if(party.isChecked) venue_types.add(party.text.toString())
-        if(exhibition.isChecked) venue_types.add(exhibition.text.toString())
-        if(sports.isChecked) venue_types.add(sports.text.toString())
+            val name = venueTitle.text.toString()
+            val description = venueDescription.text.toString()
+            val landmark = venueLandmark.text.toString()
+            val city = spinnerCity.selectedItem.toString()
+            val state = spinnerState.selectedItem.toString()
+            val capacity = venueCapacity.text.toString()
+            val dealerContact = dealerPhNo.text.toString()
+            val availability = if (dayTimeAvailability.isChecked) "Yes" else "No"
+            val parkingAvailability = if (parkingToggle.isChecked) "Yes" else "No"
+            val rentPerHour = rentPrice.text.toString()
+            val restRooms = restRooms.text.toString()
 
-        if((name.isNotEmpty() &&
-                    description.isNotEmpty() &&
-                    landmark.isNotEmpty() &&
-                    city.isNotEmpty() &&
-                    state.isNotEmpty() &&
-                    capacity.isNotEmpty() &&
-                    dealerContact.isNotEmpty() &&
-                    rentPerHour.isNotEmpty() &&
-                    restRooms.isNotEmpty()
-                    //imgUris.isNotEmpty()
-                    )
-            && (
-                    wedding.isChecked ||
-                    festivity.isChecked ||
-                    convHall.isChecked ||
-                    party.isChecked ||
-                    exhibition.isChecked ||
-                    sports.isChecked
-                    )
-        ){
-            summaryResult.apply {
-                put("Name",name)
-                put("Description",description)
-                put("Landmark",landmark)
-                put("City",city)
-                put("State",state)
-                put("VenueCapacity",capacity)
-                put("DealerContact",dealerContact)
-                put("Types",venue_types.toSet().toString())
-                put("RentPerHour",rentPerHour)
-                put("RestRooms",restRooms)
-                put("Parking",parkingAvailability)
-                put("Availability",availability)
-                put("userId",user.uid)
-                put("docId",documentRef.id)
+            if (convHall.isChecked) venue_types.add(convHall.text.toString())
+            if (wedding.isChecked) venue_types.add(wedding.text.toString())
+            if (festivity.isChecked) venue_types.add(festivity.text.toString())
+            if (party.isChecked) venue_types.add(party.text.toString())
+            if (exhibition.isChecked) venue_types.add(exhibition.text.toString())
+            if (sports.isChecked) venue_types.add(sports.text.toString())
+
+            if ((name.isNotEmpty() &&
+                        description.isNotEmpty() &&
+                        landmark.isNotEmpty() &&
+                        city.isNotEmpty() &&
+                        state.isNotEmpty() &&
+                        capacity.isNotEmpty() &&
+                        dealerContact.isNotEmpty() &&
+                        rentPerHour.isNotEmpty() &&
+                        restRooms.isNotEmpty()
+                        //imgUris.isNotEmpty()
+                        )
+                && (
+                        wedding.isChecked ||
+                                festivity.isChecked ||
+                                convHall.isChecked ||
+                                party.isChecked ||
+                                exhibition.isChecked ||
+                                sports.isChecked
+                        )
+            ) {
+                summaryResult.apply {
+                    put("Name", name)
+                    put("Description", description)
+                    put("Landmark", landmark)
+                    put("City", city)
+                    put("State", state)
+                    put("VenueCapacity", capacity)
+                    put("DealerContact", dealerContact)
+                    put("Types", venue_types.toSet().toString())
+                    put("RentPerHour", rentPerHour)
+                    put("RestRooms", restRooms)
+                    put("Parking", parkingAvailability)
+                    put("Availability", availability)
+                    put("userId", user.uid)
+                    put("docId", documentRef.id)
+                }
+                return true
             }
-
-            return true
+            return false
         }
-        return false
     }
 
     private fun clearFields(){
 
-        venueTitle.text.clear()
-        venueDescription.text.clear()
-        venueLandmark.text.clear()
-        dealerPhNo.text.clear()
-        venueCapacity.text.clear()
-        spinnerCity.adapter=null // reset
-        spinnerState.adapter=null
-        rentPrice.text.clear()
-        restRooms.text.clear()
+        binding.apply {
+            venueTitle.text.clear()
+            venueDescription.text.clear()
+            venueLandmark.text.clear()
+            dealerPhNo.text.clear()
+            venueCapacity.text.clear()
+            spinnerCity.adapter = null // reset
+            spinnerState.adapter = null
+            rentPrice.text.clear()
+            restRooms.text.clear()
 
-        convHall.isChecked=false
-        sports.isChecked=false
-        exhibition.isChecked=false
-        wedding.isChecked=false
-        festivity.isChecked=false
-        party.isChecked=false
-        dayTimeAvailability.isChecked=true
-        parkingToggle.isChecked=true
+            convHall.isChecked = false
+            sports.isChecked = false
+            exhibition.isChecked = false
+            wedding.isChecked = false
+            festivity.isChecked = false
+            party.isChecked = false
+            dayTimeAvailability.isChecked = true
+            parkingToggle.isChecked = true
+        }
 
         summaryResult.clear()
         venue_types.clear()
         imgUris.clear()
-        selected_images_Rview?.adapter?.notifyDataSetChanged()
+        binding.selectedImagesRview.adapter?.notifyDataSetChanged()
     }
 
     private fun isOnline(): Boolean {
