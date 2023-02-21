@@ -59,22 +59,38 @@
         <item>Ahmedabad</item>
         <item>Valsad</item>
         <item>Navsari</item>
+        <item>Rajkot</item>
+        <item>Anand</item>
         <item>Bharuch</item>
+        <item>Bhuj</item>
+        <item>Gandhinagar</item>
+        <item>Junagadh</item>
+        <item>Dwarka</item>
+        <item>Vapi</item>
+        <item>Mehsana</item>
     </string-array>
 
     <string-array name="mh_cities">
-        <item>Bandra</item>
-        <item>Borivali</item>
-        <item>Charni Road</item>
-        <item>Goregaon</item>
+        <item>Mumbai</item>
+        <item>Nashik</item>
+        <item>Kolhapur</item>
+        <item>Pune</item>
+        <item>Panvel</item>
+        <item>Thane</item>
+        <item>Shirdi</item>
         <item>Navi Mumbai</item>
-        <item>Church Gate</item>
+        <item>Nagpur</item>
+    </string-array>
 
-    </string-array><string-array name="rj_cities">
+    <string-array name="rj_cities">
         <item>Jaipur</item>
         <item>Ajmer</item>
         <item>Bhilwara</item>
         <item>Jodhpur</item>
+        <item>Bikaner</item>
+        <item>Jaisalmer</item>
+        <item>Kota</item>
+        <item>Pushkar</item>
         <item>Udaipur</item>
     </string-array>
 
