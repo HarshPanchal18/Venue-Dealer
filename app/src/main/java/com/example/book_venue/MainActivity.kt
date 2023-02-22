@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.book_venue.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth

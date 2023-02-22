@@ -4,8 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.book_venue.databinding.ActivityHomeBinding
-import com.example.book_venue.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlin.system.exitProcess
@@ -27,12 +27,31 @@ class HomeActivity : AppCompatActivity() {
         binding.accountName.text="${user.displayName}\n${user.email}"
 
         binding.logoutbtn.setOnClickListener {
-            auth.signOut()
-            Intent(this,MainActivity::class.java).also {
-                it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(it)
-                //Toast.makeText(this,"Logged out Successfully", Toast.LENGTH_SHORT).show()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Logout")
+            builder.setMessage("Are you sure you want to logout?")
+            builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+            //positive action
+            builder.setPositiveButton("Yes") { _, _ ->
+                auth.signOut()
+                Intent(this,MainActivity::class.java).also {
+                    it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(it)
+                }
             }
+
+            //cancel action
+            builder.setNegativeButton("No")
+            { _, _ -> Toast.makeText(applicationContext, "Welcome Back :)", Toast.LENGTH_SHORT).show() }
+
+            //create the alert dialog
+            val alertDialog: AlertDialog = builder.create()
+
+            //other properties
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+
         }
 
         binding.addVenuebtn.setOnClickListener {

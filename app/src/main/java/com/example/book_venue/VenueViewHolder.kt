@@ -2,7 +2,6 @@ package com.example.book_venue
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.example.book_venue.databinding.ActivityLoginBinding
 import com.example.book_venue.databinding.VenueCardBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -10,7 +9,7 @@ class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private var binding=VenueCardBinding.bind(itemView)
 
-    val auth=FirebaseAuth.getInstance()
+    private val auth=FirebaseAuth.getInstance()
     val user=auth.currentUser
 
     fun bind(venue:Venue){

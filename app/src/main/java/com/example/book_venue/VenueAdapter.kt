@@ -1,5 +1,7 @@
 package com.example.book_venue
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,8 +20,10 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var user: FirebaseUser = auth.currentUser!!
     private lateinit var items: ArrayList<Venue>
+    private lateinit var context: Context
 
-    constructor( activity: ViewVenueActivity,  items:ArrayList<Venue>) : this() {
+    constructor( activity: ViewVenueActivity,  items:ArrayList<Venue>,context:Context) : this() {
+        this.context=context
         this.activity=activity
         this.items=items
     }
@@ -38,14 +42,33 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
     }
 
     fun deleteData(position: Int){
-        val item:Venue=items[position]
-        db.collection("venue").document(item.docId).delete()
-            .addOnCompleteListener {
-                if(it.isSuccessful){
-                    notifyRemoved(position)
-                    Toast.makeText(activity, "Data Deleted !!", Toast.LENGTH_SHORT).show();
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Delete Venue")
+        builder.setMessage("Are you sure you want to delete the venue?\nThis action can't be undone.")
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        //positive action
+        builder.setPositiveButton("Yes, I understand") { _, _ ->
+            val item: Venue = items[position]
+            db.collection("venue").document(item.docId).delete()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        notifyRemoved(position)
+                        Toast.makeText(activity, "Data Deleted !!", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+        }
+
+        //cancel action
+        builder.setNegativeButton("No")
+        { _, _ -> /*Toast.makeText(context, "Welcome Back :)", Toast.LENGTH_SHORT).show()*/ }
+
+        //create the alert dialog
+        val alertDialog: AlertDialog = builder.create()
+
+        //other properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 
     fun updateData(position: Int){

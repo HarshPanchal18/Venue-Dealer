@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.book_venue.databinding.ActivityAddVenueBinding
 import com.example.book_venue.databinding.ActivityViewVenueBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -37,7 +36,7 @@ class ViewVenueActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         venues= ArrayList()
-        adapter=VenueAdapter(this,venues)
+        adapter=VenueAdapter(this,venues,this)
         binding.venueRecycler.apply {
             setHasFixedSize(true)
             layoutManager=LinearLayoutManager(this@ViewVenueActivity)
@@ -84,7 +83,7 @@ class ViewVenueActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun refreshAdapter(list : ArrayList<Venue>) {
-        adapter = VenueAdapter(this,list)
+        adapter = VenueAdapter(this,list,this)
         //adapter.notifyItemRemoved()
         binding.venueRecycler.adapter = adapter
     }
