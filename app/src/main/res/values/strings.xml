@@ -52,6 +52,13 @@
     <string name="dealer_contact_number">Your Contact Number or Email</string>
     <string name="indian_ruppee">₹</string>
     <string name="indian_ruppee2">\u20B9</string>
+    <string name="okay">Okay</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="warning_title">Warining Title</string>
+    <string name="dummy_text">Dummy Text</string>
+    <string name="error_title">Error Title</string>
+    <string name="success_title">Success Title</string>
 
     <string-array name="gj_cities">
         <item>Surat</item>

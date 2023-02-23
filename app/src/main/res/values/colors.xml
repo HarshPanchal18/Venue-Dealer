@@ -10,4 +10,7 @@
     <color name="primary_color">#00c988</color>
     <color name="gray">#888888</color>
     <color name="gray_light">#f0f0f0</color>
+    <color name="colorSuccess">#7BF447</color>
+    <color name="colorWarning">#F4F147</color>
+    <color name="colorError">#F44336</color>
 </resources>

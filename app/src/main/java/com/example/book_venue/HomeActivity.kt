@@ -1,10 +1,17 @@
 package com.example.book_venue
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.book_venue.databinding.ActivityHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -27,7 +34,35 @@ class HomeActivity : AppCompatActivity() {
         binding.accountName.text="${user.displayName}\n${user.email}"
 
         binding.logoutbtn.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
+            val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+            val view: View = LayoutInflater.from(this)
+                .inflate(R.layout.warning_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+            builder.setView(view)
+            (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.warning_title)
+            (view.findViewById<View>(R.id.textMessage) as TextView).text = resources.getString(R.string.dummy_text)
+            (view.findViewById<View>(R.id.buttonYes) as Button).text = resources.getString(R.string.yes)
+            (view.findViewById<View>(R.id.buttonNo) as Button).text = resources.getString(R.string.no)
+            (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.warning)
+
+            val alertDialog = builder.create()
+            view.findViewById<View>(R.id.buttonYes).setOnClickListener {
+                alertDialog.dismiss()
+                Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show()
+            }
+            view.findViewById<View>(R.id.buttonNo).setOnClickListener {
+                alertDialog.dismiss()
+                Toast.makeText(this, "No", Toast.LENGTH_SHORT).show()
+            }
+            if (alertDialog.window != null) {
+                alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+            }
+            alertDialog.show()
+
+            /*val builder = AlertDialog.Builder(this)//,R.style.AlertDialogTheme)
+            /*val view: View = LayoutInflater.from(this).inflate(
+                R.layout.warning_dialog,
+                findViewById<View>(R.id.layoutDialogContainer) as ConstraintLayout)
+            builder.setView(view)*/
             builder.setTitle("Logout")
             builder.setMessage("Are you sure you want to logout?")
             builder.setIcon(android.R.drawable.ic_dialog_alert)
@@ -51,7 +86,11 @@ class HomeActivity : AppCompatActivity() {
             //other properties
             alertDialog.setCancelable(false)
             alertDialog.show()
+*/
+        }
 
+        binding.dialog.setOnClickListener {
+            showWarningDialog()
         }
 
         binding.addVenuebtn.setOnClickListener {
@@ -74,5 +113,72 @@ class HomeActivity : AppCompatActivity() {
 
         Toast.makeText(this,"Press again to exit",Toast.LENGTH_SHORT).show()
         backPressedTime= System.currentTimeMillis()
+    }
+
+    private fun showSuccessDialog() {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.success_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.success_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = resources.getString(R.string.dummy_text)
+        (view.findViewById<View>(R.id.buttonAction) as Button?)!!.text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+            alertDialog.dismiss()
+            Toast.makeText(this@HomeActivity, "Success", Toast.LENGTH_SHORT).show()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.show()
+    }
+
+    private fun showWarningDialog() {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.warning_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.warning_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = resources.getString(R.string.dummy_text)
+        (view.findViewById<View>(R.id.buttonYes) as Button).text = resources.getString(R.string.yes)
+        (view.findViewById<View>(R.id.buttonNo) as Button).text = resources.getString(R.string.no)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.warning)
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonYes).setOnClickListener {
+            alertDialog.dismiss()
+            Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show()
+        }
+        view.findViewById<View>(R.id.buttonNo).setOnClickListener {
+            alertDialog.dismiss()
+            Toast.makeText(this, "No", Toast.LENGTH_SHORT).show()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.show()
+    }
+
+    private fun showErrorDialog() {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.error_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.error_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = resources.getString(R.string.dummy_text)
+        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+            alertDialog.dismiss()
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.show()
     }
 }
