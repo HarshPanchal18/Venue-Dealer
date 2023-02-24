@@ -46,7 +46,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textTitle"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:id="@+id/buttonNo"
@@ -59,7 +59,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttonYes"
         app:layout_constraintTop_toBottomOf="@id/layoutDialog"/>
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:id="@+id/buttonYes"

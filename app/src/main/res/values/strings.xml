@@ -52,13 +52,23 @@
     <string name="dealer_contact_number">Your Contact Number or Email</string>
     <string name="indian_ruppee">₹</string>
     <string name="indian_ruppee2">\u20B9</string>
+
     <string name="okay">Okay</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="warning_title">Warining Title</string>
+
+    <string name="warning_title">Warning</string>
     <string name="dummy_text">Dummy Text</string>
-    <string name="error_title">Error Title</string>
-    <string name="success_title">Success Title</string>
+    <string name="error_title">Error</string>
+    <string name="network_error_title">Oops!</string>
+    <string name="network_error_text">You\'re not connected with Internet! Check your connection and retry.</string>
+    <string name="success_title">Success</string>
+    <string name="delete_venue">Delete Venue</string>
+    <string name="delete_venue_text">Are you sure you want to delete the venue?</string>
+    <string name="venue_added">New venue is added</string>
+    <string name="venue_update_text">Are you sure you want to modify the venue data?</string>
+    <string name="venue_delete_success">Venue is deleted successfully</string>
+    <string name="logout_text">Are you sure you want to logout?</string>
 
     <string-array name="gj_cities">
         <item>Surat</item>

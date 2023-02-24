@@ -4,11 +4,18 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.example.book_venue.databinding.ActivityResetPasswordBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -52,14 +59,24 @@ class ResetPasswordActivity : AppCompatActivity() {
                     }
             } else {
                 try {
-                    val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
-                    alertDialog.apply{
-                        setTitle("Info")
-                        setMessage("Internet not available, Cross check your internet connectivity and try again")
-                        setIcon(android.R.drawable.ic_dialog_alert)
-                        setButton("OK") { dialog, which -> /*finish()*/ }
-                        show()
+                    val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+                    val view: View = LayoutInflater.from(this)
+                        .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+                    builder.setView(view)
+                    (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
+                    (view.findViewById<View>(R.id.textMessage) as TextView).text = resources.getString(R.string.network_error_text)
+                    (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+                    (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+                    val alertDialog = builder.create()
+                    view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+                        alertDialog.dismiss()
+                        //Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
                     }
+                    if (alertDialog.window != null) {
+                        alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+                    }
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
                 } catch (e: Exception) { e.printStackTrace() }
             }
         }

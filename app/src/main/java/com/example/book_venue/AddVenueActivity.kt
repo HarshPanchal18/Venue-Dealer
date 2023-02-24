@@ -5,12 +5,15 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -125,33 +128,27 @@ class AddVenueActivity : AppCompatActivity() {
                                 put("Types", venue_types.toSet().toString())
                                 put("RentPerHour", rentPrice.text.toString())
                                 put("RestRooms", restRooms.text.toString())
-                                put("Parking", if (parkingToggle.isChecked) "Yes" else "No")
+                                put("Parking",
+                                    if (parkingToggle.isChecked) "Yes" else "No")
                                 put("Availability",
                                     if (dayTimeAvailability.isChecked) "Yes" else "No")
                             }
                         }
                         updateToFireStore(summaryResult)
                         finish()
+                        startActivity(Intent(this,ViewVenueActivity::class.java))
                     } else {
                         documentRef.set(summaryResult)
-                            .addOnSuccessListener { Toast.makeText(applicationContext,"Venue is Added :)",Toast.LENGTH_SHORT).show() }
-                            .addOnFailureListener { Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show() }
-                        finish()
+                            .addOnSuccessListener { showSuccessDialog("Venue is created") }
+                            .addOnFailureListener { showErrorDialog(it.message.toString()) }
                     }
                 } else {
                     try {
-                        val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
-                        alertDialog.apply{
-                            setTitle("Info")
-                            setMessage("Internet not available, Cross check your internet connectivity and try again")
-                            setIcon(android.R.drawable.ic_dialog_alert)
-                            setButton("OK") { dialog, which -> /*finish()*/ }
-                            show()
-                        }
+                        showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.")
                     } catch (e: Exception) { e.printStackTrace() }
                 }
             } else {
-                Toast.makeText(this,"Empty fields are not allowed :(",Toast.LENGTH_SHORT).show()
+                showErrorDialog("Empty fields are not allowed :(")
             }
         }
 
@@ -213,17 +210,10 @@ class AddVenueActivity : AppCompatActivity() {
                     batch.commit()
                 }
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this, "Data Updated!!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this,
-                            "Error : " + task.exception?.message,
-                            Toast.LENGTH_SHORT).show()
-                    }
+                    if (task.isSuccessful) { showSuccessDialog("Venue data are updated") }
+                    else { showErrorDialog(task.exception?.message.toString()) }
                 }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-                }
+                .addOnFailureListener { e -> showErrorDialog(e.message.toString()) }
         }
     }
 
@@ -330,35 +320,6 @@ class AddVenueActivity : AppCompatActivity() {
         }
     }
 
-    private fun clearFields(){
-
-        binding.apply {
-            venueTitle.text.clear()
-            venueDescription.text.clear()
-            venueLandmark.text.clear()
-            dealerPhNo.text.clear()
-            venueCapacity.text.clear()
-            spinnerCity.adapter = null // reset
-            spinnerState.adapter = null
-            rentPrice.text.clear()
-            restRooms.text.clear()
-
-            convHall.isChecked = false
-            sports.isChecked = false
-            exhibition.isChecked = false
-            wedding.isChecked = false
-            festivity.isChecked = false
-            party.isChecked = false
-            dayTimeAvailability.isChecked = true
-            parkingToggle.isChecked = true
-        }
-
-        summaryResult.clear()
-        venue_types.clear()
-        imgUris.clear()
-        binding.selectedImagesRview.adapter?.notifyDataSetChanged()
-    }
-
     private fun isOnline(): Boolean {
         val connManager =
             applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -368,4 +329,52 @@ class AddVenueActivity : AppCompatActivity() {
         }
         return true
     }
+
+    private fun showSuccessDialog(message:String){
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.success_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.success_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
+        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
+
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+            alertDialog.dismiss()
+            finish()
+            //Toast.makeText(this@AddVenueActivity, "Success", Toast.LENGTH_SHORT).show()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun showErrorDialog(message: String) {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
+        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+            alertDialog.dismiss()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
 }

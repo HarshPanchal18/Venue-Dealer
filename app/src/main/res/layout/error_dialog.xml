@@ -46,7 +46,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textTitle"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:id="@+id/buttonAction"
