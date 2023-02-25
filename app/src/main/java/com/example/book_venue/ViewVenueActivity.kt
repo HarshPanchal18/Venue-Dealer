@@ -36,7 +36,7 @@ class ViewVenueActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         venues= ArrayList()
-        adapter=VenueAdapter(this,venues,this)
+        adapter=VenueAdapter(this,this,venues)
         binding.venueRecycler.apply {
             setHasFixedSize(true)
             layoutManager=LinearLayoutManager(this@ViewVenueActivity)
@@ -83,7 +83,7 @@ class ViewVenueActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun refreshAdapter(list : ArrayList<Venue>) {
-        adapter = VenueAdapter(this,list,this)
+        adapter = VenueAdapter(this,this,list)
         //adapter.notifyItemRemoved()
         binding.venueRecycler.adapter = adapter
     }

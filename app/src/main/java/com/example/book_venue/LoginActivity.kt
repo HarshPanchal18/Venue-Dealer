@@ -24,6 +24,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.Scopes
+import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -46,7 +48,8 @@ class LoginActivity : AppCompatActivity() {
         // Authentication
         auth= FirebaseAuth.getInstance()
 
-        val gso= GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestScopes(Scope(Scopes.EMAIL))
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
@@ -85,16 +88,8 @@ class LoginActivity : AppCompatActivity() {
             if(isOnline()){
                 loginUser(mail,pass)
             } else {
-                try {
-                    val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
-                    alertDialog.apply{
-                        setTitle("Info")
-                        setMessage("Internet not available, Cross check your internet connectivity and try again")
-                        setIcon(android.R.drawable.ic_dialog_alert)
-                        setButton("OK") { dialog, which -> /*finish()*/ }
-                        show()
-                    }
-                } catch (e: Exception) { e.printStackTrace() }
+                try { showErrorDialog(resources.getString(R.string.network_error_text)) }
+                catch (e: Exception) { e.printStackTrace() }
             }
         }
 
@@ -102,26 +97,8 @@ class LoginActivity : AppCompatActivity() {
             if(isOnline()){
                 signInGoogle()
             } else {
-                try {
-                    val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
-                    val view: View = LayoutInflater.from(this)
-                        .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
-                    builder.setView(view)
-                    (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
-                    (view.findViewById<View>(R.id.textMessage) as TextView).text = resources.getString(R.string.network_error_text)
-                    (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
-                    (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
-                    val alertDialog = builder.create()
-                    view.findViewById<View>(R.id.buttonAction).setOnClickListener {
-                        alertDialog.dismiss()
-                        //Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-                    }
-                    if (alertDialog.window != null) {
-                        alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
-                    }
-                    alertDialog.setCancelable(false)
-                    alertDialog.show()
-                } catch (e: Exception) { e.printStackTrace() }
+                try { showErrorDialog(resources.getString(R.string.network_error_text)) }
+                catch (e: Exception) { e.printStackTrace() }
             }
         }
 
@@ -144,7 +121,7 @@ class LoginActivity : AppCompatActivity() {
 
     private val launcher=registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result ->
-        if(result.resultCode== Activity.RESULT_OK){
+        if(result.resultCode== Activity.RESULT_OK) {
             val task= GoogleSignIn.getSignedInAccountFromIntent(result.data)
             handleResults(task)
         }
@@ -153,34 +130,25 @@ class LoginActivity : AppCompatActivity() {
     private fun handleResults(task: Task<GoogleSignInAccount>) {
         if(task.isSuccessful){
             val account: GoogleSignInAccount?=task.result
-            if(account!=null){
-                updateUI(account)
-            }
-        }
-        else{
-            Toast.makeText(this,task.exception?.message,Toast.LENGTH_SHORT).show()
+            if(account!=null) { updateUI(account) }
+        } else {
+            showErrorDialog(task.exception?.message.toString())
         }
     }
 
     private fun updateUI(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken,null)
         auth.signInWithCredential(credential).addOnCompleteListener {
-            if(it.isSuccessful){
-                startActivity(Intent(this,HomeActivity::class.java))
-            } else{
-                Toast.makeText(this,it.exception?.message,Toast.LENGTH_SHORT).show()
-            }
+            if(it.isSuccessful) { startActivity(Intent(this,HomeActivity::class.java)) }
+            else { showErrorDialog(it.exception?.message.toString()) }
         }
     }
 
     private fun loginUser(mail: String, pass: String) {
         auth.signInWithEmailAndPassword(mail,pass)
             .addOnCompleteListener(this){ login ->
-                if(login.isSuccessful){
-                    checkMailVerification()
-                } else {
-                    Toast.makeText(this,login.exception?.message,Toast.LENGTH_SHORT).show()
-                }
+                if(login.isSuccessful) { checkMailVerification() }
+                else { showErrorDialog(login.exception?.message.toString()) }
             }
     }
 
@@ -191,16 +159,9 @@ class LoginActivity : AppCompatActivity() {
             Intent(this,HomeActivity::class.java).also {
                 it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(it)
-                Toast.makeText(this,"Login Successfully", Toast.LENGTH_SHORT).show()
             }
         } else {
-            val snackbar= Snackbar.make(binding.loginScreen,"Verify your mail first",Snackbar.LENGTH_SHORT)
-            val snackBarView: View =snackbar.view
-            val params=snackBarView.layoutParams as FrameLayout.LayoutParams
-            params.gravity= Gravity.TOP
-            snackBarView.setBackgroundColor(Color.BLACK)
-            snackbar.show()
-
+            showErrorDialog("Seems like you have not verified your mail yet!")
             val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(VibrationEffect.createOneShot(200,VibrationEffect.DEFAULT_AMPLITUDE))
 
@@ -225,4 +186,27 @@ class LoginActivity : AppCompatActivity() {
         }
         return true
     }
+
+    private fun showErrorDialog(message: String) {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
+        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+            alertDialog.dismiss()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
 }

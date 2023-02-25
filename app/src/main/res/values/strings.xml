@@ -60,7 +60,7 @@
     <string name="warning_title">Warning</string>
     <string name="dummy_text">Dummy Text</string>
     <string name="error_title">Error</string>
-    <string name="network_error_title">Oops!</string>
+    <string name="network_error_title">Oops! something went wrong</string>
     <string name="network_error_text">You\'re not connected with Internet! Check your connection and retry.</string>
     <string name="success_title">Success</string>
     <string name="delete_venue">Delete Venue</string>

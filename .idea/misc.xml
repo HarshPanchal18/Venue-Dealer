@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/bg_btn.xml" value="0.1455" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/bg_text_field.xml" value="0.1455" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/bottom_tab_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_error_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_neutral_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_success_bg.xml" value="0.153" />
@@ -20,7 +21,7 @@
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/success_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/warning_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_add_venue.xml" value="0.22" />
-        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_home.xml" value="0.1" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_main.xml" value="0.209375" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_register.xml" value="0.25" />

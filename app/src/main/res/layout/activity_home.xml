@@ -6,6 +6,7 @@
     tools:context=".HomeActivity"
     android:id="@+id/homeLayout"
     android:orientation="vertical"
+    android:gravity="center"
     android:padding="12sp">
 
     <TextView
@@ -28,38 +29,14 @@
         android:layout_weight="1"
         android:id="@+id/home_subtitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:text="@string/home_subtitle"
         android:textAlignment="center"
         android:textStyle="bold"
         style="@style/SubTitle"/>
 
-    <!--<androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/addVenuebtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_venue"
-        style="@style/ButtonGreen"
-        android:layout_marginTop="15sp" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/viewVenuebtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="View Venue"
-        style="@style/ButtonGreen"
-        android:layout_marginTop="15sp" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/logoutbtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/logoutbtn"
-        style="@style/ButtonGreen"
-        android:layout_marginTop="15sp" />-->
-
     <LinearLayout
-        android:background="@color/cardview_shadow_start_color"
+        android:background="@drawable/bottom_tab_bg"
         android:orientation="horizontal"
         android:padding="12sp"
         android:layout_width="match_parent"
@@ -70,7 +47,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center">
             <ImageView
@@ -90,7 +67,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center">
             <ImageView
@@ -110,7 +87,7 @@
             android:layout_weight="1"
             android:layout_marginHorizontal="10dp"
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center">
             <ImageView
@@ -124,6 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

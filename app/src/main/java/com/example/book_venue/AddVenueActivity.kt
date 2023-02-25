@@ -210,7 +210,7 @@ class AddVenueActivity : AppCompatActivity() {
                     batch.commit()
                 }
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful) { showSuccessDialog("Venue data are updated") }
+                    if (task.isSuccessful) { showSuccessDialog("Venue is updated") }
                     else { showErrorDialog(task.exception?.message.toString()) }
                 }
                 .addOnFailureListener { e -> showErrorDialog(e.message.toString()) }

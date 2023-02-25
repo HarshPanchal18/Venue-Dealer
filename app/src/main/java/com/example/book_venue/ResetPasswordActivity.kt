@@ -50,34 +50,16 @@ class ResetPasswordActivity : AppCompatActivity() {
                         if(reset.isSuccessful){
                             Intent(this,LoginActivity::class.java).also {
                                 it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                showSuccessDialog("Password reset link is sent to your mail")
                                 startActivity(it)
-                                Toast.makeText(this,"Check email for password reset", Toast.LENGTH_SHORT).show()
                             }
                         } else {
-                            Toast.makeText(this,reset.exception?.message, Toast.LENGTH_SHORT).show()
+                            showErrorDialog(reset.exception?.message.toString())
                         }
                     }
             } else {
-                try {
-                    val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
-                    val view: View = LayoutInflater.from(this)
-                        .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
-                    builder.setView(view)
-                    (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
-                    (view.findViewById<View>(R.id.textMessage) as TextView).text = resources.getString(R.string.network_error_text)
-                    (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
-                    (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
-                    val alertDialog = builder.create()
-                    view.findViewById<View>(R.id.buttonAction).setOnClickListener {
-                        alertDialog.dismiss()
-                        //Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-                    }
-                    if (alertDialog.window != null) {
-                        alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
-                    }
-                    alertDialog.setCancelable(false)
-                    alertDialog.show()
-                } catch (e: Exception) { e.printStackTrace() }
+                try { showErrorDialog(resources.getString(R.string.network_error_text)) }
+                catch (e: Exception) { e.printStackTrace() }
             }
         }
 
@@ -108,4 +90,52 @@ class ResetPasswordActivity : AppCompatActivity() {
         }
         return true
     }
+
+    private fun showSuccessDialog(message:String){
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.success_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.success_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
+        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
+
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+            alertDialog.dismiss()
+            finish()
+            //Toast.makeText(this@AddVenueActivity, "Success", Toast.LENGTH_SHORT).show()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun showErrorDialog(message: String) {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
+        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+            alertDialog.dismiss()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
 }

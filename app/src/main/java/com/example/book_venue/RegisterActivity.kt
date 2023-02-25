@@ -97,29 +97,11 @@ class RegisterActivity : AppCompatActivity() {
             val mail=binding.etMail.text.toString().trim()
             val pass=binding.etPassword.text.toString().trim()
 
-            if(isOnline()){
+            if(isOnline()) {
                 registerUser(mail,pass)
             } else {
-                try {
-                    val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
-                    val view: View = LayoutInflater.from(this)
-                        .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
-                    builder.setView(view)
-                    (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
-                    (view.findViewById<View>(R.id.textMessage) as TextView).text = resources.getString(R.string.network_error_text)
-                    (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
-                    (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
-                    val alertDialog = builder.create()
-                    view.findViewById<View>(R.id.buttonAction).setOnClickListener {
-                        alertDialog.dismiss()
-                        //Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-                    }
-                    if (alertDialog.window != null) {
-                        alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
-                    }
-                    alertDialog.setCancelable(false)
-                    alertDialog.show()
-                } catch (e: Exception) { e.printStackTrace() }
+                try { showErrorDialog(resources.getString(R.string.network_error_text)) }
+                catch (e: Exception) { e.printStackTrace() }
             }
         }
 
@@ -133,10 +115,11 @@ class RegisterActivity : AppCompatActivity() {
             .addOnCompleteListener(this) {
                 if(it.isSuccessful){
                     startActivity(Intent(this,LoginActivity::class.java))
-                    Toast.makeText(this,"Registered Successfully",Toast.LENGTH_SHORT).show()
+                    showSuccessDialog("Registered successfully")
+                    //Toast.makeText(this,"Registered Successfully",Toast.LENGTH_SHORT).show()
                     sendMailVerification()
                 } else {
-                    Toast.makeText(this,it.exception?.message,Toast.LENGTH_SHORT).show()
+                    showErrorDialog(it.exception?.message.toString())
                 }
             }
     }
@@ -145,13 +128,14 @@ class RegisterActivity : AppCompatActivity() {
         val user=auth.currentUser
         if(user!=null){
             user.sendEmailVerification().addOnCompleteListener {
-                Toast.makeText(applicationContext,"Verification mail is sent, verify and login again",Toast.LENGTH_SHORT).show()
+                showSuccessDialog("Verification mail is sent, verify and login again")
+                //Toast.makeText(applicationContext,"Verification mail is sent, verify and login again",Toast.LENGTH_SHORT).show()
                 auth.signOut()
                 finish()
                 startActivity(Intent(this,LoginActivity::class.java))
             }
         } else {
-            Toast.makeText(applicationContext,"Failed to sent mail",Toast.LENGTH_SHORT).show()
+            showErrorDialog("Failed to sent mail")
         }
     }
 
@@ -184,4 +168,52 @@ class RegisterActivity : AppCompatActivity() {
         }
         return true
     }
+
+    private fun showErrorDialog(message: String) {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
+        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+            alertDialog.dismiss()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun showSuccessDialog(message:String){
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.success_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.success_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
+        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
+
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+            alertDialog.dismiss()
+            finish()
+            //Toast.makeText(this@AddVenueActivity, "Success", Toast.LENGTH_SHORT).show()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
 }
