@@ -23,7 +23,7 @@ class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
             capacityCard.text= venue.VenueCapacity
             parkingCard.text= venue.Parking
             availableTimeCard.text= venue.Availability
-            //nameDealer.text=user?.displayName
+            nameDealer.text=venue.docId
             //contactDealer.text=user?.email.toString()
             typesCard.text= venue.Types.removePrefix("[").removeSuffix("]")
         }

@@ -132,20 +132,20 @@ class AddVenueActivity : AppCompatActivity() {
                                     if (parkingToggle.isChecked) "Yes" else "No")
                                 put("Availability",
                                     if (dayTimeAvailability.isChecked) "Yes" else "No")
+                                put("docId",docId)
                             }
                         }
                         updateToFireStore(summaryResult)
-                        finish()
                         startActivity(Intent(this,ViewVenueActivity::class.java))
+                        finish()
                     } else {
                         documentRef.set(summaryResult)
                             .addOnSuccessListener { showSuccessDialog("Venue is created") }
                             .addOnFailureListener { showErrorDialog(it.message.toString()) }
                     }
                 } else {
-                    try {
-                        showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.")
-                    } catch (e: Exception) { e.printStackTrace() }
+                    try { showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.") }
+                    catch (e: Exception) { e.printStackTrace() }
                 }
             } else {
                 showErrorDialog("Empty fields are not allowed :(")

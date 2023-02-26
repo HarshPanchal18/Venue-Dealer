@@ -55,49 +55,31 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
                 (context as Activity).findViewById(R.id.layoutDialogContainer))
 
         builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text =
+        (view.findViewById<TextView>(R.id.textTitle)).text =
             context.getString(R.string.delete_venue)
-        (view.findViewById<View>(R.id.textMessage) as TextView).text =
+        (view.findViewById<TextView>(R.id.textMessage)).text =
             context.getString(R.string.delete_venue_text)
-        (view.findViewById<View>(R.id.buttonYes) as Button).text =
+        (view.findViewById<Button>(R.id.buttonYes)).text =
             context.resources.getString(R.string.yes)
-        (view.findViewById<View>(R.id.buttonNo) as Button).text =
+        (view.findViewById<Button>(R.id.buttonNo)).text =
             context.resources.getString(R.string.no)
-        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.warning)
+        (view.findViewById<ImageView>(R.id.imageIcon)).setImageResource(R.drawable.warning)
 
         val alertDialog = builder.create()
         view.findViewById<View>(R.id.buttonYes).setOnClickListener {
             alertDialog.dismiss()
             val item: Venue = items[position]
             db.collection("venue").document(item.docId).delete()
+                .addOnSuccessListener { showSuccessDialog("Venue is deleted successfully") }
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         notifyRemoved(position)
-                        showSuccessDialog("Venue is deleted successfully")
+                        //showSuccessDialog("Venue is deleted successfully")
+                        showSuccessDialog(item.docId)
                         //Toast.makeText(activity, "Data Deleted !!", Toast.LENGTH_SHORT).show()
-
-                        val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
-                        val view: View = LayoutInflater.from(context)
-                            .inflate(R.layout.success_dialog,
-                                (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
-
-                        builder.setView(view)
-                        (view.findViewById<View>(R.id.textTitle) as TextView).text = context.resources.getString(R.string.success_title)
-                        (view.findViewById<View>(R.id.textMessage) as TextView).text = context.getString(R.string.venue_delete_success)
-                        (view.findViewById<View>(R.id.buttonAction) as Button).text = context.resources.getString(R.string.okay)
-                        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
-
-                        val alertDialog = builder.create()
-                        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
-                            alertDialog.dismiss()
-                            //Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-                        }
-                        if (alertDialog.window != null) {
-                            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
-                        }
-                        alertDialog.show()
                     }
                 }
+                .addOnFailureListener { showErrorDialog(it.message.toString()) }
         }
         view.findViewById<View>(R.id.buttonNo).setOnClickListener { alertDialog.dismiss() }
         if (alertDialog.window != null) {
@@ -170,7 +152,7 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
     }
 
     private fun showSuccessDialog(message:String){
-        val builder = androidx.appcompat.app.AlertDialog.Builder(context, R.style.AlertDialogTheme)
+        val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
         val view: View = LayoutInflater.from(context)
             .inflate(R.layout.success_dialog,
                 (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
@@ -186,6 +168,28 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
             alertDialog.dismiss()
             //finish()
             //Toast.makeText(this@AddVenueActivity, "Success", Toast.LENGTH_SHORT).show()
+        }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun showErrorDialog(message: String) {
+        val builder = android.app.AlertDialog.Builder(context, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(context)
+            .inflate(R.layout.error_dialog, (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text = context.resources.getString(R.string.network_error_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
+        (view.findViewById<View>(R.id.buttonAction) as Button).text = context.resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+            alertDialog.dismiss()
         }
         if (alertDialog.window != null) {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
