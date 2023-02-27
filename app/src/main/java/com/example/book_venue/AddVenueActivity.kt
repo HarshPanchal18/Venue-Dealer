@@ -2,6 +2,7 @@ package com.example.book_venue
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,6 +10,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -75,7 +77,7 @@ class AddVenueActivity : AppCompatActivity() {
                 restRooms.setText(bundle!!.getString("restRooms"))
             }
 
-            docId= bundle!!.getString("docId").toString()
+            docId = bundle!!.getString("docId").toString()
 
             if(bundle!!.getString("parking") != "Yes")
                 binding.parkingToggle.isChecked=false
@@ -132,12 +134,11 @@ class AddVenueActivity : AppCompatActivity() {
                                     if (parkingToggle.isChecked) "Yes" else "No")
                                 put("Availability",
                                     if (dayTimeAvailability.isChecked) "Yes" else "No")
-                                put("docId",docId)
                             }
                         }
                         updateToFireStore(summaryResult)
                         startActivity(Intent(this,ViewVenueActivity::class.java))
-                        finish()
+                        //finish()
                     } else {
                         documentRef.set(summaryResult)
                             .addOnSuccessListener { showSuccessDialog("Venue is created") }
@@ -200,20 +201,18 @@ class AddVenueActivity : AppCompatActivity() {
 
     private fun updateToFireStore(updateList:HashMap<String,Any>) {
         if(validateAndBind()){
-            val query=firestore.collection("venue").whereEqualTo("docId",docId)
-                query.get().addOnSuccessListener { querySnapshot ->
+            firestore.collection("venue").document(docId).update(updateList)
+                //.update(updateList)//.whereEqualTo("docId",docId)
+                /*.addOnSuccessListener { querySnapshot ->
                     val batch=firestore.batch()
                     for(doc in querySnapshot) {
                         val docRef=firestore.collection("venue").document(doc.id)
                         batch.update(docRef,updateList)
                     }
                     batch.commit()
-                }
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) { showSuccessDialog("Venue is updated") }
-                    else { showErrorDialog(task.exception?.message.toString()) }
-                }
-                .addOnFailureListener { e -> showErrorDialog(e.message.toString()) }
+                }*/
+                .addOnSuccessListener { Toast.makeText(this,"Updated successfully",Toast.LENGTH_LONG).show()/*showSuccessDialog("Document updated successfully")*/ }
+                .addOnFailureListener { e -> showErrorDialog(docId + e.message.toString()) }
         }
     }
 
