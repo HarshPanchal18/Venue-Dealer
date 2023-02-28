@@ -269,6 +269,19 @@
                 android:layout_marginTop="15dp"
                 android:text="Upload image" />
 
+            <TextView
+                android:id="@+id/currentId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dealerPhNo"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="15dp"
+                android:layout_toEndOf="@id/chooseImage"
+                android:hint="Document ID"
+                android:textColorHint="@color/white"
+                android:textColor="@color/white"
+                android:textSize="2sp" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/clearImage"
                 android:layout_width="wrap_content"

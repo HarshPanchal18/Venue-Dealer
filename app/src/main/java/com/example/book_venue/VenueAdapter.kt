@@ -111,7 +111,7 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
             alertDialog.dismiss()
             val item: Venue = items[position]
             val bundle = Bundle().apply {
-                //putString("docId", item.docId)
+                putString("docId", item.docId)
                 putString("name", item.Name)
                 putString("description", item.Description)
                 putString("landmark", item.Landmark)
