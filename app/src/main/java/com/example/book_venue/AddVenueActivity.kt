@@ -2,7 +2,6 @@ package com.example.book_venue
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,7 +9,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -34,7 +32,6 @@ class AddVenueActivity : AppCompatActivity() {
     private lateinit var venue_types:ArrayList<String>
     private lateinit var imgUris:ArrayList<Uri>
     private lateinit var docId:String
-    //private lateinit var currentDocId:String
 
     private lateinit var binding: ActivityAddVenueBinding
     private var bundle: Bundle? = null
@@ -132,11 +129,9 @@ class AddVenueActivity : AppCompatActivity() {
                         }
 
                         val currentDocId = binding.currentId.text.toString()
-
                         updateToFireStore(currentDocId,summaryResult)
-                        startActivity(Intent(this,ViewVenueActivity::class.java))
-                        //finish()
                     } else {
+                        summaryResult["docId"] = documentRef.id
                         documentRef.set(summaryResult)
                             .addOnSuccessListener { showSuccessDialog("Venue is created") }
                             .addOnFailureListener { showErrorDialog(it.message.toString()) }
@@ -193,20 +188,10 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun updateToFireStore(currentDocId:String, updateList:HashMap<String,Any>) {
-                    if(validateAndBindForUpdate()){
-                        firestore.collection("venue").document(currentDocId).update(updateList)
-                            //.update(updateList)//.whereEqualTo("docId",docId)
-                            /*.addOnSuccessListener { querySnapshot ->
-                                val batch=firestore.batch()
-                                for(doc in querySnapshot) {
-                                    val docRef=firestore.collection("venue").document(doc.id)
-                                    batch.update(docRef,updateList)
-                                }
-                                batch.commit()
-                            }*/
-                            .addOnCompleteListener { Toast.makeText(this,"Updated completed",Toast.LENGTH_LONG).show() }
-                .addOnSuccessListener { Toast.makeText(this,"Updated successfully",Toast.LENGTH_LONG).show()/*showSuccessDialog("Document updated successfully")*/ }
-                .addOnFailureListener { e -> showErrorDialog(docId + e.message.toString()) }
+        if(validateAndBind()) {
+            firestore.collection("venue").document(currentDocId).update(updateList)
+                .addOnSuccessListener { showSuccessDialog("Venue updated successfully") }
+                .addOnFailureListener { e -> showErrorDialog(e.message.toString()) }
         }
     }
 
@@ -305,71 +290,6 @@ class AddVenueActivity : AppCompatActivity() {
                     put("Parking", parkingAvailability)
                     put("Availability", availability)
                     put("userId", user.uid)
-                    put("docId", documentRef.id)
-                }
-                return true
-            }
-            return false
-        }
-    }
-
-    private fun validateAndBindForUpdate() : Boolean {
-
-        binding.apply {
-
-            val name = venueTitle.text.toString()
-            val description = venueDescription.text.toString()
-            val landmark = venueLandmark.text.toString()
-            val city = spinnerCity.selectedItem.toString()
-            val state = spinnerState.selectedItem.toString()
-            val capacity = venueCapacity.text.toString()
-            val dealerContact = dealerPhNo.text.toString()
-            val availability = if (dayTimeAvailability.isChecked) "Yes" else "No"
-            val parkingAvailability = if (parkingToggle.isChecked) "Yes" else "No"
-            val rentPerHour = rentPrice.text.toString()
-            val restRooms = restRooms.text.toString()
-
-            if (convHall.isChecked) venue_types.add(convHall.text.toString())
-            if (wedding.isChecked) venue_types.add(wedding.text.toString())
-            if (festivity.isChecked) venue_types.add(festivity.text.toString())
-            if (party.isChecked) venue_types.add(party.text.toString())
-            if (exhibition.isChecked) venue_types.add(exhibition.text.toString())
-            if (sports.isChecked) venue_types.add(sports.text.toString())
-
-            if ((name.isNotEmpty() &&
-                        description.isNotEmpty() &&
-                        landmark.isNotEmpty() &&
-                        city.isNotEmpty() &&
-                        state.isNotEmpty() &&
-                        capacity.isNotEmpty() &&
-                        dealerContact.isNotEmpty() &&
-                        rentPerHour.isNotEmpty() &&
-                        restRooms.isNotEmpty()
-                        //imgUris.isNotEmpty()
-                        )
-                && (
-                        wedding.isChecked ||
-                                festivity.isChecked ||
-                                convHall.isChecked ||
-                                party.isChecked ||
-                                exhibition.isChecked ||
-                                sports.isChecked
-                        )
-            ) {
-                summaryResult.apply {
-                    put("Name", name)
-                    put("Description", description)
-                    put("Landmark", landmark)
-                    put("City", city)
-                    put("State", state)
-                    put("VenueCapacity", capacity)
-                    put("DealerContact", dealerContact)
-                    put("Types", venue_types.toSet().toString())
-                    put("RentPerHour", rentPerHour)
-                    put("RestRooms", restRooms)
-                    put("Parking", parkingAvailability)
-                    put("Availability", availability)
-                    put("userId", user.uid)
                     //put("docId", documentRef.id)
                 }
                 return true
@@ -377,7 +297,6 @@ class AddVenueActivity : AppCompatActivity() {
             return false
         }
     }
-
 
     private fun isOnline(): Boolean {
         val connManager =
@@ -389,7 +308,7 @@ class AddVenueActivity : AppCompatActivity() {
         return true
     }
 
-    private fun showSuccessDialog(message:String){
+    private fun showSuccessDialog(message:String) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
         val view: View = LayoutInflater.from(this)
             .inflate(R.layout.success_dialog,
@@ -405,11 +324,9 @@ class AddVenueActivity : AppCompatActivity() {
         view.findViewById<View>(R.id.buttonAction).setOnClickListener {
             alertDialog.dismiss()
             finish()
-            //Toast.makeText(this@AddVenueActivity, "Success", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,ViewVenueActivity::class.java))
         }
-        if (alertDialog.window != null) {
-            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
-        }
+        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
         alertDialog.setCancelable(false)
         alertDialog.show()
     }

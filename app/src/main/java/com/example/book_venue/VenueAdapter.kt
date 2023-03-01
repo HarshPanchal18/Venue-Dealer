@@ -70,14 +70,9 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
             alertDialog.dismiss()
             val item: Venue = items[position]
             db.collection("venue").document(item.docId).delete()
-                .addOnSuccessListener { showSuccessDialog("Venue is deleted successfully") }
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        notifyRemoved(position)
-                        //showSuccessDialog("Venue is deleted successfully")
-                        showSuccessDialog(item.docId)
-                        //Toast.makeText(activity, "Data Deleted !!", Toast.LENGTH_SHORT).show()
-                    }
+                .addOnSuccessListener {
+                    showSuccessDialog("Venue is deleted successfully")
+                    notifyRemoved(position)
                 }
                 .addOnFailureListener { showErrorDialog(it.message.toString()) }
         }

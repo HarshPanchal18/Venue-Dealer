@@ -62,7 +62,6 @@ class ViewVenueActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
-                        Toast.makeText(this@ViewVenueActivity, "No venue found", Toast.LENGTH_SHORT).show()
                         binding.venueRecycler.visibility=View.INVISIBLE // for in case of delete card
                         binding.zeroVenues.visibility = View.VISIBLE
                         binding.addVenueFAB.visibility = View.VISIBLE
