@@ -89,13 +89,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/venueDescription"
                 android:layout_marginTop="10dp"
+                android:textSize="16sp"
                 android:text="Your venue will be available for:"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/venueTypes"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="25dp"
                 android:layout_below="@id/venueDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -195,6 +196,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="Day/Time Availability:" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -242,6 +244,7 @@
                 android:layout_below="@id/availableLayout"
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -249,16 +252,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="Parking is available ?" />
+                    android:text="Parking spaces : " />
 
-                <ToggleButton
-                    android:id="@+id/parkingToggle"
-                    android:textOn="Yes"
-                    android:textOff="No"
-                    android:checked="true"
-                    android:layout_marginStart="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                <RadioGroup
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/parkingYes"
+                        android:layout_marginStart="16sp"
+                        android:text="Yes"
+                        android:checked="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <RadioButton
+                        android:id="@+id/parkingNo"
+                        android:layout_marginStart="16sp"
+                        android:text="No"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </RadioGroup>
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton

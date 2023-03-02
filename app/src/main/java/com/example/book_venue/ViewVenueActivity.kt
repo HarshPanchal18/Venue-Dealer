@@ -21,7 +21,7 @@ class ViewVenueActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: VenueAdapter
     private var venues = ArrayList<Venue>()
-    private lateinit var binding: ActivityViewVenueBinding
+    lateinit var binding: ActivityViewVenueBinding
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {

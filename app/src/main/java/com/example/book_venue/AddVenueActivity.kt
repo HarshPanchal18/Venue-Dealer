@@ -50,7 +50,7 @@ class AddVenueActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        initializer()
+        initialize()
 
         bundle = intent.extras
         if(bundle!=null){
@@ -73,24 +73,17 @@ class AddVenueActivity : AppCompatActivity() {
 
             docId = bundle!!.getString("docId").toString()
 
-            if(bundle!!.getString("parking") != "Yes")
-                binding.parkingToggle.isChecked=false
+            if(bundle!!.getString("parking") != "Yes") binding.parkingNo.isChecked=true
+            else binding.parkingYes.isChecked=true
 
-            if(bundle!!.getString("available") != "Yes")
-                binding.dayTimeAvailability.isChecked=false
+            if(bundle!!.getString("available") != "Yes") binding.dayTimeAvailability.isChecked=false
 
-            if(bundle!!.getString("types")!!.contains("Convention Hall"))
-                binding.convHall.isChecked=true
-            if(bundle!!.getString("types")!!.contains("binding.sports"))
-                binding.sports.isChecked=true
-            if(bundle!!.getString("types")!!.contains("binding.exhibition"))
-                binding.exhibition.isChecked=true
-            if(bundle!!.getString("types")!!.contains("Wedding"))
-                binding.wedding.isChecked=true
-            if(bundle!!.getString("types")!!.contains("Festivity"))
-                binding.festivity.isChecked=true
-            if(bundle!!.getString("types")!!.contains("Party"))
-                binding.party.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Convention Hall")) binding.convHall.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Sports")) binding.sports.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Exhibition")) binding.exhibition.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Wedding")) binding.wedding.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Festivity")) binding.festivity.isChecked=true
+            if(bundle!!.getString("types")!!.contains("Party")) binding.party.isChecked=true
 
         }
 
@@ -122,7 +115,7 @@ class AddVenueActivity : AppCompatActivity() {
                                 put("RentPerHour", rentPrice.text.toString())
                                 put("RestRooms", restRooms.text.toString())
                                 put("Parking",
-                                    if (parkingToggle.isChecked) "Yes" else "No")
+                                    if (parkingYes.isChecked) "Yes" else "No")
                                 put("Availability",
                                     if (dayTimeAvailability.isChecked) "Yes" else "No")
                             }
@@ -151,33 +144,6 @@ class AddVenueActivity : AppCompatActivity() {
             imgUris.clear()
             binding.selectedImagesRview.adapter?.notifyDataSetChanged()
         }
-
-        val spinStates=resources.getStringArray(R.array.states)
-        val adapter2= ArrayAdapter(applicationContext,R.layout.dropdown_item,spinStates)
-        binding.spinnerState.adapter = adapter2
-
-        binding.spinnerState.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-
-            override fun onNothingSelected(adapter: AdapterView<*>?) {}
-
-            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
-                var adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.gj_cities).sorted())
-                if(position==0){
-                    binding.spinnerCity.adapter = adapter1
-                }
-                if(position==1){
-                    adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.mh_cities).sorted())
-                    binding.spinnerCity.adapter = adapter1
-                }
-                if(position==2){
-                    adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.rj_cities).sorted())
-                    binding.spinnerCity.adapter = adapter1
-                }
-                adapter1.notifyDataSetChanged()
-            }
-        }
-
     }
 
     private fun checkPermissionAndGo() {
@@ -245,7 +211,7 @@ class AddVenueActivity : AppCompatActivity() {
             val capacity = venueCapacity.text.toString()
             val dealerContact = dealerPhNo.text.toString()
             val availability = if (dayTimeAvailability.isChecked) "Yes" else "No"
-            val parkingAvailability = if (parkingToggle.isChecked) "Yes" else "No"
+            val parkingAvailability = if (parkingYes.isChecked) "Yes" else "No"
             val rentPerHour = rentPrice.text.toString()
             val restRooms = restRooms.text.toString()
 
@@ -256,24 +222,25 @@ class AddVenueActivity : AppCompatActivity() {
             if (exhibition.isChecked) venue_types.add(exhibition.text.toString())
             if (sports.isChecked) venue_types.add(sports.text.toString())
 
-            if ((name.isNotEmpty() &&
-                        description.isNotEmpty() &&
-                        landmark.isNotEmpty() &&
-                        city.isNotEmpty() &&
-                        state.isNotEmpty() &&
-                        capacity.isNotEmpty() &&
-                        dealerContact.isNotEmpty() &&
-                        rentPerHour.isNotEmpty() &&
-                        restRooms.isNotEmpty()
-                        //imgUris.isNotEmpty()
+            if (
+                (name.isNotEmpty()
+                        && description.isNotEmpty()
+                        && landmark.isNotEmpty()
+                        && city.isNotEmpty()
+                        && state.isNotEmpty()
+                        && capacity.isNotEmpty()
+                        && dealerContact.isNotEmpty()
+                        && rentPerHour.isNotEmpty()
+                        && restRooms.isNotEmpty()
+                        //&& imgUris.isNotEmpty()
                         )
-                && (
-                        wedding.isChecked ||
-                                festivity.isChecked ||
-                                convHall.isChecked ||
-                                party.isChecked ||
-                                exhibition.isChecked ||
-                                sports.isChecked
+                &&
+                (wedding.isChecked
+                        || festivity.isChecked
+                        || convHall.isChecked
+                        || party.isChecked
+                        || exhibition.isChecked
+                        || sports.isChecked
                         )
             ) {
                 summaryResult.apply {
@@ -290,7 +257,6 @@ class AddVenueActivity : AppCompatActivity() {
                     put("Parking", parkingAvailability)
                     put("Availability", availability)
                     put("userId", user.uid)
-                    //put("docId", documentRef.id)
                 }
                 return true
             }
@@ -299,8 +265,7 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun isOnline(): Boolean {
-        val connManager =
-            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = connManager.activeNetworkInfo
         if (netInfo == null || !netInfo.isConnected || !netInfo.isAvailable) {
             return false
@@ -324,8 +289,8 @@ class AddVenueActivity : AppCompatActivity() {
         view.findViewById<View>(R.id.buttonAction).setOnClickListener {
             alertDialog.dismiss()
             finish()
-            startActivity(Intent(this,ViewVenueActivity::class.java))
         }
+
         if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
         alertDialog.setCancelable(false)
         alertDialog.show()
@@ -343,17 +308,15 @@ class AddVenueActivity : AppCompatActivity() {
         (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
-            alertDialog.dismiss()
-        }
-        if (alertDialog.window != null) {
-            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
-        }
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener { alertDialog.dismiss() }
+
+        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
 
-    private fun initializer() {
+    private fun initialize() {
 
         // firebase
         auth = FirebaseAuth.getInstance()
@@ -370,8 +333,8 @@ class AddVenueActivity : AppCompatActivity() {
 
         // adapting spinners
         val spinStates=resources.getStringArray(R.array.states)
-        val adapter2= ArrayAdapter(applicationContext,R.layout.dropdown_item,spinStates)
-        binding.spinnerState.adapter = adapter2
+        val adapterStates= ArrayAdapter(applicationContext,R.layout.dropdown_item,spinStates)
+        binding.spinnerState.adapter = adapterStates
 
         binding.spinnerState.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
 
@@ -379,19 +342,14 @@ class AddVenueActivity : AppCompatActivity() {
 
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
-                var adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.gj_cities).sorted())
-                if(position==0){
-                    binding.spinnerCity.adapter = adapter1
+                var adapterCity = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.gj_cities).sorted())
+                when(position){
+                    0 -> {}
+                    1 -> { adapterCity = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.mh_cities).sorted()) }
+                    2 -> { adapterCity = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.rj_cities).sorted()) }
                 }
-                if(position==1){
-                    adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.mh_cities).sorted())
-                    binding.spinnerCity.adapter = adapter1
-                }
-                if(position==2){
-                    adapter1 = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.rj_cities).sorted())
-                    binding.spinnerCity.adapter = adapter1
-                }
-                adapter1.notifyDataSetChanged()
+                binding.spinnerCity.adapter = adapterCity
+                adapterCity.notifyDataSetChanged()
             }
         }
 

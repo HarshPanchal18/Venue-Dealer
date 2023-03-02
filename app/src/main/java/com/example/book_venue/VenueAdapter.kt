@@ -43,9 +43,8 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         holder.bind(items[position])
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
+
 
     fun deleteData(position: Int) {
 
@@ -76,7 +75,10 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
                 }
                 .addOnFailureListener { showErrorDialog(it.message.toString()) }
         }
-        view.findViewById<View>(R.id.buttonNo).setOnClickListener { alertDialog.dismiss() }
+        view.findViewById<View>(R.id.buttonNo).setOnClickListener {
+            activity.binding.venueRecycler.adapter?.notifyDataSetChanged()
+            alertDialog.dismiss()
+        }
         if (alertDialog.window != null) {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
         }
@@ -127,25 +129,24 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
             activity.finish()
 
         }
-        view.findViewById<View>(R.id.buttonNo).setOnClickListener { alertDialog.dismiss() }
-        if (alertDialog.window != null) {
-            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        view.findViewById<View>(R.id.buttonNo).setOnClickListener {
+            activity.binding.venueRecycler.adapter?.notifyDataSetChanged()
+            alertDialog.dismiss()
         }
+
+        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
 
-    private fun notifyRemoved(position: Int){
+    private fun notifyRemoved(position: Int) {
         items.removeAt(position)
-        //notifyDataSetChanged()
         notifyItemRemoved(position)
-        //venueRecycler.adapter?.notifyItemRemoved(position)
-        //activity.venueRecycler.adapter?.notifyDataSetChanged()
-        activity.loadVenuesFromDb(user.uid)
-        //activity.restart()
+        activity.binding.venueRecycler.adapter?.notifyDataSetChanged()
     }
 
-    private fun showSuccessDialog(message:String){
+    private fun showSuccessDialog(message:String) {
         val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
         val view: View = LayoutInflater.from(context)
             .inflate(R.layout.success_dialog,
@@ -158,14 +159,10 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
-            alertDialog.dismiss()
-            //finish()
-            //Toast.makeText(this@AddVenueActivity, "Success", Toast.LENGTH_SHORT).show()
-        }
-        if (alertDialog.window != null) {
-            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
-        }
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener { alertDialog.dismiss() }
+
+        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
