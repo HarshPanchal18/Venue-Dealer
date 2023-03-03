@@ -3,9 +3,12 @@ package com.example.book_venue
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView.*
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.book_venue.databinding.ActivityViewVenueBinding
@@ -21,6 +24,7 @@ class ViewVenueActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: VenueAdapter
     private var venues = ArrayList<Venue>()
+    private var tempVenueList = ArrayList<Venue>()
     lateinit var binding: ActivityViewVenueBinding
 
     @SuppressLint("NotifyDataSetChanged")
@@ -29,7 +33,9 @@ class ViewVenueActivity : AppCompatActivity() {
         binding= ActivityViewVenueBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.hide()
+        setSupportActionBar(binding.viewVenueToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         auth= FirebaseAuth.getInstance()
         user= auth.currentUser!!
         firestore=FirebaseFirestore.getInstance()
@@ -48,10 +54,39 @@ class ViewVenueActivity : AppCompatActivity() {
 
         loadVenuesFromDb(user.uid)
 
+        binding.searchVenue.apply {
+            clearFocus()
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+                OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean { return false }
+
+                override fun onQueryTextChange(searchKeyword: String?): Boolean {
+                    filterList(searchKeyword)
+                    return false
+                }
+            })
+        }
+
         binding.addVenueFAB.setOnClickListener {
             startActivity(Intent(this,AddVenueActivity::class.java))
             finish()
         }
+    }
+
+    private fun filterList(searchKeyword: String?) {
+        val filteredList= arrayListOf<Venue>()
+        for(item in venues)
+            if(item.Name.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
+                ||item.City.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
+                ||item.Types.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
+                ||item.State.toLowerCase().contains(searchKeyword?.toLowerCase()!!))
+            { filteredList.add(item) }
+
+        if(filteredList.isEmpty())
+            Toast.makeText(this,"No venues found for $searchKeyword",Toast.LENGTH_SHORT).show()
+
+        adapter.setFilterList(filteredList)
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -64,7 +99,6 @@ class ViewVenueActivity : AppCompatActivity() {
                     if (result.isEmpty) {
                         binding.venueRecycler.visibility=View.INVISIBLE // for in case of delete card
                         binding.zeroVenues.visibility = View.VISIBLE
-                        binding.addVenueFAB.visibility = View.VISIBLE
                         return@addOnSuccessListener
                     }
 
@@ -75,9 +109,8 @@ class ViewVenueActivity : AppCompatActivity() {
                     }
                     adapter.notifyDataSetChanged()
                 }
-        } catch (e:Exception){
-            Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
         }
+        catch (e:Exception) { Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show() }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -87,9 +120,4 @@ class ViewVenueActivity : AppCompatActivity() {
         binding.venueRecycler.adapter = adapter
     }
 
-    fun restart(){
-        finish()
-        startActivity(intent)
-        overridePendingTransition(0,0) // Call immediately after one of the flavors of #startActivity(Intent) or #finish to specify an explicit transition animation to perform next.
-    }
 }

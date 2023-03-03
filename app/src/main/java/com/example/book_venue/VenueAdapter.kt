@@ -86,6 +86,11 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         alertDialog.show()
     }
 
+    fun setFilterList(filteredList:ArrayList<Venue>) {
+        this.items=filteredList
+        notifyDataSetChanged()
+    }
+
     fun updateData(position: Int) {
         val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
         val view: View = LayoutInflater.from(context)
