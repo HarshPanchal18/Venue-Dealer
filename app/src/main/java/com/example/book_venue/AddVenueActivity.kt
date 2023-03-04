@@ -29,6 +29,7 @@ import kotlin.random.Random
 class AddVenueActivity : AppCompatActivity() {
 
     private lateinit var summaryResult: HashMap<String,Any>
+    private lateinit var imgdata: HashMap<String,Any>
     private lateinit var venue_types:ArrayList<String>
     private lateinit var imgUris:ArrayList<Uri>
     private lateinit var docId:String
@@ -46,7 +47,7 @@ class AddVenueActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityAddVenueBinding.inflate(layoutInflater)
+        binding = ActivityAddVenueBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
@@ -101,7 +102,7 @@ class AddVenueActivity : AppCompatActivity() {
                             if (sports.isChecked) venue_types.add(sports.text.toString())
                         }
 
-                        summaryResult.clear()
+                        //summaryResult.clear()
                         binding.apply {
                             summaryResult.apply {
                                 put("Name", venueTitle.text)
@@ -188,10 +189,12 @@ class AddVenueActivity : AppCompatActivity() {
                 val imageRef=mStorageRef.child("images/venue/${System.currentTimeMillis()}_${Random(10000)}_$i.jpg")
                 val uploadTask=imageRef.putFile(imgUris[i])
                     .addOnSuccessListener {
+                        binding.imageProgress.visibility=View.VISIBLE
                         // Get the URL of the uploaded image
                         imageRef.downloadUrl.addOnSuccessListener { url ->
-                            val imgdata= hashMapOf("url$i" to url.toString())
+                            imgdata = hashMapOf("url$i" to url.toString())
                             summaryResult.putAll(imgdata)
+                            binding.imageProgress.visibility=View.INVISIBLE
                         }
                     }
                 }
@@ -327,6 +330,7 @@ class AddVenueActivity : AppCompatActivity() {
         user = auth.currentUser!!
 
         summaryResult = HashMap()
+        imgdata = HashMap()
         venue_types = ArrayList()
         imgUris = ArrayList()
         documentRef = firestore.collection("venue").document()

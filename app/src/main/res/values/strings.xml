@@ -69,7 +69,7 @@
     <string name="venue_update_text">Are you sure you want to modify the venue data?</string>
     <string name="venue_delete_success">Venue is deleted successfully</string>
     <string name="logout_text">Are you sure you want to logout?</string>
-    <string name="no_bookings">No bookings for now</string>
+    <string name="no_bookings">Bookings are coming very soon</string>
 
     <string-array name="gj_cities">
         <item>Surat</item>

@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".AddVenueActivity">
 
+    <ProgressBar
+        android:id="@+id/imageProgress"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <ScrollView
         android:layout_above="@id/add_update_venue_btn"
         android:layout_alignParentTop="true"
@@ -327,10 +334,10 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_update_venue_btn"
         style="@style/ButtonGreen"
-        android:layout_marginHorizontal="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="10dp"
         android:text="Add Venue" />
 
