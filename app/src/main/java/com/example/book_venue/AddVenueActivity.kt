@@ -9,6 +9,8 @@ import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -24,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import java.util.regex.Pattern
 import kotlin.random.Random
 
 class AddVenueActivity : AppCompatActivity() {
@@ -52,6 +55,7 @@ class AddVenueActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         initialize()
+        verifyInputs()
 
         bundle = intent.extras
         if(bundle!=null){
@@ -362,5 +366,43 @@ class AddVenueActivity : AppCompatActivity() {
         binding.selectedImagesRview.adapter=adapter
         binding.selectedImagesRview.layoutManager=LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 
+        binding.dealerPhNo.setText(user.email.toString())
+    }
+
+    private fun mailMobileValidate(text: String?): Boolean {
+        //val p = Pattern.compile("\\[0][7-9]\\[0-1][0-9]{8}") // only for a phone number
+        //val p = Pattern.compile("^(?:\\d{10}|\\w+@\\w+\\.\\w{2,3})\$") // giving false if having a period before '@'
+        //val p = Pattern.compile("^(?:(?:\\+|0{0,2})91([\\- ])?|[0]?)?[6789]\\d{9}\$|^[\\w.%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$")
+        val pattern = Pattern.compile("^(?:(?:\\+|0{0,2})91([\\- ])?|[0]?)?[6789]\\d{9}\$|^[\\w.%+-]+@[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*\\.[A-Za-z]{2,}\$")
+
+        /*
+        ^ indicates the start of the string
+        (?:(?:\+|0{0,2})91([\- ])?|[0]?)? matches the optional country code for India, followed by an optional hyphen or space separator
+        [6789]\d{9} matches a 10-digit phone number starting with 6, 7, 8, or 9
+        | indicates an OR condition
+        ^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ matches an email address with alphanumeric characters and some special characters, followed by an @ symbol, domain name with alphanumeric characters, hyphens, and periods, and a top-level domain name with two or more characters.
+        $ indicates the end of the string
+        */
+
+        val m = pattern.matcher(text!!)
+        return m.matches()
+    }
+
+    private fun verifyInputs() {
+
+        binding.dealerPhNo.addTextChangedListener(object : TextWatcher{
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (mailMobileValidate(binding.dealerPhNo.text.toString()))
+                    binding.addUpdateVenueBtn.isEnabled = true
+                else {
+                    binding.addUpdateVenueBtn.isEnabled = false
+                    binding.dealerPhNo.error="Invalid input"
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {}
+        })
     }
 }

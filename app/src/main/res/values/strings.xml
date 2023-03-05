@@ -46,10 +46,10 @@
     </string>
     <string name="show_data">Show Data</string>
     <string name="first_name">First Name</string>
-    <string name="venue_landmark">Enter venue landmark</string>
+    <string name="venue_landmark">Enter venue locality (i.e. Area, Sector, Street) </string>
     <string name="venue_name">Enter venue name</string>
     <string name="add_venue">Add Venue</string>
-    <string name="dealer_contact_number">Your Contact Number or Email</string>
+    <string name="dealer_contact_number">Dealer Contact Number or Email</string>
     <string name="indian_ruppee">₹</string>
     <string name="indian_ruppee2">\u20B9</string>
 
