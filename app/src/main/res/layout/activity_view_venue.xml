@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#B4F2F666"
-    tools:context=".ViewVenueActivity">
+    tools:context=".ui.ViewVenueActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/viewVenueToolbar"
@@ -30,6 +30,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/viewVenueToolbar"
         android:paddingHorizontal="8sp"
+        android:overScrollMode="never"
         android:paddingVertical="2sp"/>
 
     <TextView

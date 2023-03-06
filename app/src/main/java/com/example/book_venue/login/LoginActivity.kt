@@ -1,24 +1,24 @@
-package com.example.book_venue
+package com.example.book_venue.login
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.example.book_venue.ui.HomeActivity
+import com.example.book_venue.R
 import com.example.book_venue.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -27,7 +27,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -75,7 +74,8 @@ class LoginActivity : AppCompatActivity() {
         invalidFieldsStream.subscribe { isValid:Boolean ->
             if(isValid) {
                 binding.loginbtn.isEnabled=true
-                binding.loginbtn.backgroundTintList= ContextCompat.getColorStateList(this,R.color.primary_color)
+                binding.loginbtn.backgroundTintList= ContextCompat.getColorStateList(this,
+                    R.color.primary_color)
             } else {
                 binding.loginbtn.isEnabled=false
                 binding.loginbtn.backgroundTintList= ContextCompat.getColorStateList(this,android.R.color.darker_gray)
@@ -103,11 +103,11 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.tvHaventAccount.setOnClickListener {
-            startActivity(Intent(this,RegisterActivity::class.java))
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
 
         binding.tvForgotPassword.setOnClickListener {
-            val intent=Intent(this,ResetPasswordActivity::class.java)
+            val intent=Intent(this, ResetPasswordActivity::class.java)
             intent.putExtra("Mail",binding.etMail.text.toString().trim())
             startActivity(intent)
         }
@@ -139,7 +139,7 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken,null)
         auth.signInWithCredential(credential).addOnCompleteListener {
-            if(it.isSuccessful) { startActivity(Intent(this,HomeActivity::class.java)) }
+            if(it.isSuccessful) { startActivity(Intent(this, HomeActivity::class.java)) }
             else { showErrorDialog(it.exception?.message.toString()) }
         }
     }
@@ -156,7 +156,7 @@ class LoginActivity : AppCompatActivity() {
         val user=auth.currentUser
         if(user?.isEmailVerified==true){
             finish()
-            Intent(this,HomeActivity::class.java).also {
+            Intent(this, HomeActivity::class.java).also {
                 it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(it)
             }

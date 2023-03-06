@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddVenueActivity">
+    tools:context=".ui.AddVenueActivity">
 
     <ProgressBar
         android:id="@+id/imageProgress"
@@ -17,6 +17,7 @@
     <ScrollView
         android:layout_above="@id/add_update_venue_btn"
         android:layout_alignParentTop="true"
+        android:overScrollMode="never"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
@@ -52,7 +53,7 @@
                 android:id="@+id/venueLandmark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/venueTitle"
+                android:layout_below="@id/selected_images_Rview"
                 android:layout_marginTop="10dp"
                 android:hint="@string/venue_landmark"
                 android:inputType="textCapSentences"
@@ -205,6 +206,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
+                    android:textStyle="bold"
                     android:text="Day/Time Availability:" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -259,6 +261,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:textSize="16sp"
                     android:text="Parking spaces : " />
 
@@ -286,9 +289,9 @@
                 android:id="@+id/chooseImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/dealerPhNo"
+                android:layout_below="@id/venueTitle"
                 android:layout_marginTop="15dp"
-                android:text="Upload image" />
+                android:text="Pick venue images" />
 
             <TextView
                 android:id="@+id/currentId"
@@ -307,9 +310,10 @@
                 android:id="@+id/clearImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/dealerPhNo"
+                android:layout_below="@id/venueTitle"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="15dp"
+                android:visibility="gone"
                 android:text="Clear images" />
 
             <ProgressBar
@@ -325,7 +329,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/selected_images_Rview"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="150dp"
+                android:visibility="gone"
+                android:background="@color/gray_light"
                 android:layout_below="@id/chooseImage"
                 android:layout_marginTop="16sp"
                 android:padding="5dp" />

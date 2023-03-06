@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="20sp"
     android:id="@+id/loginScreen"
-    tools:context=".LoginActivity">
+    tools:context=".login.LoginActivity">
 
     <TextView
         android:id="@+id/tv_login_title"
@@ -102,13 +102,13 @@
         style="@style/ButtonGreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="20sp"
         android:text="Sign in with    "
         android:paddingHorizontal="20dp"
         android:drawableEnd="@drawable/common_google_signin_btn_icon_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginbtn" />
+        app:layout_constraintTop_toBottomOf="@+id/orText" />
 
     <TextView
         android:id="@+id/tv_havent_account"
@@ -121,5 +121,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/orText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OR"
+        android:fontFamily="monospace"
+        android:layout_marginTop="20sp"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginbtn"
+        tools:layout_editor_absoluteY="504dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

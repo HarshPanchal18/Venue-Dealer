@@ -19,23 +19,23 @@
         android:theme="@style/Theme.BookVenue"
         tools:targetApi="31">
         <activity
-            android:parentActivityName=".HomeActivity"
-            android:name=".ViewVenueActivity"
+            android:parentActivityName=".ui.HomeActivity"
+            android:name=".ui.ViewVenueActivity"
             android:exported="false" />
         <activity
-            android:name=".AddVenueActivity"
+            android:name=".ui.AddVenueActivity"
             android:exported="false" />
         <activity
-            android:name=".ResetPasswordActivity"
+            android:name=".login.ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".ui.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".login.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".login.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

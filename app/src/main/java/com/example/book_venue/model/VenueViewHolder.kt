@@ -1,4 +1,4 @@
-package com.example.book_venue
+package com.example.book_venue.model
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +12,7 @@ class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val auth=FirebaseAuth.getInstance()
     val user=auth.currentUser
 
-    fun bind(venue:Venue){
+    fun bind(venue: Venue){
 
         binding.apply {
             venueTitleCard.text=venue.Name

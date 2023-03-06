@@ -6,6 +6,9 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.book_venue.databinding.ActivityMainBinding
+import com.example.book_venue.login.LoginActivity
+import com.example.book_venue.login.RegisterActivity
+import com.example.book_venue.ui.HomeActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -29,18 +32,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.loginbtn.setOnClickListener{
-            startActivity(Intent(this,LoginActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
         binding.registerbtn.setOnClickListener{
-            startActivity(Intent(this,RegisterActivity::class.java))
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 
     override fun onStart() {
         super.onStart()
         if(auth.currentUser!=null) {
-            Intent(this,HomeActivity::class.java).also {
+            Intent(this, HomeActivity::class.java).also {
                 it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(it)
             }

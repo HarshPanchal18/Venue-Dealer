@@ -1,9 +1,11 @@
-package com.example.book_venue
+package com.example.book_venue.helper
 
 import android.graphics.Canvas
 import android.graphics.Color
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.book_venue.R
+import com.example.book_venue.adapters.VenueAdapter
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 class TouchHelper(adapter: VenueAdapter) :

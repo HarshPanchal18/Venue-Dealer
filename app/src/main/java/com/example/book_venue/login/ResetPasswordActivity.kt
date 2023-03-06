@@ -1,4 +1,4 @@
-package com.example.book_venue
+package com.example.book_venue.login
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -14,9 +14,9 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.example.book_venue.R
 import com.example.book_venue.databinding.ActivityResetPasswordBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -48,7 +48,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                 auth.sendPasswordResetEmail(mail)
                     .addOnCompleteListener(this){ reset ->
                         if(reset.isSuccessful){
-                            Intent(this,LoginActivity::class.java).also {
+                            Intent(this, LoginActivity::class.java).also {
                                 it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 showSuccessDialog("Password reset link is sent to your mail")
                                 startActivity(it)
@@ -64,7 +64,7 @@ class ResetPasswordActivity : AppCompatActivity() {
         }
 
         binding.backLogin.setOnClickListener {
-            startActivity(Intent(this,LoginActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 
@@ -76,7 +76,8 @@ class ResetPasswordActivity : AppCompatActivity() {
         } else {
             binding.etMail.error=null
             binding.resetPwBtn.isEnabled=true
-            binding.resetPwBtn.backgroundTintList=ContextCompat.getColorStateList(this,R.color.primary_color)
+            binding.resetPwBtn.backgroundTintList=ContextCompat.getColorStateList(this,
+                R.color.primary_color)
         }
     }
 

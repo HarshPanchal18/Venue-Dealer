@@ -1,4 +1,4 @@
-package com.example.book_venue
+package com.example.book_venue.ui
 
 import android.Manifest
 import android.app.AlertDialog
@@ -19,6 +19,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.book_venue.R
+import com.example.book_venue.adapters.ImageAdapter
 import com.example.book_venue.databinding.ActivityAddVenueBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -60,6 +62,8 @@ class AddVenueActivity : AppCompatActivity() {
         bundle = intent.extras
         if(bundle!=null){
 
+            docId = bundle!!.getString("docId").toString()
+
             binding.apply {
                 addUpdateVenueBtn.text = "Update Venue"
                 venueTitle.setText(bundle!!.getString("name"))
@@ -75,8 +79,6 @@ class AddVenueActivity : AppCompatActivity() {
                 clearImage.visibility=View.INVISIBLE
                 selectedImagesRview.visibility=View.INVISIBLE
             }
-
-            docId = bundle!!.getString("docId").toString()
 
             if(bundle!!.getString("parking") != "Yes") binding.parkingNo.isChecked=true
             else binding.parkingYes.isChecked=true
@@ -96,43 +98,11 @@ class AddVenueActivity : AppCompatActivity() {
             if(validateAndBind()) {
                 if(isOnline()) {
                     if(bundle!=null) {
-
-                        binding.apply {
-                            if (convHall.isChecked) venue_types.add(convHall.text.toString())
-                            if (wedding.isChecked) venue_types.add(wedding.text.toString())
-                            if (festivity.isChecked) venue_types.add(festivity.text.toString())
-                            if (party.isChecked) venue_types.add(party.text.toString())
-                            if (exhibition.isChecked) venue_types.add(exhibition.text.toString())
-                            if (sports.isChecked) venue_types.add(sports.text.toString())
-                        }
-
-                        //summaryResult.clear()
-                        binding.apply {
-                            summaryResult.apply {
-                                put("Name", venueTitle.text)
-                                put("Description", venueDescription.text.toString())
-                                put("Landmark", venueLandmark.text.toString())
-                                put("City", spinnerCity.selectedItem.toString())
-                                put("State", spinnerState.selectedItem.toString())
-                                put("VenueCapacity", venueCapacity.text.toString())
-                                put("DealerContact", dealerPhNo.text.toString())
-                                put("Types", venue_types.toSet().toString())
-                                put("RentPerHour", rentPrice.text.toString())
-                                put("RestRooms", restRooms.text.toString())
-                                put("Parking",
-                                    if (parkingYes.isChecked) "Yes" else "No")
-                                put("Availability",
-                                    if (dayTimeAvailability.isChecked) "Yes" else "No")
-                            }
-                        }
-
+                        setHashMapForUpdate()
                         val currentDocId = binding.currentId.text.toString()
                         updateToFireStore(currentDocId,summaryResult)
                     } else {
-                        summaryResult["docId"] = documentRef.id
-                        documentRef.set(summaryResult)
-                            .addOnSuccessListener { showSuccessDialog("Venue is created") }
-                            .addOnFailureListener { showErrorDialog(it.message.toString()) }
+                        createNewVenue(summaryResult)
                     }
                 } else {
                     try { showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.") }
@@ -148,6 +118,8 @@ class AddVenueActivity : AppCompatActivity() {
         binding.clearImage.setOnClickListener {
             imgUris.clear()
             binding.selectedImagesRview.adapter?.notifyDataSetChanged()
+            binding.selectedImagesRview.visibility=View.GONE
+            binding.clearImage.visibility=View.GONE
         }
     }
 
@@ -156,6 +128,13 @@ class AddVenueActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),2)
         }
         openFileChooser()
+    }
+
+    private fun createNewVenue(summaryResult: HashMap<String, Any>) {
+        summaryResult["docId"] = documentRef.id
+        documentRef.set(summaryResult)
+            .addOnSuccessListener { showSuccessDialog("Venue is created") }
+            .addOnFailureListener { showErrorDialog(it.message.toString()) }
     }
 
     private fun updateToFireStore(currentDocId:String, updateList:HashMap<String,Any>) {
@@ -173,6 +152,8 @@ class AddVenueActivity : AppCompatActivity() {
             action = Intent.ACTION_GET_CONTENT
         }
         startActivityForResult(Intent.createChooser(intent, "Select Images"), 1)
+        binding.selectedImagesRview.visibility=View.VISIBLE
+        binding.clearImage.visibility=View.VISIBLE
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -186,7 +167,7 @@ class AddVenueActivity : AppCompatActivity() {
                     imgUris.add(item.uri)
                 }
 
-                val adapter=ImageAdapter(imgUris)
+                val adapter= ImageAdapter(imgUris)
                 binding.selectedImagesRview.adapter=adapter
 
             for(i in 0 until imgUris.size) {
@@ -341,7 +322,7 @@ class AddVenueActivity : AppCompatActivity() {
 
         // adapting spinners
         val spinStates=resources.getStringArray(R.array.states)
-        val adapterStates= ArrayAdapter(applicationContext,R.layout.dropdown_item,spinStates)
+        val adapterStates= ArrayAdapter(applicationContext, R.layout.dropdown_item,spinStates)
         binding.spinnerState.adapter = adapterStates
 
         binding.spinnerState.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
@@ -350,11 +331,14 @@ class AddVenueActivity : AppCompatActivity() {
 
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
-                var adapterCity = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.gj_cities).sorted())
+                var adapterCity = ArrayAdapter(applicationContext,
+                    R.layout.dropdown_item,resources.getStringArray(R.array.gj_cities).sorted())
                 when(position){
                     0 -> {}
-                    1 -> { adapterCity = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.mh_cities).sorted()) }
-                    2 -> { adapterCity = ArrayAdapter(applicationContext,R.layout.dropdown_item,resources.getStringArray(R.array.rj_cities).sorted()) }
+                    1 -> { adapterCity = ArrayAdapter(applicationContext,
+                        R.layout.dropdown_item,resources.getStringArray(R.array.mh_cities).sorted()) }
+                    2 -> { adapterCity = ArrayAdapter(applicationContext,
+                        R.layout.dropdown_item,resources.getStringArray(R.array.rj_cities).sorted()) }
                 }
                 binding.spinnerCity.adapter = adapterCity
                 adapterCity.notifyDataSetChanged()
@@ -362,7 +346,7 @@ class AddVenueActivity : AppCompatActivity() {
         }
 
         // Image adapter for selected images
-        val adapter=ImageAdapter(ArrayList())
+        val adapter= ImageAdapter(ArrayList())
         binding.selectedImagesRview.adapter=adapter
         binding.selectedImagesRview.layoutManager=LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
 
@@ -405,4 +389,35 @@ class AddVenueActivity : AppCompatActivity() {
             override fun afterTextChanged(p0: Editable?) {}
         })
     }
+
+    private fun setHashMapForUpdate() {
+
+        binding.apply {
+
+            if (convHall.isChecked) venue_types.add(convHall.text.toString())
+            if (wedding.isChecked) venue_types.add(wedding.text.toString())
+            if (festivity.isChecked) venue_types.add(festivity.text.toString())
+            if (party.isChecked) venue_types.add(party.text.toString())
+            if (exhibition.isChecked) venue_types.add(exhibition.text.toString())
+            if (sports.isChecked) venue_types.add(sports.text.toString())
+
+            summaryResult.apply {
+                put("Name", venueTitle.text)
+                put("Description", venueDescription.text.toString())
+                put("Landmark", venueLandmark.text.toString())
+                put("City", spinnerCity.selectedItem.toString())
+                put("State", spinnerState.selectedItem.toString())
+                put("VenueCapacity", venueCapacity.text.toString())
+                put("DealerContact", dealerPhNo.text.toString())
+                put("Types", venue_types.toSet().toString())
+                put("RentPerHour", rentPrice.text.toString())
+                put("RestRooms", restRooms.text.toString())
+                put("Parking",
+                    if (parkingYes.isChecked) "Yes" else "No")
+                put("Availability",
+                    if (dayTimeAvailability.isChecked) "Yes" else "No")
+            }
+        }
+    }
+
 }

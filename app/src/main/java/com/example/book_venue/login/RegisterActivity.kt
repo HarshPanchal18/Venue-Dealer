@@ -1,4 +1,4 @@
-package com.example.book_venue
+package com.example.book_venue.login
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -14,9 +14,9 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.example.book_venue.R
 import com.example.book_venue.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -86,7 +86,7 @@ class RegisterActivity : AppCompatActivity() {
         invalidFieldsStream.subscribe { isValid:Boolean ->
             if (isValid) {
                 binding.registerbtn.isEnabled=true
-                binding.registerbtn.backgroundTintList= ContextCompat.getColorStateList(this,R.color.primary_color)
+                binding.registerbtn.backgroundTintList= ContextCompat.getColorStateList(this, R.color.primary_color)
             } else {
                 binding.registerbtn.isEnabled=false
                 binding.registerbtn.backgroundTintList=ContextCompat.getColorStateList(this,android.R.color.darker_gray)
@@ -106,7 +106,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.tvHaveAccount.setOnClickListener {
-            startActivity(Intent(this,LoginActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 
@@ -114,9 +114,7 @@ class RegisterActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(mail,pass)
             .addOnCompleteListener(this) {
                 if(it.isSuccessful){
-                    startActivity(Intent(this,LoginActivity::class.java))
                     showSuccessDialog("Registered successfully")
-                    //Toast.makeText(this,"Registered Successfully",Toast.LENGTH_SHORT).show()
                     sendMailVerification()
                 } else {
                     showErrorDialog(it.exception?.message.toString())
@@ -126,16 +124,15 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun sendMailVerification() {
         val user=auth.currentUser
-        if(user!=null){
+        if(user!=null) {
             user.sendEmailVerification().addOnCompleteListener {
-                showSuccessDialog("Verification mail is sent, verify and login again")
+                showSuccessDialog("Verification mail has been sent, verify and login")
                 //Toast.makeText(applicationContext,"Verification mail is sent, verify and login again",Toast.LENGTH_SHORT).show()
                 auth.signOut()
                 finish()
-                startActivity(Intent(this,LoginActivity::class.java))
             }
         } else {
-            showErrorDialog("Failed to sent mail")
+            showErrorDialog("Failed to sent a mail")
         }
     }
 
@@ -191,7 +188,7 @@ class RegisterActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun showSuccessDialog(message:String){
+    private fun showSuccessDialog(message:String) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
         val view: View = LayoutInflater.from(this)
             .inflate(R.layout.success_dialog,

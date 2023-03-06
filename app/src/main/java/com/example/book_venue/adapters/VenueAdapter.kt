@@ -1,4 +1,4 @@
-package com.example.book_venue
+package com.example.book_venue.adapters
 
 import android.app.Activity
 import android.content.Context
@@ -14,7 +14,12 @@ import android.widget.TextView
 import androidx.appcompat.app.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.book_venue.*
 import com.example.book_venue.databinding.VenueCardBinding
+import com.example.book_venue.model.Venue
+import com.example.book_venue.model.VenueViewHolder
+import com.example.book_venue.ui.AddVenueActivity
+import com.example.book_venue.ui.ViewVenueActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,7 +33,7 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
     private lateinit var items: ArrayList<Venue>
     private lateinit var context: Context
 
-    constructor( context: Context, activity: ViewVenueActivity, items: ArrayList<Venue>) : this() {
+    constructor(context: Context, activity: ViewVenueActivity, items: ArrayList<Venue>) : this() {
         this.context = context
         this.activity = activity
         this.items = items

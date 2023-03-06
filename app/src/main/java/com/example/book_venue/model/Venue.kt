@@ -1,4 +1,4 @@
-package com.example.book_venue
+package com.example.book_venue.model
 
 data class Venue(
     val Name: String,
