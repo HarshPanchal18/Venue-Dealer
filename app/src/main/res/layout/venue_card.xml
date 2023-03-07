@@ -2,65 +2,56 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/venueCard"
-        android:elevation="5dp"
         app:cardCornerRadius="10dp"
-        app:cardMaxElevation="5dp"
         android:layout_marginVertical="5sp"
+        app:cardMaxElevation="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/card"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/venueTitle_card"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_alignParentTop="true"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:text="VenueTitle"
+                android:textAlignment="textStart"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/venueTitle_card"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_weight="3"
-            android:textAlignment="textStart"
-            android:layout_marginHorizontal="10dp"
-            android:text="VenueTitle" />
+            <androidx.cardview.widget.CardView
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10sp"
+                android:layout_marginEnd="10sp"
+                app:cardCornerRadius="20dp"
+                android:layout_width="100sp"
+                android:layout_height="60sp">
 
-        <TextView
-            android:layout_weight="0.5"
-            android:id="@+id/nameDealer"
-            android:gravity="end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
-
-                <!--
-        <TextView
-            android:id="@+id/contactDealer"
-            android:layout_weight="0.5"
-            android:layout_width="wrap_content"
-            android:gravity="end"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:text="Dealer Contact" />
-                -->
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/venueHeadImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/logo"
+                    android:contentDescription="Venue Logo" />
+            </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:id="@+id/venueLandmark_card"
             android:orientation="horizontal"
+            android:layout_below="@id/venueTitle_card"
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -91,7 +82,9 @@
         </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/capacityAndParking"
                 android:layout_marginTop="6dp"
+                android:layout_below="@id/venueLandmark_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -138,6 +131,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/descriptionLinear"
+                android:layout_below="@id/capacityAndParking"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -161,6 +156,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/availableLayout"
+                android:layout_below="@id/descriptionLinear"
                 android:padding="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -185,6 +182,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/typesLayout"
+                android:layout_below="@id/availableLayout"
                 android:padding="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -212,6 +211,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/swipeLayout"
+                android:layout_below="@id/typesLayout"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -236,7 +237,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 

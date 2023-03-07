@@ -10,6 +10,7 @@
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_neutral_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_success_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_warning_bg.xml" value="0.153" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/card_shadow.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/dialog_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/done.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/error.xml" value="0.153" />
@@ -17,6 +18,7 @@
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_account.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_circle_account.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_email.xml" value="0.1" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_lock.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/search_view_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/success_bg.xml" value="0.153" />
@@ -33,7 +35,7 @@
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/item_image.xml" value="0.209375" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/showimageslayout.xml" value="0.209375" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/success_dialog.xml" value="0.25" />
-        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/venue_card.xml" value="0.33" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/venue_card.xml" value="0.9" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/warning_dialog.xml" value="0.20833333333333334" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/menu/menu_item.xml" value="0.209375" />
       </map>

@@ -75,23 +75,32 @@ class AddVenueActivity : AppCompatActivity() {
                 restRooms.setText(bundle!!.getString("restRooms"))
                 currentId.text = bundle!!.getString("docId")
 
-                chooseImage.visibility=View.INVISIBLE
-                clearImage.visibility=View.INVISIBLE
-                selectedImagesRview.visibility=View.INVISIBLE
+                if (bundle!!.getString("parking") != "Yes") parkingNo.isChecked = true
+                else parkingYes.isChecked = true
+
+                if (bundle!!.getString("available") != "Yes") dayTimeAvailability.isChecked = false
+
+                // Following is the Alternative trick of -> if (bundle!!.getString("types")!!.contains("Party")) party.isChecked = true
+                // Pair (A,B) - Represents a generic pair of two values.
+                // There is no meaning attached to values in this class, it can be used for any purpose.
+                val checkBoxLists=arrayOf(
+                    Pair(convHall,"Convention Hall"),
+                    Pair(sports,"Sports"),
+                    Pair(party,"Party"),
+                    Pair(wedding,"Wedding"),
+                    Pair(exhibition,"Exhibition"),
+                    Pair(festivity,"Festivity")
+                )
+                val types=bundle!!.getString("types")
+                checkBoxLists.forEach { (checkbox,label) ->
+                    when { types?.contains(label) == true -> checkbox.isChecked = true }
+                    //For each checkbox and label pair, we check if the types string contains the label, and set the checkbox's isChecked property accordingly.
+                }
+
+                chooseImage.visibility = View.GONE
+                clearImage.visibility = View.GONE
+                selectedImagesRview.visibility = View.GONE
             }
-
-            if(bundle!!.getString("parking") != "Yes") binding.parkingNo.isChecked=true
-            else binding.parkingYes.isChecked=true
-
-            if(bundle!!.getString("available") != "Yes") binding.dayTimeAvailability.isChecked=false
-
-            if(bundle!!.getString("types")!!.contains("Convention Hall")) binding.convHall.isChecked=true
-            if(bundle!!.getString("types")!!.contains("Sports")) binding.sports.isChecked=true
-            if(bundle!!.getString("types")!!.contains("Exhibition")) binding.exhibition.isChecked=true
-            if(bundle!!.getString("types")!!.contains("Wedding")) binding.wedding.isChecked=true
-            if(bundle!!.getString("types")!!.contains("Festivity")) binding.festivity.isChecked=true
-            if(bundle!!.getString("types")!!.contains("Party")) binding.party.isChecked=true
-
         }
 
         binding.addUpdateVenueBtn.setOnClickListener {
@@ -245,6 +254,7 @@ class AddVenueActivity : AppCompatActivity() {
                     put("Parking", parkingAvailability)
                     put("Availability", availability)
                     put("userId", user.uid)
+                    put("url0", "")
                 }
                 return true
             }
@@ -354,9 +364,7 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun mailMobileValidate(text: String?): Boolean {
-        //val p = Pattern.compile("\\[0][7-9]\\[0-1][0-9]{8}") // only for a phone number
-        //val p = Pattern.compile("^(?:\\d{10}|\\w+@\\w+\\.\\w{2,3})\$") // giving false if having a period before '@'
-        //val p = Pattern.compile("^(?:(?:\\+|0{0,2})91([\\- ])?|[0]?)?[6789]\\d{9}\$|^[\\w.%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$")
+
         val pattern = Pattern.compile("^(?:(?:\\+|0{0,2})91([\\- ])?|[0]?)?[6789]\\d{9}\$|^[\\w.%+-]+@[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*\\.[A-Za-z]{2,}\$")
 
         /*

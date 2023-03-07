@@ -13,7 +13,8 @@ data class Venue(
     val Types: String,
     val Parking: String,
     val RestRooms: String,
-    val docId: String
+    val docId: String,
+    val url0: String?
 ) {
     constructor():this(
         "",
@@ -25,6 +26,7 @@ data class Venue(
         "",
         "",
         "0",
+        "",
         "",
         "",
         "",

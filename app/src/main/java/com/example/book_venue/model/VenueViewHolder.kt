@@ -1,9 +1,15 @@
 package com.example.book_venue.model
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.book_venue.R
 import com.example.book_venue.databinding.VenueCardBinding
 import com.google.firebase.auth.FirebaseAuth
+import java.net.URL
+import java.net.URLEncoder
 
 class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -12,20 +18,25 @@ class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val auth=FirebaseAuth.getInstance()
     val user=auth.currentUser
 
-    fun bind(venue: Venue){
+    fun bind(venue: Venue) {
 
         binding.apply {
-            venueTitleCard.text=venue.Name
-            venueDescriptionCard.text=venue.Description
-            landmarkCard.text=venue.Landmark
-            cityCard.text=venue.City
-            stateCard.text=venue.State
-            capacityCard.text= venue.VenueCapacity
-            parkingCard.text= venue.Parking
-            availableTimeCard.text= venue.Availability
-            //nameDealer.text=venue.docId
-            //contactDealer.text=user?.email.toString()
-            typesCard.text= venue.Types.removePrefix("[").removeSuffix("]")
+            venueTitleCard.text = venue.Name
+            venueDescriptionCard.text = venue.Description
+            landmarkCard.text = venue.Landmark
+            cityCard.text = venue.City
+            stateCard.text = venue.State
+            capacityCard.text = venue.VenueCapacity
+            parkingCard.text = venue.Parking
+            availableTimeCard.text = venue.Availability
+            typesCard.text = venue.Types.removePrefix("[").removeSuffix("]")
+
+            val imageUrl = if(venue.url0 != "") venue.url0 else R.drawable.logo
+
+            // Load image into ImageView using Glide library
+            Glide.with(itemView)
+                .load(imageUrl)
+                .into(venueHeadImage)
         }
     }
 }
