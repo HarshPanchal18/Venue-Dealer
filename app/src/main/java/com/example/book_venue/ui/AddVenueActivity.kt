@@ -60,11 +60,11 @@ class AddVenueActivity : AppCompatActivity() {
         verifyInputs()
 
         bundle = intent.extras
-        if(bundle!=null){
 
-            docId = bundle!!.getString("docId").toString()
+        binding.apply {
+            if(bundle!=null) {
+                docId = bundle!!.getString("docId").toString()
 
-            binding.apply {
                 addUpdateVenueBtn.text = "Update Venue"
                 venueTitle.setText(bundle!!.getString("name"))
                 venueDescription.setText(bundle!!.getString("description"))
@@ -73,7 +73,6 @@ class AddVenueActivity : AppCompatActivity() {
                 rentPrice.setText(bundle!!.getString("rentHour"))
                 venueCapacity.setText(bundle!!.getString("capacity"))
                 restRooms.setText(bundle!!.getString("restRooms"))
-                currentId.text = bundle!!.getString("docId")
 
                 if (bundle!!.getString("parking") != "Yes") parkingNo.isChecked = true
                 else parkingYes.isChecked = true
@@ -97,40 +96,42 @@ class AddVenueActivity : AppCompatActivity() {
                     //For each checkbox and label pair, we check if the types string contains the label, and set the checkbox's isChecked property accordingly.
                 }
 
-                chooseImage.visibility = View.GONE
-                clearImage.visibility = View.GONE
+                chooseImageBtn.visibility = View.GONE
+                clearImageBtn.visibility = View.GONE
                 selectedImagesRview.visibility = View.GONE
-            }
-        }
 
-        binding.addUpdateVenueBtn.setOnClickListener {
-            if(validateAndBind()) {
-                if(isOnline()) {
-                    if(bundle!=null) {
-                        setHashMapForUpdate()
-                        val currentDocId = binding.currentId.text.toString()
-                        updateToFireStore(currentDocId,summaryResult)
+                if (bundle!!.getString("url0")=="") chooseImageBtn.visibility=View.VISIBLE
+
+            } // end of if(bundle!=null)
+
+            addUpdateVenueBtn.setOnClickListener {
+                if (validateAndBind()) {
+                    if (isOnline()) {
+                        if (bundle != null) {
+                            setHashMapForUpdate()
+                            updateToFireStore(docId, summaryResult)
+                        } else {
+                            createNewVenue(summaryResult)
+                        }
                     } else {
-                        createNewVenue(summaryResult)
+                        try { showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.") }
+                        catch (e: Exception) { e.printStackTrace() }
                     }
                 } else {
-                    try { showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.") }
-                    catch (e: Exception) { e.printStackTrace() }
+                    showErrorDialog("Empty fields are not allowed :(")
                 }
-            } else {
-                showErrorDialog("Empty fields are not allowed :(")
+            } // end of .setOnClickListener{}
+
+            chooseImageBtn.setOnClickListener { checkPermissionAndGo() }
+
+            clearImageBtn.setOnClickListener {
+                imgUris.clear()
+                selectedImagesRview.adapter?.notifyDataSetChanged()
+                selectedImagesRview.visibility = View.GONE
+                clearImageBtn.visibility = View.GONE
             }
-        }
-
-        binding.chooseImage.setOnClickListener { checkPermissionAndGo() }
-
-        binding.clearImage.setOnClickListener {
-            imgUris.clear()
-            binding.selectedImagesRview.adapter?.notifyDataSetChanged()
-            binding.selectedImagesRview.visibility=View.GONE
-            binding.clearImage.visibility=View.GONE
-        }
-    }
+        } // end of binding
+    } // end of onCreate()
 
     private fun checkPermissionAndGo() {
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
@@ -140,6 +141,7 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun createNewVenue(summaryResult: HashMap<String, Any>) {
+        if(imgdata.isEmpty()) summaryResult["url0"] = ""
         summaryResult["docId"] = documentRef.id
         documentRef.set(summaryResult)
             .addOnSuccessListener { showSuccessDialog("Venue is created") }
@@ -161,8 +163,6 @@ class AddVenueActivity : AppCompatActivity() {
             action = Intent.ACTION_GET_CONTENT
         }
         startActivityForResult(Intent.createChooser(intent, "Select Images"), 1)
-        binding.selectedImagesRview.visibility=View.VISIBLE
-        binding.clearImage.visibility=View.VISIBLE
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -175,6 +175,9 @@ class AddVenueActivity : AppCompatActivity() {
                     val item=data.clipData!!.getItemAt(i)
                     imgUris.add(item.uri)
                 }
+
+                binding.selectedImagesRview.visibility=View.VISIBLE
+                binding.clearImageBtn.visibility=View.VISIBLE
 
                 val adapter= ImageAdapter(imgUris)
                 binding.selectedImagesRview.adapter=adapter
@@ -254,7 +257,6 @@ class AddVenueActivity : AppCompatActivity() {
                     put("Parking", parkingAvailability)
                     put("Availability", availability)
                     put("userId", user.uid)
-                    put("url0", "")
                 }
                 return true
             }

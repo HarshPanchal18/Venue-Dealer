@@ -286,28 +286,15 @@
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/chooseImage"
+                android:id="@+id/chooseImageBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/venueTitle"
                 android:layout_marginTop="15dp"
                 android:text="Pick venue images" />
 
-            <TextView
-                android:id="@+id/currentId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/dealerPhNo"
-                android:layout_marginStart="10sp"
-                android:layout_marginTop="15dp"
-                android:layout_toEndOf="@id/chooseImage"
-                android:hint="Document ID"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"
-                android:textSize="2sp" />
-
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/clearImage"
+                android:id="@+id/clearImageBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/venueTitle"
@@ -322,7 +309,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="invisible"
-                android:layout_below="@id/chooseImage"
+                android:layout_below="@id/chooseImageBtn"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="17dp" />
 
@@ -332,7 +319,7 @@
                 android:layout_height="150dp"
                 android:visibility="gone"
                 android:background="@color/gray_light"
-                android:layout_below="@id/chooseImage"
+                android:layout_below="@id/chooseImageBtn"
                 android:layout_marginTop="16sp"
                 android:padding="5dp" />
         </RelativeLayout>
