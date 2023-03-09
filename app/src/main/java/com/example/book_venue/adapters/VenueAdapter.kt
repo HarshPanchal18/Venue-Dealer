@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.book_venue.*
 import com.example.book_venue.databinding.VenueCardBinding
 import com.example.book_venue.model.Venue
@@ -45,11 +46,21 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: VenueViewHolder, position: Int) {
-        holder.bind(items[position])
+        val currentVenue=items[position]
+        holder.bind(currentVenue)
+
+        holder.binding.venueHeadImage.setOnClickListener {
+            val dialogView : View = LayoutInflater.from(context).inflate(R.layout.dialog_image,null)
+
+            val imageUrl = if(currentVenue.url0 != "") currentVenue.url0 else R.drawable.logo
+            Glide.with(context).load(imageUrl).into(dialogView.findViewById(R.id.previewedImage))
+
+            val imageDialog = AlertDialog.Builder(context)
+            imageDialog.setView(dialogView).show()
+        }
     }
 
-    override fun getItemCount(): Int = items.size
-
+    override fun getItemCount() : Int = items.size
 
     fun deleteData(position: Int) {
 

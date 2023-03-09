@@ -25,9 +25,11 @@ import com.example.book_venue.databinding.ActivityAddVenueBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.protobuf.DescriptorProtos
 import java.util.regex.Pattern
 import kotlin.random.Random
 
@@ -37,6 +39,7 @@ class AddVenueActivity : AppCompatActivity() {
     private lateinit var imgdata: HashMap<String,Any>
     private lateinit var venue_types:ArrayList<String>
     private lateinit var imgUris:ArrayList<Uri>
+    private lateinit var imgURLs:ArrayList<String>
     private lateinit var docId:String
 
     private lateinit var binding: ActivityAddVenueBinding
@@ -96,11 +99,11 @@ class AddVenueActivity : AppCompatActivity() {
                     //For each checkbox and label pair, we check if the types string contains the label, and set the checkbox's isChecked property accordingly.
                 }
 
-                chooseImageBtn.visibility = View.GONE
+                /*chooseImageBtn.visibility = View.GONE
                 clearImageBtn.visibility = View.GONE
                 selectedImagesRview.visibility = View.GONE
 
-                if (bundle!!.getString("url0")=="") chooseImageBtn.visibility=View.VISIBLE
+                if (bundle!!.getString("url0")=="") chooseImageBtn.visibility=View.VISIBLE*/
 
             } // end of if(bundle!=null)
 
@@ -151,6 +154,7 @@ class AddVenueActivity : AppCompatActivity() {
     private fun updateToFireStore(currentDocId:String, updateList:HashMap<String,Any>) {
         if(validateAndBind()) {
             firestore.collection("venue").document(currentDocId).update(updateList)
+            //firestore.collection("venue").document(currentDocId).update("images",FieldValue.arrayUnion(imgURLs))
                 .addOnSuccessListener { showSuccessDialog("Venue updated successfully") }
                 .addOnFailureListener { e -> showErrorDialog(e.message.toString()) }
         }
@@ -191,6 +195,10 @@ class AddVenueActivity : AppCompatActivity() {
                         imageRef.downloadUrl.addOnSuccessListener { url ->
                             imgdata = hashMapOf("url$i" to url.toString())
                             summaryResult.putAll(imgdata)
+
+                            /*imgURLs.add(url.toString())
+                            summaryResult["images"]=imgURLs*/
+
                             binding.imageProgress.visibility=View.INVISIBLE
                         }
                     }
@@ -330,6 +338,7 @@ class AddVenueActivity : AppCompatActivity() {
         imgdata = HashMap()
         venue_types = ArrayList()
         imgUris = ArrayList()
+        imgURLs = ArrayList()
         documentRef = firestore.collection("venue").document()
 
         // adapting spinners

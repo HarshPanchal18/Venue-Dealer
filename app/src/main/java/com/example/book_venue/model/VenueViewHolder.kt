@@ -13,10 +13,9 @@ import java.net.URLEncoder
 
 class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private var binding=VenueCardBinding.bind(itemView)
+    var binding=VenueCardBinding.bind(itemView)
 
-    private val auth=FirebaseAuth.getInstance()
-    val user=auth.currentUser
+    val user=FirebaseAuth.getInstance().currentUser
 
     fun bind(venue: Venue) {
 
@@ -37,6 +36,7 @@ class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
             Glide.with(itemView)
                 .load(imageUrl)
                 .into(venueHeadImage)
+
         }
     }
 }
