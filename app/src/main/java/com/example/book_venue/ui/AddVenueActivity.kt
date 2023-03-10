@@ -40,6 +40,7 @@ class AddVenueActivity : AppCompatActivity() {
     private lateinit var venue_types:ArrayList<String>
     private lateinit var imgUris:ArrayList<Uri>
     private lateinit var imgURLs:ArrayList<String>
+    private lateinit var urls:List<Map<String,String>>
     private lateinit var docId:String
 
     private lateinit var binding: ActivityAddVenueBinding
@@ -154,7 +155,7 @@ class AddVenueActivity : AppCompatActivity() {
     private fun updateToFireStore(currentDocId:String, updateList:HashMap<String,Any>) {
         if(validateAndBind()) {
             firestore.collection("venue").document(currentDocId).update(updateList)
-            //firestore.collection("venue").document(currentDocId).update("images",FieldValue.arrayUnion(imgURLs))
+            firestore.collection("venue").document(currentDocId).update("images",FieldValue.arrayUnion(*urls.toTypedArray()))
                 .addOnSuccessListener { showSuccessDialog("Venue updated successfully") }
                 .addOnFailureListener { e -> showErrorDialog(e.message.toString()) }
         }
@@ -193,12 +194,13 @@ class AddVenueActivity : AppCompatActivity() {
                         binding.imageProgress.visibility=View.VISIBLE
                         // Get the URL of the uploaded image
                         imageRef.downloadUrl.addOnSuccessListener { url ->
-                            imgdata = hashMapOf("url$i" to url.toString())
-                            summaryResult.putAll(imgdata)
 
-                            /*imgURLs.add(url.toString())
-                            summaryResult["images"]=imgURLs*/
+                            /*imgdata = hashMapOf("url$i" to url.toString())
+                            summaryResult.putAll(imgdata)*/
 
+                            imgURLs.add(url.toString())
+
+                            urls=imgURLs.map { c -> mapOf("url" to c) }
                             binding.imageProgress.visibility=View.INVISIBLE
                         }
                     }
@@ -336,6 +338,7 @@ class AddVenueActivity : AppCompatActivity() {
 
         summaryResult = HashMap()
         imgdata = HashMap()
+        urls = listOf(emptyMap())
         venue_types = ArrayList()
         imgUris = ArrayList()
         imgURLs = ArrayList()
@@ -435,6 +438,9 @@ class AddVenueActivity : AppCompatActivity() {
                     if (parkingYes.isChecked) "Yes" else "No")
                 put("Availability",
                     if (dayTimeAvailability.isChecked) "Yes" else "No")
+
+                if(urls.isNotEmpty())
+                    put("url0", urls.firstOrNull()?.get("url")!!)
             }
         }
     }
