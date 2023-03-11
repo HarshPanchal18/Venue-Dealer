@@ -92,20 +92,13 @@ class AddVenueActivity : AppCompatActivity() {
                     Pair(party,"Party"),
                     Pair(wedding,"Wedding"),
                     Pair(exhibition,"Exhibition"),
-                    Pair(festivity,"Festivity")
-                )
+                    Pair(festivity,"Festivity"))
+
                 val types=bundle!!.getString("types")
                 checkBoxLists.forEach { (checkbox,label) ->
                     when { types?.contains(label) == true -> checkbox.isChecked = true }
                     //For each checkbox and label pair, we check if the types string contains the label, and set the checkbox's isChecked property accordingly.
                 }
-
-                /*chooseImageBtn.visibility = View.GONE
-                clearImageBtn.visibility = View.GONE
-                selectedImagesRview.visibility = View.GONE
-
-                if (bundle!!.getString("url0")=="") chooseImageBtn.visibility=View.VISIBLE*/
-
             } // end of if(bundle!=null)
 
             addUpdateVenueBtn.setOnClickListener {
@@ -120,10 +113,10 @@ class AddVenueActivity : AppCompatActivity() {
                     } else {
                         try { showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.") }
                         catch (e: Exception) { e.printStackTrace() }
-                    }
+                    } // end of isOnline()
                 } else {
                     showErrorDialog("Empty fields are not allowed :(")
-                }
+                } // end of validateAndBind()
             } // end of .setOnClickListener{}
 
             chooseImageBtn.setOnClickListener { checkPermissionAndGo() }

@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -19,9 +19,25 @@
         android:theme="@style/Theme.BookVenue"
         tools:targetApi="31">
         <activity
-            android:parentActivityName=".ui.HomeActivity"
+            android:name=".ui.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Material3.Dark.NoActionBar">
+            <intent-filter>
+
+                <!--
+                To make this activity as the starting activity.
+                So whenever the app will execute the user can see the splash screen
+                at the beginning.
+                -->
+
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.ViewVenueActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ui.HomeActivity" />
         <activity
             android:name=".ui.AddVenueActivity"
             android:exported="false" />
@@ -39,12 +55,15 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="false">
+            <!--
+            Disabling for splash screen
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
     </application>
 
