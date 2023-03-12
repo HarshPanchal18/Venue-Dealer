@@ -29,8 +29,9 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.protobuf.DescriptorProtos
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.random.Random
 
 class AddVenueActivity : AppCompatActivity() {
@@ -40,7 +41,7 @@ class AddVenueActivity : AppCompatActivity() {
     private lateinit var venue_types:ArrayList<String>
     private lateinit var imgUris:ArrayList<Uri>
     private lateinit var imgURLs:ArrayList<String>
-    private lateinit var urls:List<Map<String,String>>
+    private lateinit var urls:List<Map<String,String?>>
     private lateinit var docId:String
 
     private lateinit var binding: ActivityAddVenueBinding
@@ -53,6 +54,8 @@ class AddVenueActivity : AppCompatActivity() {
     private lateinit var mStorageRef: StorageReference
     private lateinit var mStorage: FirebaseStorage
     private lateinit var documentRef: DocumentReference
+
+    val mhCity= arrayOf("Mumbai","Nashik","Kolhapur","Pune","Panvel","Thane").sorted()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +85,25 @@ class AddVenueActivity : AppCompatActivity() {
                 else parkingYes.isChecked = true
 
                 if (bundle!!.getString("available") != "Yes") dayTimeAvailability.isChecked = false
+
+                val spinnerStateValue : Int = when(bundle?.getString("state")) {
+                    "Maharashtra" -> 1
+                    "Rajasthan" -> 2
+                    else -> 0 // Gujarat
+                }
+                spinnerState.setSelection(spinnerStateValue)
+
+                val bundledCity=bundle?.getString("city")
+                val cityIndex : Int = when(spinnerStateValue) {
+                    0 -> resources.getStringArray(R.array.gj_cities).sorted().indexOf(bundledCity)
+                    1 -> resources.getStringArray(R.array.mh_cities).sorted().indexOf(bundledCity)
+                    2 -> resources.getStringArray(R.array.rj_cities).sorted().indexOf(bundledCity)
+                    else -> {0}
+                }
+                spinnerCity.postDelayed({
+                    spinnerCity.setSelection(cityIndex)
+                }, 500)
+
 
                 // Following is the Alternative trick of -> if (bundle!!.getString("types")!!.contains("Party")) party.isChecked = true
                 // Pair (A,B) - Represents a generic pair of two values.
@@ -338,24 +360,27 @@ class AddVenueActivity : AppCompatActivity() {
         documentRef = firestore.collection("venue").document()
 
         // adapting spinners
-        val spinStates=resources.getStringArray(R.array.states)
-        val adapterStates= ArrayAdapter(applicationContext, R.layout.dropdown_item,spinStates)
+        val spinStates = resources.getStringArray(R.array.states)
+        val adapterStates = ArrayAdapter(applicationContext, R.layout.dropdown_item, spinStates)
         binding.spinnerState.adapter = adapterStates
 
-        binding.spinnerState.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+        binding.spinnerState.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onNothingSelected(adapter: AdapterView<*>?) {}
 
             override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
                 var adapterCity = ArrayAdapter(applicationContext,
-                    R.layout.dropdown_item,resources.getStringArray(R.array.gj_cities).sorted())
-                when(position){
+                    R.layout.dropdown_item, resources.getStringArray(R.array.gj_cities).sorted())
+                when (position) {
                     0 -> {}
                     1 -> { adapterCity = ArrayAdapter(applicationContext,
-                        R.layout.dropdown_item,resources.getStringArray(R.array.mh_cities).sorted()) }
-                    2 -> { adapterCity = ArrayAdapter(applicationContext,
-                        R.layout.dropdown_item,resources.getStringArray(R.array.rj_cities).sorted()) }
+                        R.layout.dropdown_item, resources.getStringArray(R.array.mh_cities).sorted())
+                    }
+                    2 -> {
+                        adapterCity = ArrayAdapter(applicationContext,
+                            R.layout.dropdown_item, resources.getStringArray(R.array.rj_cities).sorted())
+                    }
                 }
                 binding.spinnerCity.adapter = adapterCity
                 adapterCity.notifyDataSetChanged()
@@ -432,8 +457,10 @@ class AddVenueActivity : AppCompatActivity() {
                 put("Availability",
                     if (dayTimeAvailability.isChecked) "Yes" else "No")
 
-                if(urls.isNotEmpty())
-                    put("url0", urls.firstOrNull()?.get("url")!!)
+                /*if(urls.isEmpty())
+                    put("url0", "")
+                else
+                    put("url0", urls.first()["url"]!!)*/
             }
         }
     }
