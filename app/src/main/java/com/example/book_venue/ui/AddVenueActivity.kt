@@ -36,26 +36,24 @@ import kotlin.random.Random
 
 class AddVenueActivity : AppCompatActivity() {
 
-    private lateinit var summaryResult: HashMap<String,Any>
-    private lateinit var imgdata: HashMap<String,Any>
-    private lateinit var venue_types:ArrayList<String>
-    private lateinit var imgUris:ArrayList<Uri>
-    private lateinit var imgURLs:ArrayList<String>
-    private lateinit var urls:List<Map<String,String?>>
-    private lateinit var docId:String
+    private lateinit var summaryResult: HashMap<String, Any>
+    private lateinit var imgdata: HashMap<String, Any>
+    private lateinit var venue_types: ArrayList<String>
+    private lateinit var imgUris: ArrayList<Uri>
+    private lateinit var imgURLs: ArrayList<String>
+    private var urls: List<Map<String, String>>? = null
+    private lateinit var docId: String
 
     private lateinit var binding: ActivityAddVenueBinding
     private var bundle: Bundle? = null
 
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
-    private lateinit var firestore:FirebaseFirestore
+    private lateinit var firestore: FirebaseFirestore
 
     private lateinit var mStorageRef: StorageReference
     private lateinit var mStorage: FirebaseStorage
     private lateinit var documentRef: DocumentReference
-
-    val mhCity= arrayOf("Mumbai","Nashik","Kolhapur","Pune","Panvel","Thane").sorted()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +67,7 @@ class AddVenueActivity : AppCompatActivity() {
         bundle = intent.extras
 
         binding.apply {
-            if(bundle!=null) {
+            if (bundle != null) {
                 docId = bundle!!.getString("docId").toString()
 
                 addUpdateVenueBtn.text = "Update Venue"
@@ -86,39 +84,40 @@ class AddVenueActivity : AppCompatActivity() {
 
                 if (bundle!!.getString("available") != "Yes") dayTimeAvailability.isChecked = false
 
-                val spinnerStateValue : Int = when(bundle?.getString("state")) {
+                val spinnerStateValue: Int = when (bundle?.getString("state")) {
                     "Maharashtra" -> 1
                     "Rajasthan" -> 2
                     else -> 0 // Gujarat
                 }
                 spinnerState.setSelection(spinnerStateValue)
 
-                val bundledCity=bundle?.getString("city")
-                val cityIndex : Int = when(spinnerStateValue) {
+                val bundledCity = bundle!!.getString("city")
+                val cityIndex: Int = when (spinnerStateValue) {
                     0 -> resources.getStringArray(R.array.gj_cities).sorted().indexOf(bundledCity)
                     1 -> resources.getStringArray(R.array.mh_cities).sorted().indexOf(bundledCity)
                     2 -> resources.getStringArray(R.array.rj_cities).sorted().indexOf(bundledCity)
-                    else -> {0}
+                    else -> 0
                 }
                 spinnerCity.postDelayed({
                     spinnerCity.setSelection(cityIndex)
                 }, 500)
 
-
                 // Following is the Alternative trick of -> if (bundle!!.getString("types")!!.contains("Party")) party.isChecked = true
                 // Pair (A,B) - Represents a generic pair of two values.
                 // There is no meaning attached to values in this class, it can be used for any purpose.
-                val checkBoxLists=arrayOf(
-                    Pair(convHall,"Convention Hall"),
-                    Pair(sports,"Sports"),
-                    Pair(party,"Party"),
-                    Pair(wedding,"Wedding"),
-                    Pair(exhibition,"Exhibition"),
-                    Pair(festivity,"Festivity"))
+                val checkBoxLists = arrayOf(
+                    Pair(convHall, "Convention Hall"),
+                    Pair(sports, "Sports"),
+                    Pair(party, "Party"),
+                    Pair(wedding, "Wedding"),
+                    Pair(exhibition, "Exhibition"),
+                    Pair(festivity, "Festivity"))
 
-                val types=bundle!!.getString("types")
-                checkBoxLists.forEach { (checkbox,label) ->
-                    when { types?.contains(label) == true -> checkbox.isChecked = true }
+                val types = bundle!!.getString("types")
+                checkBoxLists.forEach { (checkbox, label) ->
+                    when {
+                        types?.contains(label) == true -> checkbox.isChecked = true
+                    }
                     //For each checkbox and label pair, we check if the types string contains the label, and set the checkbox's isChecked property accordingly.
                 }
             } // end of if(bundle!=null)
@@ -133,8 +132,11 @@ class AddVenueActivity : AppCompatActivity() {
                             createNewVenue(summaryResult)
                         }
                     } else {
-                        try { showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.") }
-                        catch (e: Exception) { e.printStackTrace() }
+                        try {
+                            showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.")
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     } // end of isOnline()
                 } else {
                     showErrorDialog("Empty fields are not allowed :(")
@@ -153,24 +155,31 @@ class AddVenueActivity : AppCompatActivity() {
     } // end of onCreate()
 
     private fun checkPermissionAndGo() {
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),2)
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                2)
         }
         openFileChooser()
     }
 
     private fun createNewVenue(summaryResult: HashMap<String, Any>) {
-        if(imgdata.isEmpty()) summaryResult["url0"] = ""
+        if (imgdata.isEmpty()) summaryResult["url0"] = ""
         summaryResult["docId"] = documentRef.id
         documentRef.set(summaryResult)
             .addOnSuccessListener { showSuccessDialog("Venue is created") }
             .addOnFailureListener { showErrorDialog(it.message.toString()) }
     }
 
-    private fun updateToFireStore(currentDocId:String, updateList:HashMap<String,Any>) {
-        if(validateAndBind()) {
-            firestore.collection("venue").document(currentDocId).update(updateList)
-            firestore.collection("venue").document(currentDocId).update("images",FieldValue.arrayUnion(*urls.toTypedArray()))
+    private fun updateToFireStore(currentDocId: String, updateList: HashMap<String, Any>) {
+        if (validateAndBind()) {
+            firestore.collection("venue")
+                .document(currentDocId).update(updateList)
+            firestore.collection("venue")
+                .document(currentDocId)
+                .update("images", FieldValue.arrayUnion(*(urls!!.toTypedArray())))
                 .addOnSuccessListener { showSuccessDialog("Venue updated successfully") }
                 .addOnFailureListener { e -> showErrorDialog(e.message.toString()) }
         }
@@ -187,44 +196,45 @@ class AddVenueActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == RESULT_OK ) {
-            if(data?.clipData!=null) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            if (data?.clipData != null) {
                 // Get the URIs of the selected images
-                imgUris=ArrayList()
-                for(i in 0 until data.clipData!!.itemCount) {
-                    val item=data.clipData!!.getItemAt(i)
+                imgUris = ArrayList()
+                for (i in 0 until data.clipData!!.itemCount) {
+                    val item = data.clipData!!.getItemAt(i)
                     imgUris.add(item.uri)
                 }
 
-                binding.selectedImagesRview.visibility=View.VISIBLE
-                binding.clearImageBtn.visibility=View.VISIBLE
+                binding.selectedImagesRview.visibility = View.VISIBLE
+                binding.clearImageBtn.visibility = View.VISIBLE
 
-                val adapter= ImageAdapter(imgUris)
-                binding.selectedImagesRview.adapter=adapter
+                val adapter = ImageAdapter(imgUris)
+                binding.selectedImagesRview.adapter = adapter
 
-            for(i in 0 until imgUris.size) {
-                val imageRef=mStorageRef.child("images/venue/${System.currentTimeMillis()}_${Random(10000)}_$i.jpg")
-                val uploadTask=imageRef.putFile(imgUris[i])
-                    .addOnSuccessListener {
-                        binding.imageProgress.visibility=View.VISIBLE
-                        // Get the URL of the uploaded image
-                        imageRef.downloadUrl.addOnSuccessListener { url ->
+                for (i in 0 until imgUris.size) {
+                    val imageRef =
+                        mStorageRef.child("images/venue/${System.currentTimeMillis()}_${Random(10000)}_$i.jpg")
+                    val uploadTask = imageRef.putFile(imgUris[i])
+                        .addOnSuccessListener {
+                            binding.imageProgress.visibility = View.VISIBLE
+                            // Get the URL of the uploaded image
+                            imageRef.downloadUrl.addOnSuccessListener { url ->
 
-                            /*imgdata = hashMapOf("url$i" to url.toString())
+                                /*imgdata = hashMapOf("url$i" to url.toString())
                             summaryResult.putAll(imgdata)*/
 
-                            imgURLs.add(url.toString())
+                                imgURLs.add(url.toString())
 
-                            urls=imgURLs.map { c -> mapOf("url" to c) }
-                            binding.imageProgress.visibility=View.INVISIBLE
+                                urls = imgURLs.map { c -> mapOf("url" to c) }
+                                binding.imageProgress.visibility = View.INVISIBLE
+                            }
                         }
-                    }
                 }
             }
         }
     }
 
-    private fun validateAndBind() : Boolean {
+    private fun validateAndBind(): Boolean {
 
         binding.apply {
 
@@ -290,7 +300,8 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun isOnline(): Boolean {
-        val connManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connManager =
+            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = connManager.activeNetworkInfo
         if (netInfo == null || !netInfo.isConnected || !netInfo.isAvailable) {
             return false
@@ -298,16 +309,18 @@ class AddVenueActivity : AppCompatActivity() {
         return true
     }
 
-    private fun showSuccessDialog(message:String) {
+    private fun showSuccessDialog(message: String) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
         val view: View = LayoutInflater.from(this)
             .inflate(R.layout.success_dialog,
                 findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
 
         builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.success_title)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text =
+            resources.getString(R.string.success_title)
         (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.buttonAction) as Button).text =
+            resources.getString(R.string.okay)
         (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
 
         val alertDialog = builder.create()
@@ -316,7 +329,9 @@ class AddVenueActivity : AppCompatActivity() {
             finish()
         }
 
-        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
@@ -324,18 +339,23 @@ class AddVenueActivity : AppCompatActivity() {
     private fun showErrorDialog(message: String) {
         val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
         val view: View = LayoutInflater.from(this)
-            .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+            .inflate(R.layout.error_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
 
         builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text =
+            resources.getString(R.string.network_error_title)
         (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.buttonAction) as Button).text =
+            resources.getString(R.string.okay)
         (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
 
         val alertDialog = builder.create()
         view.findViewById<View>(R.id.buttonAction).setOnClickListener { alertDialog.dismiss() }
 
-        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
 
         alertDialog.setCancelable(false)
         alertDialog.show()
@@ -368,18 +388,26 @@ class AddVenueActivity : AppCompatActivity() {
 
             override fun onNothingSelected(adapter: AdapterView<*>?) {}
 
-            override fun onItemSelected(adapter: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                adapter: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
 
                 var adapterCity = ArrayAdapter(applicationContext,
                     R.layout.dropdown_item, resources.getStringArray(R.array.gj_cities).sorted())
                 when (position) {
                     0 -> {}
-                    1 -> { adapterCity = ArrayAdapter(applicationContext,
-                        R.layout.dropdown_item, resources.getStringArray(R.array.mh_cities).sorted())
+                    1 -> {
+                        adapterCity = ArrayAdapter(applicationContext,
+                            R.layout.dropdown_item,
+                            resources.getStringArray(R.array.mh_cities).sorted())
                     }
                     2 -> {
                         adapterCity = ArrayAdapter(applicationContext,
-                            R.layout.dropdown_item, resources.getStringArray(R.array.rj_cities).sorted())
+                            R.layout.dropdown_item,
+                            resources.getStringArray(R.array.rj_cities).sorted())
                     }
                 }
                 binding.spinnerCity.adapter = adapterCity
@@ -388,16 +416,18 @@ class AddVenueActivity : AppCompatActivity() {
         }
 
         // Image adapter for selected images
-        val adapter= ImageAdapter(ArrayList())
-        binding.selectedImagesRview.adapter=adapter
-        binding.selectedImagesRview.layoutManager=LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        val adapter = ImageAdapter(ArrayList())
+        binding.selectedImagesRview.adapter = adapter
+        binding.selectedImagesRview.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         binding.dealerPhNo.setText(user.email.toString())
     }
 
     private fun mailMobileValidate(text: String?): Boolean {
 
-        val pattern = Pattern.compile("^(?:(?:\\+|0{0,2})91([\\- ])?|[0]?)?[6789]\\d{9}\$|^[\\w.%+-]+@[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*\\.[A-Za-z]{2,}\$")
+        val pattern =
+            Pattern.compile("^(?:(?:\\+|0{0,2})91([\\- ])?|[0]?)?[6789]\\d{9}\$|^[\\w.%+-]+@[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*\\.[A-Za-z]{2,}\$")
 
         /*
         ^ indicates the start of the string
@@ -414,14 +444,14 @@ class AddVenueActivity : AppCompatActivity() {
 
     private fun verifyInputs() {
 
-        binding.dealerPhNo.addTextChangedListener(object : TextWatcher{
+        binding.dealerPhNo.addTextChangedListener(object : TextWatcher {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (mailMobileValidate(binding.dealerPhNo.text.toString()))
                     binding.addUpdateVenueBtn.isEnabled = true
                 else {
                     binding.addUpdateVenueBtn.isEnabled = false
-                    binding.dealerPhNo.error="Invalid input"
+                    binding.dealerPhNo.error = "Invalid input"
                 }
             }
 
@@ -457,10 +487,11 @@ class AddVenueActivity : AppCompatActivity() {
                 put("Availability",
                     if (dayTimeAvailability.isChecked) "Yes" else "No")
 
-                /*if(urls.isEmpty())
-                    put("url0", "")
-                else
-                    put("url0", urls.first()["url"]!!)*/
+                if (bundle!!.getString("url0") == "" && urls?.isNotEmpty() == true)
+                    put("url0", urls?.firstOrNull()?.get("url") ?: "")
+
+                if (bundle!!.getString("url0") == "" && urls?.isEmpty() == true)
+                    put("url0", urls?.firstOrNull()?.get("url") ?: "")
             }
         }
     }

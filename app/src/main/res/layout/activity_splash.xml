@@ -30,4 +30,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="LOGO-SPLASH" />
+
+    <ImageView
+        android:src="@drawable/made_in_india_logo"
+        android:layout_width="match_parent"
+        android:layout_height="90sp"
+        android:contentDescription="MADE IN INDIA"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,8 @@ data class Venue(
     val Parking: String,
     val RestRooms: String,
     val docId: String,
-    val url0: String?
+    val url0: String,
+    //val images: ArrayList<Map<String,String>>
 ) {
     constructor():this(
         "",
@@ -30,6 +31,7 @@ data class Venue(
         "",
         "",
         "",
-        ""
+        "",
+        //ArrayList<Map<String, String>>()
     )
 }
