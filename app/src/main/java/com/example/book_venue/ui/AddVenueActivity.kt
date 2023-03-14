@@ -472,7 +472,7 @@ class AddVenueActivity : AppCompatActivity() {
             if (sports.isChecked) venue_types.add(sports.text.toString())
 
             summaryResult.apply {
-                put("Name", venueTitle.text)
+                put("Name", venueTitle.text.toString())
                 put("Description", venueDescription.text.toString())
                 put("Landmark", venueLandmark.text.toString())
                 put("City", spinnerCity.selectedItem.toString())
