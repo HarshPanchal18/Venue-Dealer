@@ -39,11 +39,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bookingsRview"
-        android:background="@color/gray_light"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bookingsRview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray_light" />
 
         <TextView
             android:layout_centerInParent="true"
@@ -59,72 +59,50 @@
         android:background="@drawable/bottom_tab_bg"
         android:orientation="horizontal"
         android:padding="12sp"
-        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/addVenuebtn"
             android:layout_marginHorizontal="10dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center">
-            <!--<ImageView
-                android:src="@drawable/ic_baseline_delete_outline_24"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>-->
+
+            <ImageView
+                android:layout_marginHorizontal="10sp"
+                android:id="@+id/userPhoto"
+                android:layout_width="40sp"
+                android:layout_height="40sp"/>
+
             <TextView
-                android:layout_marginTop="5sp"
-                android:text="Add Venue"
+                android:id="@+id/addVenue"
+                android:text="Add"
                 android:textStyle="bold"
                 android:textSize="16sp"
+                android:layout_marginHorizontal="10sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/viewVenuebtn"
-            android:layout_marginHorizontal="10dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-            <!--<ImageView
-                android:src="@drawable/ic_baseline_delete_outline_24"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>-->
             <TextView
-                android:layout_marginTop="5sp"
+                android:id="@+id/viewVenue"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:text="View Venue"
+                android:layout_marginHorizontal="10sp"
+                android:text="View"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/logoutbtn"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="10dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-            <!--<ImageView
-                android:src="@drawable/ic_baseline_delete_outline_24"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>-->
             <TextView
-                android:layout_marginTop="5sp"
+                android:id="@+id/logoutbtn"
                 android:text="Logout"
                 android:textSize="16sp"
+                android:layout_marginHorizontal="10sp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>

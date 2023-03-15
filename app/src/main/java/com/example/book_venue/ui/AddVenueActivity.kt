@@ -41,7 +41,7 @@ class AddVenueActivity : AppCompatActivity() {
     private lateinit var venue_types: ArrayList<String>
     private lateinit var imgUris: ArrayList<Uri>
     private lateinit var imgURLs: ArrayList<String>
-    private var urls: List<Map<String, String>>? = null
+    private var urls: ArrayList<Map<String, String>>? = null
     private lateinit var docId: String
 
     private lateinit var binding: ActivityAddVenueBinding
@@ -124,13 +124,16 @@ class AddVenueActivity : AppCompatActivity() {
 
             addUpdateVenueBtn.setOnClickListener {
                 if (validateAndBind()) {
-                    if (isOnline()) {
+                    if (isOnline()) { // checking connectivity
                         if (bundle != null) {
                             setHashMapForUpdate()
+                            if(bundle?.getString("url0").isNullOrEmpty() && urls?.isNotEmpty()==true)
+                                summaryResult["url0"] = urls?.first()?.get("url") ?: ""
+
                             updateToFireStore(docId, summaryResult)
                         } else {
                             createNewVenue(summaryResult)
-                        }
+                        } // if(bundle!=null)
                     } else {
                         try {
                             showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.")
@@ -175,11 +178,13 @@ class AddVenueActivity : AppCompatActivity() {
 
     private fun updateToFireStore(currentDocId: String, updateList: HashMap<String, Any>) {
         if (validateAndBind()) {
+            if (urls?.isNotEmpty() == true) {
+                firestore.collection("venue")
+                    .document(currentDocId)
+                    .update("images", FieldValue.arrayUnion(*(urls!!.toTypedArray())))
+            }
             firestore.collection("venue")
                 .document(currentDocId).update(updateList)
-            firestore.collection("venue")
-                .document(currentDocId)
-                .update("images", FieldValue.arrayUnion(*(urls!!.toTypedArray())))
                 .addOnSuccessListener { showSuccessDialog("Venue updated successfully") }
                 .addOnFailureListener { e -> showErrorDialog(e.message.toString()) }
         }
@@ -225,7 +230,7 @@ class AddVenueActivity : AppCompatActivity() {
 
                                 imgURLs.add(url.toString())
 
-                                urls = imgURLs.map { c -> mapOf("url" to c) }
+                                urls = ArrayList(imgURLs.map { c -> mapOf("url" to c) })
                                 binding.imageProgress.visibility = View.INVISIBLE
                             }
                         }
@@ -373,7 +378,7 @@ class AddVenueActivity : AppCompatActivity() {
 
         summaryResult = HashMap()
         imgdata = HashMap()
-        urls = listOf(emptyMap())
+        urls = ArrayList()
         venue_types = ArrayList()
         imgUris = ArrayList()
         imgURLs = ArrayList()
@@ -487,11 +492,11 @@ class AddVenueActivity : AppCompatActivity() {
                 put("Availability",
                     if (dayTimeAvailability.isChecked) "Yes" else "No")
 
-                if (bundle!!.getString("url0") == "" && urls?.isNotEmpty() == true)
+                /*if (bundle!!.getString("url0") == "" && urls?.isNotEmpty() == true)
                     put("url0", urls?.firstOrNull()?.get("url") ?: "")
 
                 if (bundle!!.getString("url0") == "" && urls?.isEmpty() == true)
-                    put("url0", urls?.firstOrNull()?.get("url") ?: "")
+                    put("url0", urls?.firstOrNull()?.get("url") ?: "")*/
             }
         }
     }

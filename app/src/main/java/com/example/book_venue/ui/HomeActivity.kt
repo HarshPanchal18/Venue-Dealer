@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
 import com.example.book_venue.MainActivity
 import com.example.book_venue.R
 import com.example.book_venue.databinding.ActivityHomeBinding
@@ -32,6 +33,13 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
         auth=FirebaseAuth.getInstance()
         user= auth.currentUser!!
+
+        val imageURI:String = if(user.photoUrl==null)
+            resources.getResourceName(R.drawable.logo)
+        else
+            user.photoUrl.toString()
+
+        Glide.with(this).load(imageURI).into(binding.userPhoto)
 
         binding.accountName.text="${user.displayName}\n${user.email}"
 
@@ -67,11 +75,11 @@ class HomeActivity : AppCompatActivity() {
             alertDialog.show()
         }
 
-        binding.addVenuebtn.setOnClickListener {
+        binding.addVenue.setOnClickListener {
             startActivity(Intent(this, AddVenueActivity::class.java))
         }
 
-        binding.viewVenuebtn.setOnClickListener {
+        binding.viewVenue.setOnClickListener {
             startActivity(Intent(this, ViewVenueActivity::class.java))
         }
     }

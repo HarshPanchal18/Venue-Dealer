@@ -7,13 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.AddVenueActivity">
 
-    <ProgressBar
-        android:id="@+id/imageProgress"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <ScrollView
         android:layout_above="@id/add_update_venue_btn"
         android:layout_alignParentTop="true"
@@ -26,6 +19,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="12dp">
+
+            <ProgressBar
+                android:id="@+id/imageProgress"
+                android:layout_centerInParent="true"
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/titleInputLayout"

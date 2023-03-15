@@ -16,6 +16,7 @@ import com.example.book_venue.helper.TouchHelper
 import com.example.book_venue.model.Venue
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ViewVenueActivity : AppCompatActivity() {
@@ -26,7 +27,6 @@ class ViewVenueActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: VenueAdapter
     private var venues = ArrayList<Venue>()
-    private var tempVenueList = ArrayList<Venue>()
     lateinit var binding: ActivityViewVenueBinding
 
     @SuppressLint("NotifyDataSetChanged")
@@ -101,8 +101,10 @@ class ViewVenueActivity : AppCompatActivity() {
                     if (result.isEmpty) {
                         binding.venueRecycler.visibility=View.INVISIBLE // for in case of delete card
                         binding.zeroVenues.visibility = View.VISIBLE
+                        binding.loadingVenue.visibility = View.GONE
                         return@addOnSuccessListener
                     }
+                    binding.loadingVenue.visibility = View.GONE
 
                     refreshAdapter(venues)
                     for (doc in result) {
