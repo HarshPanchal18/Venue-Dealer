@@ -33,7 +33,7 @@
     <string name="btnregister">Register</string>
     <string name="logoutbtn">Logout</string>
 
-    <string name="home_title">Hello Dealer!</string>
+    <string name="home_title">Hello,</string>
     <string name="home_subtitle">Welcome to Home</string>
 
     <string name="reset_title">Reset your password</string>

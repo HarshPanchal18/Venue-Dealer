@@ -36,8 +36,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="10sp"
                 android:layout_marginEnd="10sp"
-                app:cardCornerRadius="20dp"
-                android:layout_width="100sp"
+                app:cardCornerRadius="16dp"
+                android:layout_width="60sp"
                 android:layout_height="60sp">
 
                 <ImageView
@@ -218,7 +218,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_weight="1"
-                    android:background="#F15050"
+                    android:background="#CCF15050"
                     android:paddingStart="5sp"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -229,7 +229,7 @@
                 <TextView
                     android:layout_weight="1"
                     android:textAlignment="viewEnd"
-                    android:background="#4CAF50"
+                    android:background="#CC4CAF50"
                     android:textStyle="bold"
                     android:textSize="14sp"
                     android:paddingEnd="5sp"

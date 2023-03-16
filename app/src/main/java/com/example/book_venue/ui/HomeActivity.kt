@@ -41,7 +41,19 @@ class HomeActivity : AppCompatActivity() {
 
         Glide.with(this).load(imageURI).into(binding.userPhoto)
 
-        binding.accountName.text="${user.displayName}\n${user.email}"
+        binding.accountName.text = user.displayName
+
+        binding.addVenue.setOnClickListener {
+            startActivity(Intent(this, AddVenueActivity::class.java))
+        }
+
+        binding.viewVenue.setOnClickListener {
+            startActivity(Intent(this, ViewVenueActivity::class.java))
+        }
+
+        binding.aboutDevBtn.setOnClickListener {
+            startActivity(Intent(this,AboutAppActivity::class.java))
+        }
 
         binding.logoutbtn.setOnClickListener {
             val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
@@ -75,13 +87,6 @@ class HomeActivity : AppCompatActivity() {
             alertDialog.show()
         }
 
-        binding.addVenue.setOnClickListener {
-            startActivity(Intent(this, AddVenueActivity::class.java))
-        }
-
-        binding.viewVenue.setOnClickListener {
-            startActivity(Intent(this, ViewVenueActivity::class.java))
-        }
     }
 
     // Ask again for exit
