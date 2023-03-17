@@ -53,6 +53,7 @@ class HomeActivity : AppCompatActivity() {
 
         binding.aboutDevBtn.setOnClickListener {
             startActivity(Intent(this,AboutAppActivity::class.java))
+            //Toast.makeText(this,"",Toast.LENGTH_SHORT).show()
         }
 
         binding.logoutbtn.setOnClickListener {

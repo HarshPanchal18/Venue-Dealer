@@ -70,6 +70,22 @@
     <string name="venue_delete_success">Venue is deleted successfully</string>
     <string name="logout_text">Are you sure you want to logout?</string>
     <string name="no_bookings">Bookings are coming very soon</string>
+    <string name="app_description">
+        App Description: \n\t\tThe Venue Dock app is a tool designed for venue dealers to add their venues online.
+        It\'s a user-friendly app that allows venue dealers to add their venues and publish them on another app, making them visible to the public.
+        \n\t\tVenue dealers can easily create, edit, and delete their venues from within the app, providing a seamless experience for both venue dealers and end-users.
+
+        \n\nFeatures:
+        \n\u2022 User-friendly interface for easy venue management
+        \n\u2022 Add, edit, and delete venue information with ease
+        \n\u2022 Seamless integration with another app to publish venues online
+        \n\u2022 Ability to upload photos of the venue
+        \n\u2022 Option to add pricing and availability details
+
+        \n\n\nThe development team has used the latest technology and tools to ensure that the Venue Dealer app is secure, reliable, and easy to use.
+        \nThey have also incorporated user feedback into the development process, ensuring that the app meets the needs of venue dealers and end-users alike.
+    </string>
+    <string name="devContact">Facing issues? or want to add more locations?</string>
 
     <string-array name="gj_cities">
         <item>Surat</item>

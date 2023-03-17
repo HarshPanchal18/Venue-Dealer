@@ -23,7 +23,7 @@ class ViewVenueActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
-    private lateinit var db:FirebaseFirestore
+    private lateinit var db: FirebaseFirestore
     private lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: VenueAdapter
     private var venues = ArrayList<Venue>()
@@ -32,23 +32,23 @@ class ViewVenueActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityViewVenueBinding.inflate(layoutInflater)
+        binding = ActivityViewVenueBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.viewVenueToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        auth= FirebaseAuth.getInstance()
-        user= auth.currentUser!!
-        firestore=FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
+        user = auth.currentUser!!
+        firestore = FirebaseFirestore.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        venues= ArrayList()
-        adapter= VenueAdapter(this,this,venues)
+        venues = ArrayList()
+        adapter = VenueAdapter(this, this, venues)
         binding.venueRecycler.apply {
             setHasFixedSize(true)
-            layoutManager=LinearLayoutManager(this@ViewVenueActivity)
-            adapter=adapter
+            layoutManager = LinearLayoutManager(this@ViewVenueActivity)
+            adapter = adapter
         }
 
         val touchHelper = ItemTouchHelper(TouchHelper(adapter))
@@ -60,7 +60,9 @@ class ViewVenueActivity : AppCompatActivity() {
             clearFocus()
             setOnQueryTextListener(object : SearchView.OnQueryTextListener,
                 OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean { return false }
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
 
                 override fun onQueryTextChange(searchKeyword: String?): Boolean {
                     filterList(searchKeyword)
@@ -76,16 +78,18 @@ class ViewVenueActivity : AppCompatActivity() {
     }
 
     private fun filterList(searchKeyword: String?) {
-        val filteredList= arrayListOf<Venue>()
-        for(item in venues)
-            if(item.Name.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
-                ||item.City.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
-                ||item.Types.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
-                ||item.State.toLowerCase().contains(searchKeyword?.toLowerCase()!!))
-            { filteredList.add(item) }
+        val filteredList = arrayListOf<Venue>()
+        for (item in venues)
+            if (item.Name.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
+                || item.City.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
+                || item.Types.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
+                || item.State.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
+            ) {
+                filteredList.add(item)
+            }
 
-        if(filteredList.isEmpty())
-            Toast.makeText(this,"No venues found for $searchKeyword",Toast.LENGTH_SHORT).show()
+        if (filteredList.isEmpty())
+            Toast.makeText(this, "No venues found for $searchKeyword", Toast.LENGTH_SHORT).show()
 
         adapter.setFilterList(filteredList)
 
@@ -99,7 +103,8 @@ class ViewVenueActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
-                        binding.venueRecycler.visibility=View.INVISIBLE // for in case of delete card
+                        binding.venueRecycler.visibility =
+                            View.INVISIBLE // for in case of deletion of a single remained card
                         binding.zeroVenues.visibility = View.VISIBLE
                         binding.loadingVenue.visibility = View.GONE
                         return@addOnSuccessListener
@@ -113,14 +118,14 @@ class ViewVenueActivity : AppCompatActivity() {
                     }
                     adapter.notifyDataSetChanged()
                 }
+        } catch (e: Exception) {
+            Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
         }
-        catch (e:Exception) { Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show() }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun refreshAdapter(list : ArrayList<Venue>) {
-        adapter = VenueAdapter(this,this,list)
-        //adapter.notifyItemRemoved()
+    private fun refreshAdapter(list: ArrayList<Venue>) {
+        adapter = VenueAdapter(this, this, list)
         binding.venueRecycler.adapter = adapter
     }
 

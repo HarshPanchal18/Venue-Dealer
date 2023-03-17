@@ -1,25 +1,31 @@
 package com.example.book_venue.ui
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View.inflate
 import com.example.book_venue.R
-import com.example.book_venue.databinding.ActivityAboutAppBinding.inflate
-import com.example.book_venue.databinding.ActivityAddVenueBinding
+import com.example.book_venue.databinding.ActivityAboutAppBinding
 
 class AboutAppActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAddVenueBinding
+    private lateinit var binding: ActivityAboutAppBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityAddVenueBinding.inflate(layoutInflater)
+        binding= ActivityAboutAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val colorDrawable = ColorDrawable(Color.parseColor("#FF5693FD"))
-        supportActionBar?.setBackgroundDrawable(colorDrawable)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title=resources.getString(R.string.app_name)
+        binding.goHomeBtn.setOnClickListener {
+            startActivity(Intent(this,HomeActivity::class.java))
+            finish()
+        }
+        binding.devMailBtn.setOnClickListener {
+            val mailIntent = Intent(Intent.ACTION_SENDTO)
+            val data = Uri.parse("mailto:harshhhh1803@gmail.com")
+            mailIntent.data=data
+            startActivity(mailIntent)
+        }
     }
 }

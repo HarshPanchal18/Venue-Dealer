@@ -1,15 +1,11 @@
 package com.example.book_venue.model
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.book_venue.R
 import com.example.book_venue.databinding.VenueCardBinding
 import com.google.firebase.auth.FirebaseAuth
-import java.net.URL
-import java.net.URLEncoder
 
 class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
 

@@ -1,9 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.AboutAppActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageButton
+        android:id="@+id/goHomeBtn"
+        android:src="@drawable/ic_back_24"
+        android:background="@color/colorTextHint"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"/>
+    <TextView
+        android:text="@string/app_name"
+        android:gravity="start|center"
+        android:paddingStart="10sp"
+        android:background="@color/colorTextHint"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_toEndOf="@id/goHomeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+    <TextView
+        android:layout_below="@id/goHomeBtn"
+        android:id="@+id/appDescription"
+        android:layout_marginTop="5sp"
+        android:padding="5sp"
+        android:textSize="16sp"
+        android:text="@string/app_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/devContact"
+        android:text="@string/devContact"
+        android:layout_marginTop="5sp"
+        android:textSize="16sp"
+        android:padding="5sp"
+        android:layout_below="@id/appDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/devMailBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/devContact"
+        android:layout_marginTop="5sp"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="6dp"
+        android:text="Send Mail to Developer" />
+</RelativeLayout>

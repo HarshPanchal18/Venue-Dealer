@@ -18,8 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BookVenue"
         tools:targetApi="31">
-        <activity
-            android:name=".AboutAppActivity"
+        <activity android:name=".ui.AboutAppActivity"
             android:exported="false" />
         <activity
             android:name=".ui.SplashActivity"

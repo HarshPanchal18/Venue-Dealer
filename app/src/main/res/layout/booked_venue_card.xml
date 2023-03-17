@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/bookingUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="USERNAME" />
+
+    <TextView
+        android:id="@+id/bookingLandmark"
+        android:text="Landmark"
+        android:layout_below="@id/bookingUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/bookingCity"
+        android:text="CITY"
+        android:layout_below="@id/bookingUsername"
+        android:layout_toEndOf="@id/bookingLandmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/bookingState"
+        android:text="STATE"
+        android:layout_below="@id/bookingUsername"
+        android:layout_toEndOf="@id/bookingCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/bookingDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bookingLandmark"
+        android:text="DATE" />
+
+    <TextView
+        android:id="@+id/bookingUserMail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bookingDate"
+        android:text="USER MAIL" />
+
+    <LinearLayout
+        android:layout_below="@id/bookingUserMail"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/acceptButton"
+            android:text="ACCEPT"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/rejectButton"
+            android:text="REJECT"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</RelativeLayout>
