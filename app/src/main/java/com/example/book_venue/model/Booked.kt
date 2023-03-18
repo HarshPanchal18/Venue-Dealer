@@ -7,4 +7,13 @@ data class Booked(
     val state: String,
     val date: String,
     val usermail: String,
-)
+) {
+    constructor() : this(
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+    )
+}

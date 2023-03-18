@@ -46,7 +46,7 @@
         android:layout_below="@id/bookingDate"
         android:text="USER MAIL" />
 
-    <LinearLayout
+    <!--<LinearLayout
         android:layout_below="@id/bookingUserMail"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -65,5 +65,5 @@
             android:layout_marginHorizontal="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-    </LinearLayout>
+    </LinearLayout>-->
 </RelativeLayout>

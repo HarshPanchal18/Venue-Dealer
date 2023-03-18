@@ -3,6 +3,7 @@ package com.example.book_venue.ui
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -16,8 +17,12 @@ import com.bumptech.glide.Glide
 import com.example.book_venue.MainActivity
 import com.example.book_venue.R
 import com.example.book_venue.databinding.ActivityHomeBinding
+import com.example.book_venue.model.Booked
+import com.example.book_venue.model.BookingViewHolder
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.system.exitProcess
 
 class HomeActivity : AppCompatActivity() {
@@ -41,7 +46,27 @@ class HomeActivity : AppCompatActivity() {
 
         Glide.with(this).load(imageURI).into(binding.userPhoto)
 
-        binding.accountName.text = user.displayName
+        val collectionRef = FirebaseFirestore.getInstance().collection("cbooking")
+        val options = FirestoreRecyclerOptions.Builder<Booked>()
+            .setQuery(collectionRef, Booked::class.java).build()
+
+        //val adapter= FirestoreRecyclerOptions<Booked,BookingViewHolder>(options){}
+
+        binding.apply {
+            accountName.text = user.displayName
+            accountMail.text = user.email
+
+            accountName.setOnClickListener {
+                Handler().postDelayed({
+                    homeTitle.visibility = View.VISIBLE
+                    accountName.visibility = View.VISIBLE
+                    accountMail.visibility = View.GONE
+                },1800)
+                homeTitle.visibility = View.GONE
+                accountName.visibility = View.GONE
+                accountMail.visibility = View.VISIBLE
+            }
+        }
 
         binding.addVenue.setOnClickListener {
             startActivity(Intent(this, AddVenueActivity::class.java))
@@ -53,7 +78,6 @@ class HomeActivity : AppCompatActivity() {
 
         binding.aboutDevBtn.setOnClickListener {
             startActivity(Intent(this,AboutAppActivity::class.java))
-            //Toast.makeText(this,"",Toast.LENGTH_SHORT).show()
         }
 
         binding.logoutbtn.setOnClickListener {
