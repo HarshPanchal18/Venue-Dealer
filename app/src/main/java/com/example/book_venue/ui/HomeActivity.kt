@@ -1,5 +1,6 @@
 package com.example.book_venue.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -16,10 +17,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.example.book_venue.MainActivity
 import com.example.book_venue.R
+import com.example.book_venue.adapters.BookingAdapter
 import com.example.book_venue.databinding.ActivityHomeBinding
 import com.example.book_venue.model.Booked
-import com.example.book_venue.model.BookingViewHolder
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,6 +29,10 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
     private lateinit var binding : ActivityHomeBinding
+    private lateinit var adapter: BookingAdapter
+    private var bookedCardList = ArrayList<Booked>()
+    private lateinit var db: FirebaseFirestore
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +42,8 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
         auth=FirebaseAuth.getInstance()
         user= auth.currentUser!!
+        db = FirebaseFirestore.getInstance()
+        firestore = FirebaseFirestore.getInstance()
 
         val imageURI:String = if(user.photoUrl==null)
             resources.getResourceName(R.drawable.logo)
@@ -46,11 +52,11 @@ class HomeActivity : AppCompatActivity() {
 
         Glide.with(this).load(imageURI).into(binding.userPhoto)
 
-        val collectionRef = FirebaseFirestore.getInstance().collection("cbooking")
-        val options = FirestoreRecyclerOptions.Builder<Booked>()
-            .setQuery(collectionRef, Booked::class.java).build()
+        bookedCardList= ArrayList()
+        adapter=BookingAdapter(bookedCardList)
+        binding.confirmPager.adapter=adapter
 
-        //val adapter= FirestoreRecyclerOptions<Booked,BookingViewHolder>(options){}
+        loadBookingsFromDb(user.uid)
 
         binding.apply {
             accountName.text = user.displayName
@@ -77,7 +83,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.aboutDevBtn.setOnClickListener {
-            startActivity(Intent(this,AboutAppActivity::class.java))
+            startActivity(Intent(this, AboutAppActivity::class.java))
         }
 
         binding.logoutbtn.setOnClickListener {
@@ -114,16 +120,47 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    private fun loadBookingsFromDb(user: String) {
+        try {
+            val ref = db.collection("cbooking")
+            ref//.whereEqualTo("userId", user)
+                .get()
+                .addOnSuccessListener { result ->
+                    if (result.isEmpty) {
+                        //binding.venueRecycler.visibility = View.INVISIBLE // for in case of deletion of a single remained card
+                        binding.confirmTxt.visibility = View.VISIBLE
+                        return@addOnSuccessListener
+                    }
+                    //binding.loadingVenue.visibility = View.GONE
+
+                    refreshAdapter(bookedCardList)
+                    for (doc in result) {
+                        val bookingModel = doc.toObject(Booked::class.java)
+                        bookedCardList.add(bookingModel)
+                    }
+                    adapter.notifyDataSetChanged()
+                }
+        } catch (e: Exception) {
+            Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun refreshAdapter(list: ArrayList<Booked>) {
+        adapter = BookingAdapter(/*this,*/list)
+        binding.confirmPager.adapter = adapter
+    }
+
     // Ask again for exit
-    private var backPressedTime:Long=0
+    private var backPressedTime: Long = 0
     override fun onBackPressed() {
 
-        if(backPressedTime+2000>System.currentTimeMillis()) {
+        if(backPressedTime+2000 > System.currentTimeMillis()) {
             super.onBackPressed()
             exitProcess(0)
         }
 
         Toast.makeText(this,"Press again to exit",Toast.LENGTH_SHORT).show()
-        backPressedTime= System.currentTimeMillis()
+        backPressedTime = System.currentTimeMillis()
     }
 }

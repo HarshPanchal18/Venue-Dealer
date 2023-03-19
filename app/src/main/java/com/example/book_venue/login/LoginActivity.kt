@@ -35,7 +35,7 @@ import io.reactivex.Observable
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var binding : ActivityLoginBinding
+    private lateinit var binding: ActivityLoginBinding
 
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         // Authentication
-        auth= FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestScopes(Scope(Scopes.EMAIL))
@@ -53,52 +53,60 @@ class LoginActivity : AppCompatActivity() {
             .requestEmail()
             .build()
 
-        googleSignInClient= GoogleSignIn.getClient(this,gso)
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         val userNameStream = RxTextView.textChanges(binding.etMail)
             .skipInitialValue()
             .map { username -> username.isEmpty() }
-        userNameStream.subscribe { showTextMinimalAlert(it,"Email/Username") }
+        userNameStream.subscribe { showTextMinimalAlert(it, "Email/Username") }
 
         val passwordStream = RxTextView.textChanges(binding.etPassword)
             .skipInitialValue()
             .map { password -> password.isEmpty() }
-        passwordStream.subscribe { showTextMinimalAlert(it,"Password") }
+        passwordStream.subscribe { showTextMinimalAlert(it, "Password") }
 
 
         // Button Enable/Disable
-        val invalidFieldsStream : Observable<Boolean> = Observable.combineLatest(userNameStream,passwordStream) {
-                usernameInvalid: Boolean, passwordInvalid: Boolean -> !usernameInvalid && !passwordInvalid
+        val invalidFieldsStream: Observable<Boolean> = Observable.combineLatest(userNameStream,
+            passwordStream) { usernameInvalid: Boolean, passwordInvalid: Boolean ->
+            !usernameInvalid && !passwordInvalid
         }
 
-        invalidFieldsStream.subscribe { isValid:Boolean ->
-            if(isValid) {
-                binding.loginbtn.isEnabled=true
-                binding.loginbtn.backgroundTintList= ContextCompat.getColorStateList(this,
+        invalidFieldsStream.subscribe { isValid: Boolean ->
+            if (isValid) {
+                binding.loginbtn.isEnabled = true
+                binding.loginbtn.backgroundTintList = ContextCompat.getColorStateList(this,
                     R.color.primary_color)
             } else {
-                binding.loginbtn.isEnabled=false
-                binding.loginbtn.backgroundTintList= ContextCompat.getColorStateList(this,android.R.color.darker_gray)
+                binding.loginbtn.isEnabled = false
+                binding.loginbtn.backgroundTintList =
+                    ContextCompat.getColorStateList(this, android.R.color.darker_gray)
             }
         }
 
         binding.loginbtn.setOnClickListener {
-            val mail=binding.etMail.text.toString().trim()
-            val pass=binding.etPassword.text.toString().trim()
-            if(isOnline()){
-                loginUser(mail,pass)
+            val mail = binding.etMail.text.toString().trim()
+            val pass = binding.etPassword.text.toString().trim()
+            if (isOnline()) {
+                loginUser(mail, pass)
             } else {
-                try { showErrorDialog(resources.getString(R.string.network_error_text)) }
-                catch (e: Exception) { e.printStackTrace() }
+                try {
+                    showErrorDialog(resources.getString(R.string.network_error_text))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
 
         binding.googlesignbtn.setOnClickListener {
-            if(isOnline()){
+            if (isOnline()) {
                 signInGoogle()
             } else {
-                try { showErrorDialog(resources.getString(R.string.network_error_text)) }
-                catch (e: Exception) { e.printStackTrace() }
+                try {
+                    showErrorDialog(resources.getString(R.string.network_error_text))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
 
@@ -107,73 +115,81 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.tvForgotPassword.setOnClickListener {
-            val intent=Intent(this, ResetPasswordActivity::class.java)
-            intent.putExtra("Mail",binding.etMail.text.toString().trim())
+            val intent = Intent(this, ResetPasswordActivity::class.java)
+            intent.putExtra("Mail", binding.etMail.text.toString().trim())
             startActivity(intent)
         }
     }
 
     private fun signInGoogle() {
         googleSignInClient.signOut()
-        val signInIntent=googleSignInClient.signInIntent
+        val signInIntent = googleSignInClient.signInIntent
         launcher.launch(signInIntent)
     }
 
-    private val launcher=registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            result ->
-        if(result.resultCode== Activity.RESULT_OK) {
-            val task= GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            handleResults(task)
+    private val launcher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                handleResults(task)
+            }
         }
-    }
 
     private fun handleResults(task: Task<GoogleSignInAccount>) {
-        if(task.isSuccessful){
-            val account: GoogleSignInAccount?=task.result
-            if(account!=null) { updateUI(account) }
+        if (task.isSuccessful) {
+            val account: GoogleSignInAccount? = task.result
+            if (account != null) {
+                updateUI(account)
+            }
         } else {
             showErrorDialog(task.exception?.message.toString())
         }
     }
 
     private fun updateUI(account: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken,null)
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener {
-            if(it.isSuccessful) { startActivity(Intent(this, HomeActivity::class.java)) }
-            else { showErrorDialog(it.exception?.message.toString()) }
+            if (it.isSuccessful) {
+                startActivity(Intent(this, HomeActivity::class.java))
+            } else {
+                showErrorDialog(it.exception?.message.toString())
+            }
         }
     }
 
     private fun loginUser(mail: String, pass: String) {
-        auth.signInWithEmailAndPassword(mail,pass)
-            .addOnCompleteListener(this){ login ->
-                if(login.isSuccessful) { checkMailVerification() }
-                else { showErrorDialog(login.exception?.message.toString()) }
+        auth.signInWithEmailAndPassword(mail, pass)
+            .addOnCompleteListener(this) { login ->
+                if (login.isSuccessful) {
+                    checkMailVerification()
+                } else {
+                    showErrorDialog(login.exception?.message.toString())
+                }
             }
     }
 
-    private fun checkMailVerification(){
-        val user=auth.currentUser
-        if(user?.isEmailVerified==true){
+    private fun checkMailVerification() {
+        val user = auth.currentUser
+        if (user?.isEmailVerified == true) {
             finish()
             Intent(this, HomeActivity::class.java).also {
-                it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(it)
             }
         } else {
             showErrorDialog("Seems like you have not verified your mail yet!")
             val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
-            vibrator.vibrate(VibrationEffect.createOneShot(200,VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
 
             auth.signOut()
         }
     }
 
-    private fun showTextMinimalAlert(isNotValid: Boolean,text:String) {
-        if(text == "Email/Username")
-            binding.etMail.error=if(isNotValid) "$text cannot be empty!" else null
-        else if(text=="Password")
-            binding.etPassword.error=if(isNotValid) "$text cannot be empty!" else null
+    private fun showTextMinimalAlert(isNotValid: Boolean, text: String) {
+        if (text == "Email/Username")
+            binding.etMail.error = if (isNotValid) "$text cannot be empty!" else null
+        else if (text == "Password")
+            binding.etPassword.error = if (isNotValid) "$text cannot be empty!" else null
     }
 
     private fun isOnline(): Boolean {
@@ -190,12 +206,15 @@ class LoginActivity : AppCompatActivity() {
     private fun showErrorDialog(message: String) {
         val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
         val view: View = LayoutInflater.from(this)
-            .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+            .inflate(R.layout.error_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
 
         builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text =
+            resources.getString(R.string.network_error_title)
         (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.buttonAction) as Button).text =
+            resources.getString(R.string.okay)
         (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
 
         val alertDialog = builder.create()

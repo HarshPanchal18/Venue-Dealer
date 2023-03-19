@@ -1,6 +1,7 @@
 package com.example.book_venue.login
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -14,17 +15,25 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.example.book_venue.R
 import com.example.book_venue.databinding.ActivityRegisterBinding
+import com.example.book_venue.ui.HomeActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Observable
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding:ActivityRegisterBinding
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,12 +110,52 @@ class RegisterActivity : AppCompatActivity() {
                 registerUser(mail,pass)
             } else {
                 try { showErrorDialog(resources.getString(R.string.network_error_text)) }
-                catch (e: Exception) { e.printStackTrace() }
+                catch (e: Exception) { showErrorDialog(e.message.toString()) }
+            }
+        }
+
+        binding.googlesignbtn.setOnClickListener {
+            if(isOnline()) {
+                signInGoogle()
+            } else {
+                try { showErrorDialog(resources.getString(R.string.network_error_text)) }
+                catch (e: Exception) { showErrorDialog(e.message.toString()) }
             }
         }
 
         binding.tvHaveAccount.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
+        }
+    }
+
+    private fun signInGoogle() {
+        googleSignInClient.signOut()
+        val signInIntent=googleSignInClient.signInIntent
+        launcher.launch(signInIntent)
+    }
+
+    private val launcher=registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result ->
+        if(result.resultCode== Activity.RESULT_OK) {
+            val task= GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            handleResults(task)
+        }
+    }
+
+    private fun handleResults(task: Task<GoogleSignInAccount>) {
+        if(task.isSuccessful){
+            val account: GoogleSignInAccount?=task.result
+            if(account!=null) { updateUI(account) }
+        } else {
+            showErrorDialog(task.exception?.message.toString())
+        }
+    }
+
+    private fun updateUI(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken,null)
+        auth.signInWithCredential(credential).addOnCompleteListener {
+            if(it.isSuccessful) { startActivity(Intent(this, HomeActivity::class.java)) }
+            else { showErrorDialog(it.exception?.message.toString()) }
         }
     }
 
@@ -204,7 +253,6 @@ class RegisterActivity : AppCompatActivity() {
         view.findViewById<View>(R.id.buttonAction).setOnClickListener {
             alertDialog.dismiss()
             finish()
-            //Toast.makeText(this@AddVenueActivity, "Success", Toast.LENGTH_SHORT).show()
         }
         if (alertDialog.window != null) {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))

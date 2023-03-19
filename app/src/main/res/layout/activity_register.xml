@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20sp"
+    android:padding="10sp"
     tools:context=".login.RegisterActivity">
 
     <TextView
@@ -131,12 +131,41 @@
         android:id="@+id/registerbtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15sp"
+        android:layout_marginBottom="45sp"
         android:text="@string/btnregister"
         style="@style/ButtonGrey"
-        app:layout_constraintBottom_toTopOf="@+id/tv_have_account"
+        app:layout_constraintBottom_toTopOf="@+id/googlesignbtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/orText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OR"
+        android:fontFamily="monospace"
+        android:layout_marginTop="10sp"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerbtn" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/googlesignbtn"
+        style="@style/ButtonGreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:drawableEnd="@drawable/common_google_signin_btn_icon_light"
+        android:paddingHorizontal="20dp"
+        android:text="Sign up with"
+        android:drawablePadding="20sp"
+        android:layout_marginBottom="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_have_account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orText" />
+
 
     <TextView
         android:id="@+id/tv_have_account"
@@ -145,7 +174,7 @@
         android:layout_height="wrap_content"
         android:text="@string/register_have_acc"
         android:textAlignment="center"
-        android:layout_marginBottom="30sp"
+        android:layout_marginBottom="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

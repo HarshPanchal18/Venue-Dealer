@@ -65,38 +65,43 @@
             android:layout_weight="1"
             android:layout_marginVertical="10sp"
             android:background="@color/gray_light"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/pendingPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
             <TextView
-                android:layout_centerInParent="true"
-                android:text="Pending"
+                android:id="@+id/pendingTxt"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Pendings" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_weight="1"
-            android:layout_marginVertical="10sp"
             android:background="@color/gray_light"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/confirmPager"
-                android:layout_marginVertical="10sp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_margin="10sp"
+                android:padding="20sp"
+                android:background="#CCE49F9F" />
 
             <TextView
-                android:text="Confirmed"
-                android:layout_centerInParent="true"
+                android:id="@+id/confirmTxt"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Confirmed" />
         </RelativeLayout>
     </LinearLayout>
 

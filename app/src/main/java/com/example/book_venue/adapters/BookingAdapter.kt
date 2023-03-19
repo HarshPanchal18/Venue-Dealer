@@ -4,16 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.book_venue.databinding.BookedVenueCardBinding
+import com.example.book_venue.databinding.BookedCardBinding
 import com.example.book_venue.model.Booked
 import com.example.book_venue.model.BookingViewHolder
-import com.example.book_venue.model.Venue
-import com.example.book_venue.ui.ViewVenueActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 class BookingAdapter(
-    private var context: Context,
+    //private var context: Context,
     private var items: ArrayList<Booked>
 ) : RecyclerView.Adapter<BookingViewHolder>() {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -21,7 +19,7 @@ class BookingAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookingViewHolder {
-        val binding=BookedVenueCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding= BookedCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return  BookingViewHolder(binding.root)
     }
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/bookingUsername"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="USERNAME" />
+
+    <TextView
+        android:id="@+id/bookingLandmark"
+        android:text="Landmark"
+        android:layout_below="@id/bookingUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/bookingCity"
+        android:text="CITY"
+        android:layout_below="@id/bookingUsername"
+        android:layout_toEndOf="@id/bookingLandmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/bookingState"
+        android:text="STATE"
+        android:layout_below="@id/bookingUsername"
+        android:layout_toEndOf="@id/bookingCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/bookingStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bookingLandmark"
+        android:text="START DATE" />
+
+    <TextView
+        android:id="@+id/bookingEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/bookingStartDate"
+        android:layout_below="@id/bookingLandmark"
+        android:text="END DATE" />
+
+    <TextView
+        android:id="@+id/bookingUserMail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bookingStartDate"
+        android:text="USER MAIL" />
+
+</RelativeLayout>
