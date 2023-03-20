@@ -1,58 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="5sp"
+    app:cardCornerRadius="10sp">
 
-    <TextView
-        android:id="@+id/bookingUsername"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="USERNAME" />
+    <RelativeLayout
+        android:id="@+id/bookingCard"
+        android:background="#D282BCEF"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/bookingLandmark"
-        android:text="Landmark"
-        android:layout_below="@id/bookingUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/bookingUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginEnd="20sp"
+            android:layout_marginBottom="10sp"
+            android:text="USERNAME"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/bookingCity"
-        android:text="CITY"
-        android:layout_below="@id/bookingUsername"
-        android:layout_toEndOf="@id/bookingLandmark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/venueTitle"
+            android:layout_marginStart="10sp"
+            android:text="VENUE TITLE"
+            android:textSize="16sp"
+            android:layout_below="@id/bookingUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/bookingState"
-        android:text="STATE"
-        android:layout_below="@id/bookingUsername"
-        android:layout_toEndOf="@id/bookingCity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/bookingLandmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/venueTitle"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10sp"
+            android:layout_marginEnd="10sp"
+            android:layout_marginBottom="10sp"
+            android:text="LANDMARK"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/bookingStartDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/bookingLandmark"
-        android:text="START DATE" />
+        <TextView
+            android:id="@+id/bookingCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_below="@id/venueTitle"
+            android:layout_margin="10sp"
+            android:layout_toEndOf="@id/bookingLandmark"
+            android:text="CITY" />
 
-    <TextView
-        android:id="@+id/bookingEndDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/bookingStartDate"
-        android:layout_below="@id/bookingLandmark"
-        android:text="END DATE" />
+        <TextView
+            android:id="@+id/bookingState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_below="@id/venueTitle"
+            android:layout_margin="10sp"
+            android:layout_toEndOf="@id/bookingCity"
+            android:text="STATE" />
 
-    <TextView
-        android:id="@+id/bookingUserMail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/bookingStartDate"
-        android:text="USER MAIL" />
+        <TextView
+            android:id="@+id/from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bookingLandmark"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10sp"
+            android:text="FROM"
+            android:textSize="16sp" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/bookingStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bookingLandmark"
+            android:textSize="16sp"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10sp"
+            android:layout_marginEnd="10sp"
+            android:layout_marginBottom="10sp"
+            android:layout_toEndOf="@id/from"
+            android:text="START DATE" />
+
+        <TextView
+            android:id="@+id/to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="10sp"
+            android:layout_marginStart="10sp"
+            android:layout_below="@id/bookingStartDate"
+            android:text="TO" />
+
+        <TextView
+            android:id="@+id/bookingEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_below="@id/bookingStartDate"
+            android:layout_toEndOf="@id/to"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10sp"
+            android:layout_marginEnd="10sp"
+            android:layout_marginBottom="10sp"
+            android:text="END DATE" />
+
+        <TextView
+            android:id="@+id/bookingUserMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_below="@id/bookingEndDate"
+            android:layout_margin="10sp"
+            android:text="USER MAIL" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/statusColor"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:backgroundTint="@color/colorSuccess"
+            android:layout_marginTop="10sp"
+            android:layout_marginEnd="10sp"
+            app:cardCornerRadius="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/venueStatus"
+                android:text="ACTIVE"
+                android:layout_marginHorizontal="10sp"
+                android:layout_marginVertical="5sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

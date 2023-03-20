@@ -8,10 +8,11 @@
 
     <ImageButton
         android:id="@+id/goHomeBtn"
-        android:src="@drawable/ic_back_24"
-        android:background="@color/colorTextHint"
+        android:padding="10sp"
         android:layout_width="wrap_content"
-        android:layout_height="?attr/actionBarSize"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorTextHint"
+        android:src="@drawable/ic_back_24" />
     <TextView
         android:text="@string/app_name"
         android:gravity="start|center"
@@ -47,6 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/devContact"
         android:layout_marginTop="5sp"
+        android:layout_centerHorizontal="true"
         android:drawableStart="@drawable/ic_email"
         android:drawablePadding="6dp"
         android:text="Send Mail to Developer" />

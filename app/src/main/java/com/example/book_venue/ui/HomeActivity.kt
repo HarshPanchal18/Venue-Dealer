@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.book_venue.MainActivity
 import com.example.book_venue.R
@@ -23,7 +24,9 @@ import com.example.book_venue.model.Booked
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
 import kotlin.system.exitProcess
+
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -32,7 +35,6 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var adapter: BookingAdapter
     private var bookedCardList = ArrayList<Booked>()
     private lateinit var db: FirebaseFirestore
-    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +45,6 @@ class HomeActivity : AppCompatActivity() {
         auth=FirebaseAuth.getInstance()
         user= auth.currentUser!!
         db = FirebaseFirestore.getInstance()
-        firestore = FirebaseFirestore.getInstance()
 
         val imageURI:String = if(user.photoUrl==null)
             resources.getResourceName(R.drawable.logo)
@@ -53,8 +54,12 @@ class HomeActivity : AppCompatActivity() {
         Glide.with(this).load(imageURI).into(binding.userPhoto)
 
         bookedCardList= ArrayList()
-        adapter=BookingAdapter(bookedCardList)
+        adapter=BookingAdapter(this, bookedCardList)
         binding.confirmPager.adapter=adapter
+
+        // disabling overScrollMode programmatically
+        val child: View = binding.confirmPager.getChildAt(0)
+        (child as? RecyclerView)?.overScrollMode = View.OVER_SCROLL_NEVER
 
         loadBookingsFromDb(user.uid)
 
@@ -131,7 +136,8 @@ class HomeActivity : AppCompatActivity() {
                         binding.confirmTxt.visibility = View.VISIBLE
                         return@addOnSuccessListener
                     }
-                    //binding.loadingVenue.visibility = View.GONE
+                    binding.bookingsLoading.visibility = View.GONE
+                    binding.bookingsLoadingText.visibility = View.GONE
 
                     refreshAdapter(bookedCardList)
                     for (doc in result) {
@@ -143,11 +149,11 @@ class HomeActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
         }
-    }
+    } // end of loadingBookingsFromDb()
 
     @SuppressLint("NotifyDataSetChanged")
     private fun refreshAdapter(list: ArrayList<Booked>) {
-        adapter = BookingAdapter(/*this,*/list)
+        adapter = BookingAdapter(this, list)
         binding.confirmPager.adapter = adapter
     }
 

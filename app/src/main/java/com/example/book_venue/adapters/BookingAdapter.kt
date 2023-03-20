@@ -3,6 +3,7 @@ package com.example.book_venue.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.book_venue.databinding.BookedCardBinding
 import com.example.book_venue.model.Booked
@@ -11,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 class BookingAdapter(
-    //private var context: Context,
+    private var context: Context,
     private var items: ArrayList<Booked>
 ) : RecyclerView.Adapter<BookingViewHolder>() {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -26,6 +27,10 @@ class BookingAdapter(
     override fun onBindViewHolder(holder: BookingViewHolder, position: Int) {
         val currentCard=items[position]
         holder.bind(currentCard)
+
+        holder.binding.bookingCard.setOnClickListener {
+            Toast.makeText(context,currentCard.username,Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun getItemCount(): Int {
