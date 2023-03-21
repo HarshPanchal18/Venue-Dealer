@@ -189,7 +189,7 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         alertDialog.show()
     }
 
-    private fun showErrorDialog(message: String) {
+    fun showErrorDialog(message: String) {
         val builder = android.app.AlertDialog.Builder(context, R.style.AlertDialogTheme)
         val view: View = LayoutInflater.from(context)
             .inflate(R.layout.error_dialog, (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer))

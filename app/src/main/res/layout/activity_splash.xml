@@ -7,37 +7,48 @@
     android:layout_height="match_parent"
     tools:context=".ui.SplashActivity">
 
-    <FrameLayout
+    <!--<FrameLayout
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">-->
 
-        <ImageView
-            android:id="@+id/splashImage"
-            android:src="@drawable/logo04"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="LOGO-SPLASH" />
+    <ImageView
+        android:id="@+id/splashImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="LOGO-SPLASH"
+        android:src="@drawable/logo04"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/app_name"
-            android:textSize="32sp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/moltres"
-            android:layout_marginTop="490sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/moltres"
+        android:text="@string/app_name"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        android:layout_marginBottom="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:src="@drawable/made_in_india_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="90sp"
-            android:layout_gravity="bottom"
-            android:contentDescription="MADE IN INDIA" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="90sp"
+        android:layout_gravity="bottom"
+        android:contentDescription="MADE IN INDIA"
+        android:src="@drawable/made_in_india_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    </FrameLayout>
+<!--    </FrameLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

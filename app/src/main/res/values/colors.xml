@@ -18,7 +18,8 @@
     <color name="gray">#888888</color>
     <color name="colorNeutral">#888888</color>
     <color name="gray_light">#f0f0f0</color>
-    <color name="colorSuccess">#7BF447</color>
+    <color name="lime">#7BF447</color>
+    <color name="colorSuccess">#9AE878</color>
     <color name="colorWarning">#F8C441</color>
     <color name="colorError">#F44336</color>
     <color name="transparent">#00F44336</color>

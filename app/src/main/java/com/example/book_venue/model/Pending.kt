@@ -1,10 +1,8 @@
 package com.example.book_venue.model
 
 import com.google.firebase.Timestamp
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-data class Booked(
+data class Pending(
     val venuename: String,
     val username: String,
     val useremail: String,
@@ -14,7 +12,7 @@ data class Booked(
     var startdate: Timestamp,
     val enddate: Timestamp,
     val venueownercontact: String,
-    val bookingId: String
+    val requestId: String,
 ) {
     constructor() : this(
         "",
@@ -28,10 +26,3 @@ data class Booked(
         ""
     )
 }
-
-/*
-val startdates = doc.getTimestamp("startdate")
-bookingModel.startdate = startdates?.toDate().toString()
-val dateFormat = SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm:ss a z", Locale.getDefault())
-val formattedDate = startdates?.let { dateFormat.format(it) }
-*/

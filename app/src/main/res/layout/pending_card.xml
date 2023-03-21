@@ -1,69 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:layout_margin="5sp"
+    app:cardCornerRadius="10sp">
+
+    <RelativeLayout
+        android:id="@+id/pendingCard"
+        android:background="#E6EAD882"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/bookingUsername"
+        android:id="@+id/pendingUsername"
+        android:layout_marginStart="10sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginEnd="20sp"
+        android:layout_marginBottom="10sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="USERNAME" />
 
     <TextView
-        android:id="@+id/bookingLandmark"
+        android:id="@+id/pendingLandmark"
         android:text="Landmark"
-        android:layout_below="@id/bookingUsername"
+        android:layout_marginStart="10sp"
+        android:layout_below="@id/pendingUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/bookingCity"
+        android:id="@+id/pendingCity"
         android:text="CITY"
-        android:layout_below="@id/bookingUsername"
-        android:layout_toEndOf="@id/bookingLandmark"
+        android:layout_marginStart="10sp"
+        android:layout_below="@id/pendingUsername"
+        android:layout_toEndOf="@id/pendingLandmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/bookingState"
+        android:id="@+id/pendingState"
         android:text="STATE"
-        android:layout_below="@id/bookingUsername"
-        android:layout_toEndOf="@id/bookingCity"
+        android:layout_marginStart="10sp"
+        android:layout_below="@id/pendingUsername"
+        android:layout_toEndOf="@id/pendingCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/bookingDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/bookingLandmark"
-        android:text="DATE" />
+        <TextView
+            android:id="@+id/pendingStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pendingLandmark"
+            android:layout_marginStart="10sp"
+            android:text="START DATE" />
+
+        <TextView
+            android:id="@+id/pendingEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
+            android:layout_below="@id/pendingStartDate"
+            android:text="END DATE" />
 
     <TextView
-        android:id="@+id/bookingUserMail"
+        android:id="@+id/pendingUserMail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/bookingDate"
+        android:layout_marginStart="10sp"
+        android:layout_below="@id/pendingEndDate"
         android:text="USER MAIL" />
 
-    <!--<LinearLayout
-        android:layout_below="@id/bookingUserMail"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/acceptButton"
-            android:text="ACCEPT"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="10sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <Button
-            android:id="@+id/rejectButton"
-            android:text="REJECT"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="10sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5sp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/acceptButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10sp"
+                android:layout_weight="1"
+                android:background="@drawable/round_corners"
+                android:backgroundTint="@color/lime"
+                android:text="ACCEPT" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/rejectButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10sp"
+                android:layout_weight="1"
+                android:background="@drawable/round_corners"
+                android:backgroundTint="@color/colorError"
+                android:text="REJECT" />
+        </LinearLayout>
 </RelativeLayout>
+</androidx.cardview.widget.CardView>

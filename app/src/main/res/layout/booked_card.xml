@@ -17,21 +17,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10sp"
-            android:layout_marginTop="20sp"
-            android:layout_marginEnd="20sp"
-            android:layout_marginBottom="10sp"
+            android:layout_marginTop="10sp"
             android:text="USERNAME"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/venueTitle"
-            android:layout_marginStart="10sp"
-            android:text="VENUE TITLE"
-            android:textSize="16sp"
-            android:layout_below="@id/bookingUsername"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bookingUsername"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="2sp"
+            android:text="VENUE TITLE"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/bookingLandmark"
@@ -39,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/venueTitle"
             android:layout_marginStart="10sp"
-            android:layout_marginTop="10sp"
+            android:layout_marginTop="2sp"
             android:layout_marginEnd="10sp"
             android:layout_marginBottom="10sp"
             android:text="LANDMARK"
@@ -51,7 +50,8 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:layout_below="@id/venueTitle"
-            android:layout_margin="10sp"
+            android:layout_marginTop="2sp"
+            android:layout_marginStart="10sp"
             android:layout_toEndOf="@id/bookingLandmark"
             android:text="CITY" />
 
@@ -60,8 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
+            android:layout_marginTop="2sp"
+            android:layout_marginStart="10sp"
             android:layout_below="@id/venueTitle"
-            android:layout_margin="10sp"
             android:layout_toEndOf="@id/bookingCity"
             android:text="STATE" />
 
@@ -71,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/bookingLandmark"
             android:layout_marginStart="10sp"
-            android:layout_marginTop="10sp"
+            android:layout_marginTop="2sp"
             android:text="FROM"
             android:textSize="16sp" />
 
@@ -82,7 +83,7 @@
             android:layout_below="@id/bookingLandmark"
             android:textSize="16sp"
             android:layout_marginStart="10sp"
-            android:layout_marginTop="10sp"
+            android:layout_marginTop="2sp"
             android:layout_marginEnd="10sp"
             android:layout_marginBottom="10sp"
             android:layout_toEndOf="@id/from"
@@ -93,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:layout_marginTop="10sp"
+            android:layout_marginTop="2sp"
             android:layout_marginStart="10sp"
             android:layout_below="@id/bookingStartDate"
             android:text="TO" />
@@ -102,23 +103,25 @@
             android:id="@+id/bookingEndDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
             android:layout_below="@id/bookingStartDate"
-            android:layout_toEndOf="@id/to"
             android:layout_marginStart="10sp"
-            android:layout_marginTop="10sp"
+            android:layout_marginTop="2sp"
             android:layout_marginEnd="10sp"
             android:layout_marginBottom="10sp"
-            android:text="END DATE" />
+            android:layout_toEndOf="@id/to"
+            android:text="END DATE"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/bookingUserMail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
             android:layout_below="@id/bookingEndDate"
-            android:layout_margin="10sp"
-            android:text="USER MAIL" />
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="2sp"
+            android:layout_marginEnd="10sp"
+            android:text="USER MAIL"
+            android:textSize="16sp" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/statusColor"
@@ -138,5 +141,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/cancelBookingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="50sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5sp"
+            android:background="@drawable/round_corners"
+            android:backgroundTint="@color/white"
+            android:text="Cancel" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
