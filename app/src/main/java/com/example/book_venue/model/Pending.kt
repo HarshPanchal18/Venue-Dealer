@@ -13,6 +13,7 @@ data class Pending(
     val enddate: Timestamp,
     val venueownercontact: String,
     val requestId: String,
+    var bookingId: String,
 ) {
     constructor() : this(
         "",
@@ -22,6 +23,7 @@ data class Pending(
         "",
         Timestamp.now(),
         Timestamp.now(),
+        "",
         "",
         ""
     )

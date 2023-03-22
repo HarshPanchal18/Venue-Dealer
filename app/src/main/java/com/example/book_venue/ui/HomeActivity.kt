@@ -2,6 +2,7 @@ package com.example.book_venue.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
@@ -26,6 +27,7 @@ import com.example.book_venue.model.Pending
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import java.util.*
 import kotlin.system.exitProcess
 
@@ -36,8 +38,8 @@ class HomeActivity : AppCompatActivity() {
     lateinit var binding : ActivityHomeBinding
     private lateinit var adapterBooking: BookingAdapter
     private lateinit var adapterPending: PendingAdapter
-    private var bookedCardList = ArrayList<Booked>()
-    private var pendingCardList = ArrayList<Pending>()
+    private lateinit var bookedCardList: ArrayList<Booked>
+    private lateinit var pendingCardList: ArrayList<Pending>
     private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +47,10 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setAndInitialize()
+        initializeObjects()
+        loadBookingsFromDb(user.uid)
+        loadPendingsFromDb(user.uid)
+
     }
 
     private fun loadBookingsFromDb(user: String) {
@@ -61,8 +66,10 @@ class HomeActivity : AppCompatActivity() {
                     }
                     binding.bookingsLoading.visibility = View.GONE
                     binding.bookingsLoadingText.visibility = View.GONE
+                    binding.bookingHead.visibility = View.VISIBLE
 
-                    refreshBookingAdapter(bookedCardList)
+                    adapterBooking = BookingAdapter(this, this,bookedCardList)
+                    binding.confirmPager.adapter = adapterBooking
                     for (doc in result) {
                         val bookingModel = doc.toObject(Booked::class.java)
                         bookedCardList.add(bookingModel)
@@ -87,8 +94,10 @@ class HomeActivity : AppCompatActivity() {
                     }
                     binding.bookingsLoading.visibility = View.GONE
                     binding.bookingsLoadingText.visibility = View.GONE
+                    binding.pendingHead.visibility = View.VISIBLE
 
-                    refreshPendingAdapter(pendingCardList)
+                    adapterPending = PendingAdapter(this, this,pendingCardList)
+                    binding.pendingPager.adapter = adapterPending
                     for (doc in result) {
                         val pendingModel = doc.toObject(Pending::class.java)
                         pendingCardList.add(pendingModel)
@@ -100,17 +109,7 @@ class HomeActivity : AppCompatActivity() {
         }
     } // end of loadingBookingsFromDb()
 
-    private fun refreshBookingAdapter(list: ArrayList<Booked>) {
-        adapterBooking = BookingAdapter(this, this,list)
-        binding.confirmPager.adapter = adapterBooking
-    }
-
-    private fun refreshPendingAdapter(list: ArrayList<Pending>) {
-        adapterPending = PendingAdapter(this, this,list)
-        binding.pendingPager.adapter = adapterPending
-    }
-
-    private fun setAndInitialize() {
+    private fun initializeObjects() {
         supportActionBar?.hide()
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser!!
@@ -137,22 +136,21 @@ class HomeActivity : AppCompatActivity() {
         child = binding.pendingPager.getChildAt(0)
         (child as? RecyclerView)?.overScrollMode = View.OVER_SCROLL_NEVER
 
-        loadBookingsFromDb(user.uid)
-        loadPendingsFromDb(user.uid)
-
         binding.apply {
             accountName.text = user.displayName
             accountMail.text = user.email
 
             accountName.setOnClickListener {
                 Handler().postDelayed({
-                    homeTitle.visibility = View.VISIBLE
-                    accountName.visibility = View.VISIBLE
+                    homeTitle.setTextColor(Color.BLACK)
+                    homeSubtitle.setTextColor(Color.BLACK)
+                    accountName.setTextColor(Color.BLACK)
                     accountMail.visibility = View.GONE
                 }, 1800)
-                homeTitle.visibility = View.GONE
-                accountName.visibility = View.GONE
                 accountMail.visibility = View.VISIBLE
+                homeTitle.setTextColor(Color.WHITE)
+                homeSubtitle.setTextColor(Color.WHITE)
+                accountName.setTextColor(Color.WHITE)
             }
         }
 

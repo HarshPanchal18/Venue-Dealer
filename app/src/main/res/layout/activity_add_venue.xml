@@ -42,6 +42,7 @@
                     android:layout_alignParentTop="true"
                     android:inputType="textCapSentences"
                     android:lines="1"
+                    style="@style/TextInputEditText"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,11 +55,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/venueDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapSentences"
+                    style="@style/TextInputEditText"
                     android:lines="1"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -72,11 +74,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/venueLandmark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences"
+                style="@style/TextInputEditText"
                 android:lines="3"
                 android:maxLines="3" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -115,11 +118,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:startIconDrawable="@drawable/ic_circle_account">
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/dealerPhNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
+                style="@style/TextInputEditText"
                 android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -189,34 +193,51 @@
             <LinearLayout
                 android:layout_below="@id/venueTypes1"
                 android:id="@+id/capacity"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/venueCapacity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:layout_marginEnd="5dp"
-                android:layout_gravity="center"
-                android:hint="Venue capacity(Person)"
-                android:layout_weight="2"
-                android:inputType="phone|number"
-                android:lines="1"
-                android:maxLength="10" />
-
-                <EditText
-                    android:id="@+id/restRooms"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="5dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:hint="Venue capacity(Person)"
                     android:layout_weight="1"
+                    style="@style/TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/venueCapacity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_gravity="center"
+                    style="@style/TextInputEditText"
+                    android:inputType="phone|number"
+                    android:lines="1"
+                    android:maxLength="10" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout"
+                    android:layout_weight="1.2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/restRooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
                     android:hint="No. of Rest Rooms"
                     android:inputType="number"
+                    style="@style/TextInputEditText"
                     android:lines="1"
                     android:maxLength="3" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -224,7 +245,8 @@
                 android:id="@+id/availableLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/capacity">
+                android:layout_below="@id/capacity"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_weight="1"

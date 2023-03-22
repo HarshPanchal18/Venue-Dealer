@@ -1,7 +1,9 @@
 package com.example.book_venue.adapters
 
 import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -20,7 +22,7 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
     private lateinit var db: FirebaseFirestore
     private var activity : HomeActivity = HomeActivity()
     private lateinit var context: Context
-    private lateinit var items: ArrayList<Booked>
+    var items = ArrayList<Booked>()
 
     constructor( activity: HomeActivity, context: Context, items: ArrayList<Booked>) : this() {
         this.activity = activity
@@ -62,6 +64,13 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
         items.removeAt(position)
         notifyItemRemoved(position)
         activity.binding.confirmPager.adapter?.notifyDataSetChanged()
+
+        /*if(items.isEmpty()) {
+            val intent = Intent(context, HomeActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+            pendingIntent.send()
+            activity.finish()
+        }*/
     }
 
 }

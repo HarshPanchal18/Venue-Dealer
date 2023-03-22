@@ -48,8 +48,10 @@
         style="@style/SubTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/userPhoto"
+        android:layout_below="@id/home_title"
         android:layout_marginTop="5sp"
+        android:textColor="@color/black"
+        android:layout_toEndOf="@id/userPhoto"
         android:text="@string/home_subtitle"
         android:textStyle="bold" />
 
@@ -58,7 +60,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/bottomTab"
         android:layout_below="@id/home_subtitle"
-        android:layout_marginVertical="10sp"
+        android:layout_marginVertical="5sp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -67,18 +69,30 @@
             android:layout_marginVertical="10sp"
             android:layout_weight="1">
 
+            <TextView
+                android:id="@+id/pendingHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:fontFamily="@font/montserrat"
+                android:text="Your pendings:"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/pendingPager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_below="@id/pendingHead" />
 
             <TextView
                 android:id="@+id/pendingTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:visibility="gone"
-                android:text="There are no pending requests" />
+                android:text="There are no pending requests"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -86,10 +100,22 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
+            <TextView
+                android:id="@+id/bookingHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:fontFamily="@font/montserrat"
+                android:text="Your bookings:"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/confirmPager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_below="@id/bookingHead" />
 
             <TextView
                 android:id="@+id/confirmTxt"
@@ -162,6 +188,7 @@
         android:id="@+id/bookingsLoadingText"
         android:text="Getting things ready for you..."
         android:textColor="@color/black"
+        android:fontFamily="@font/montserrat"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/bookingsLoading"
         android:layout_width="wrap_content"
