@@ -29,12 +29,12 @@ jobs:
       run: chmod +x gradlew
 
     - name: Cache Gradle build cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches/build-cache-7.2
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      uses: actions/cache@v2
+      with:
+        path: ~/.gradle/caches/build-cache-7.2
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
 
     - name: Cache Gradle dependencies
       uses: actions/cache@v2
