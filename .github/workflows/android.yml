@@ -16,10 +16,10 @@ jobs:
         api-level: [24,25,26,27,28,29,30,31]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
 
     - name: set up JDK 11
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v2
       with:
         java-version: '11'
         distribution: 'temurin'
@@ -27,6 +27,14 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+
+    - name: Cache Gradle build cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches/build-cache-7.2
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
     - name: Cache Gradle dependencies
       uses: actions/cache@v2
@@ -36,21 +44,26 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-
-    #- name: Build with Gradle
-      #run: ./gradlew assebledebug --stacktrace
-
     - name: Build debug APK
       run: ./gradlew assembleDebug --stacktrace
 
-    #- name: Run unit tests
-      #run: ./gradlew test
+    - name: Run unit tests
+      if: "!contains(github.event.head_commit.message, '[skip tests]') && !contains(github.event.head_commit.message, '[ci skip]')"
+      uses: gradle/gradle-build-action@v1
+      with:
+        arguments: testDebugUnitTest --stacktrace
+        gradle-version: '7.2'
 
-    #- name: Run lint checks
-     # run: ./gradlew lint
+    - name: Run lint checks
+      if: "!contains(github.event.head_commit.message, '[skip lint]') && !contains(github.event.head_commit.message, '[ci skip]')"
+      uses: gradle/gradle-build-action@v1
+      with:
+        arguments: lintDebug --stacktrace
+        gradle-version: '7.2'
 
     - name: Upload APK
       uses: actions/upload-artifact@v1
+      if: "!contains(github.event.head_commit.message, '[skip build]') && !contains(github.event.head_commit.message, '[ci skip]')"
       with:
-          name: app
-          path: app/build/outputs/apk/debug/app-debug.apk
+        name: app
+        path: app/build/outputs/apk/debug/app-debug.apk
