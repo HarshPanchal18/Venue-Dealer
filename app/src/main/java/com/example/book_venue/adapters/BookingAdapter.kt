@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,7 @@ import com.example.book_venue.databinding.BookedCardBinding
 import com.example.book_venue.model.Booked
 import com.example.book_venue.model.BookingViewHolder
 import com.example.book_venue.ui.HomeActivity
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,8 +42,11 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
         holder.bind(currentCard)
         db = FirebaseFirestore.getInstance()
 
-        holder.binding.bookingUsername.setOnClickListener {
-            Toast.makeText(context,currentCard.username,Toast.LENGTH_SHORT).show()
+        if(currentCard.startdate >= Timestamp.now()) {
+            holder.binding.activeStatusColor.visibility = View.GONE
+        } else {
+            holder.binding.upcomingStatusColor.visibility = View.GONE
+            holder.binding.cancelBookingButton.visibility = View.GONE
         }
 
         val currentItem: Booked = items[position]

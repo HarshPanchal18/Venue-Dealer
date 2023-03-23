@@ -6,25 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".ui.AboutAppActivity">
 
-    <ImageButton
-        android:id="@+id/goHomeBtn"
-        android:padding="10sp"
-        android:layout_width="wrap_content"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorTextHint"
-        android:src="@drawable/ic_back_24" />
-    <TextView
-        android:text="@string/app_name"
-        android:gravity="start|center"
-        android:paddingStart="10sp"
-        android:background="@color/colorTextHint"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_toEndOf="@id/goHomeBtn"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_color"
+        android:requiresFadingEdge="vertical"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <ImageButton
+            android:id="@+id/goHomeBtn"
+            android:padding="10sp"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_back_24" />
+
+        <TextView
+            android:text="@string/app_name"
+            android:gravity="start|center"
+            android:paddingStart="10sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_toEndOf="@id/goHomeBtn"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
+    </androidx.appcompat.widget.Toolbar>
+
     <TextView
-        android:layout_below="@id/goHomeBtn"
+        android:layout_below="@id/toolBar"
         android:id="@+id/appDescription"
         android:layout_marginTop="5sp"
         android:padding="5sp"

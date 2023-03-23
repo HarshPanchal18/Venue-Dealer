@@ -7,10 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -178,8 +177,9 @@ class LoginActivity : AppCompatActivity() {
             }
         } else {
             showErrorDialog("Seems like you have not verified your mail yet!")
-            val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+
 
             auth.signOut()
         }
@@ -193,14 +193,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun isOnline(): Boolean {
-        val conMgr =
-            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = conMgr.activeNetworkInfo
-        if (netInfo == null || !netInfo.isConnected || !netInfo.isAvailable) {
-            //Toast.makeText(this, "No Internet connection!", Toast.LENGTH_LONG).show()
-            return false
-        }
-        return true
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork // returns a 'Network' object representing the currently active network.
+        // retrieve the network capabilities using the getNetworkCapabilities() method which returns a NetworkCapabilities object that provides information about the network.
+        val capabilities = connectivityManager.getNetworkCapabilities(network)
+        // NET_CAPABILITY_INTERNET capability, indicates that the device has an internet connection available or not
+        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
     private fun showErrorDialog(message: String) {

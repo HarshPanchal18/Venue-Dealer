@@ -7,9 +7,36 @@
     android:layout_height="match_parent"
     tools:context=".ui.AddVenueActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_color"
+        android:requiresFadingEdge="vertical"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <ImageButton
+            android:id="@+id/goBack"
+            android:layout_marginStart="2sp"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_back_24" />
+
+        <TextView
+            android:id="@+id/toolbarText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="20sp"
+            android:text="Add New Venue"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </androidx.appcompat.widget.Toolbar>
     <ScrollView
+        android:layout_below="@id/toolBar"
         android:layout_above="@id/add_update_venue_btn"
-        android:layout_alignParentTop="true"
         android:overScrollMode="never"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
@@ -32,6 +59,7 @@
                 android:layout_marginTop="10dp"
                 android:hint="@string/venue_name"
                 style="@style/TextInputLayout"
+                android:layout_marginHorizontal="2sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -51,6 +79,7 @@
                 android:layout_marginTop="10dp"
                 android:hint="Enter venue description"
                 android:layout_below="@id/cityState"
+                android:layout_marginHorizontal="2sp"
                 style="@style/TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -70,6 +99,7 @@
                 android:layout_marginTop="10dp"
                 android:hint="@string/venue_landmark"
                 android:layout_below="@id/selected_images_Rview"
+                android:layout_marginHorizontal="2sp"
                 style="@style/TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -95,7 +125,7 @@
                 <Spinner
                     android:id="@+id/spinnerState"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/black"
+                    android:background="@drawable/spinner_border"
                     android:layout_marginHorizontal="2sp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
@@ -103,7 +133,9 @@
                 <Spinner
                     android:id="@+id/spinnerCity"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/black"
+                    android:background="@drawable/spinner_border"
+                    android:backgroundTintMode="multiply"
+                    android:foregroundTintMode="multiply"
                     android:layout_marginHorizontal="2sp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
@@ -115,6 +147,7 @@
                 android:hint="@string/dealer_contact_number"
                 android:layout_below="@id/parkingLayout"
                 style="@style/TextInputLayout"
+                android:layout_marginHorizontal="2sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:startIconDrawable="@drawable/ic_circle_account">
@@ -132,8 +165,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/descriptionInputLayout"
                 android:layout_marginTop="10dp"
-                android:textSize="16sp"
+                android:textColor="@color/black"
                 android:text="Your venue will be available for:"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -148,17 +182,20 @@
                     android:id="@+id/convHall"
                     android:text="Convention Hall"
                     android:layout_weight="1"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <CheckBox
                     android:id="@+id/wedding"
                     android:text="Wedding"
+                    android:textColor="@color/black"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <CheckBox
                     android:id="@+id/festivity"
                     android:text="Festivity"
+                    android:textColor="@color/black"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -174,17 +211,20 @@
                     android:id="@+id/exhibition"
                     android:text="Exhibition"
                     android:layout_weight="1"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <CheckBox
                     android:id="@+id/sports"
                     android:text="Sports"
                     android:layout_weight="1"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <CheckBox
                     android:id="@+id/party"
                     android:text="Party"
+                    android:textColor="@color/black"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -259,6 +299,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:text="Day/Time Availability:" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -279,6 +320,7 @@
                     android:text="@string/indian_ruppee"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:layout_marginStart="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -289,12 +331,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:inputType="numberDecimal"
+                    android:textColor="@color/black"
                     android:maxLines="1"
-                    android:hint="Rent"/>
+                    android:hint=" Rent "/>
                 <TextView
                     android:textSize="20sp"
                     android:text="/ hour"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:layout_marginStart="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -315,6 +359,7 @@
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textSize="16sp"
+                    android:textColor="@color/black"
                     android:text="Parking spaces : " />
 
                 <RadioGroup
@@ -325,6 +370,7 @@
                         android:id="@+id/parkingYes"
                         android:layout_marginStart="16sp"
                         android:text="Yes"
+                        android:textColor="@color/black"
                         android:checked="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -332,6 +378,7 @@
                         android:id="@+id/parkingNo"
                         android:layout_marginStart="16sp"
                         android:text="No"
+                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </RadioGroup>
@@ -343,6 +390,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/titleInputLayout"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/bg_btn"
+                android:backgroundTint="@color/colorSuccess"
+                android:paddingHorizontal="10sp"
                 android:text="Pick venue images" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -351,6 +401,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/titleInputLayout"
                 android:layout_alignParentEnd="true"
+                android:paddingHorizontal="10sp"
+                android:background="@drawable/bg_btn"
+                android:backgroundTint="@color/colorError"
                 android:layout_marginTop="10dp"
                 android:text="Clear images"
                 android:visibility="gone" />
@@ -371,7 +424,8 @@
                 android:layout_height="150dp"
                 android:layout_below="@id/chooseImageBtn"
                 android:layout_marginTop="10sp"
-                android:background="@color/gray_light"
+                android:background="@drawable/bg_btn"
+                android:backgroundTint="@color/gray_light"
                 android:padding="5dp"
                 android:visibility="gone" />
         </RelativeLayout>

@@ -1,6 +1,7 @@
 package com.example.book_venue.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -16,7 +17,6 @@ import com.example.book_venue.helper.TouchHelper
 import com.example.book_venue.model.Venue
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ViewVenueActivity : AppCompatActivity() {
@@ -24,7 +24,6 @@ class ViewVenueActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
     private lateinit var db: FirebaseFirestore
-    private lateinit var firestore: FirebaseFirestore
     private lateinit var adapter: VenueAdapter
     private var venues = ArrayList<Venue>()
     lateinit var binding: ActivityViewVenueBinding
@@ -36,13 +35,12 @@ class ViewVenueActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.viewVenueToolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser!!
-        firestore = FirebaseFirestore.getInstance()
         db = FirebaseFirestore.getInstance()
 
+        binding.goBack.setOnClickListener { finish() }
         venues = ArrayList()
         adapter = VenueAdapter(this, this, venues)
         binding.venueRecycler.apply {
@@ -80,16 +78,16 @@ class ViewVenueActivity : AppCompatActivity() {
     private fun filterList(searchKeyword: String?) {
         val filteredList = arrayListOf<Venue>()
         for (item in venues)
-            if (item.Name.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
-                || item.City.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
-                || item.Types.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
-                || item.State.toLowerCase().contains(searchKeyword?.toLowerCase()!!)
+            if (item.Name.lowercase().contains(searchKeyword?.lowercase()!!)
+                || item.City.lowercase().contains(searchKeyword.lowercase())
+                || item.Types.lowercase().contains(searchKeyword.lowercase())
+                || item.State.lowercase().contains(searchKeyword.lowercase())
             ) {
                 filteredList.add(item)
             }
 
         if (filteredList.isEmpty())
-            Toast.makeText(this, "No venues found for $searchKeyword", Toast.LENGTH_SHORT).show()
+            this.showToast("No venues found for $searchKeyword")
 
         adapter.setFilterList(filteredList)
 
@@ -103,13 +101,12 @@ class ViewVenueActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
-                        binding.venueRecycler.visibility =
-                            View.INVISIBLE // for in case of deletion of a single remained card
-                        binding.zeroVenues.visibility = View.VISIBLE
-                        binding.loadingVenue.visibility = View.GONE
+                        binding.venueRecycler.invisible() // for in case of deletion of a single remained card
+                        binding.zeroVenues.visible()
+                        binding.loadingVenue.gone()
                         return@addOnSuccessListener
                     }
-                    binding.loadingVenue.visibility = View.GONE
+                    binding.loadingVenue.gone()
 
                     refreshAdapter(venues)
                     for (doc in result) {
@@ -119,7 +116,7 @@ class ViewVenueActivity : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                 }
         } catch (e: Exception) {
-            Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
+            this.showToast(e.message.toString())
         }
     }
 
@@ -127,6 +124,22 @@ class ViewVenueActivity : AppCompatActivity() {
     private fun refreshAdapter(list: ArrayList<Venue>) {
         adapter = VenueAdapter(this, this, list)
         binding.venueRecycler.adapter = adapter
+    }
+
+    private fun View.visible() {
+        visibility = View.VISIBLE
+    }
+
+    private fun View.invisible() {
+        visibility = View.INVISIBLE
+    }
+
+    private fun View.gone() {
+        visibility = View.GONE
+    }
+
+    private fun Context.showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 }

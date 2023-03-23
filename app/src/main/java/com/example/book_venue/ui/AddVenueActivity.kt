@@ -1,12 +1,14 @@
 package com.example.book_venue.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -14,6 +16,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -30,9 +34,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.random.Random
+
 
 class AddVenueActivity : AppCompatActivity() {
 
@@ -55,13 +58,14 @@ class AddVenueActivity : AppCompatActivity() {
     private lateinit var mStorage: FirebaseStorage
     private lateinit var documentRef: DocumentReference
 
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddVenueBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.hide()
+        setSupportActionBar(binding.toolBar)
 
-        initialize()
+        initializeObjects()
         verifyInputs()
 
         bundle = intent.extras
@@ -199,6 +203,7 @@ class AddVenueActivity : AppCompatActivity() {
         startActivityForResult(Intent.createChooser(intent, "Select Images"), 1)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == RESULT_OK) {
@@ -219,17 +224,12 @@ class AddVenueActivity : AppCompatActivity() {
                 for (i in 0 until imgUris.size) {
                     val imageRef =
                         mStorageRef.child("images/venue/${System.currentTimeMillis()}_${Random(10000)}_$i.jpg")
-                    val uploadTask = imageRef.putFile(imgUris[i])
+                    imageRef.putFile(imgUris[i])
                         .addOnSuccessListener {
                             binding.imageProgress.visibility = View.VISIBLE
                             // Get the URL of the uploaded image
                             imageRef.downloadUrl.addOnSuccessListener { url ->
-
-                                /*imgdata = hashMapOf("url$i" to url.toString())
-                            summaryResult.putAll(imgdata)*/
-
                                 imgURLs.add(url.toString())
-
                                 urls = ArrayList(imgURLs.map { c -> mapOf("url" to c) })
                                 binding.imageProgress.visibility = View.INVISIBLE
                             }
@@ -305,13 +305,12 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun isOnline(): Boolean {
-        val connManager =
-            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = connManager.activeNetworkInfo
-        if (netInfo == null || !netInfo.isConnected || !netInfo.isAvailable) {
-            return false
-        }
-        return true
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork // returns a 'Network' object representing the currently active network.
+        // retrieve the network capabilities using the getNetworkCapabilities() method which returns a NetworkCapabilities object that provides information about the network.
+        val capabilities = connectivityManager.getNetworkCapabilities(network)
+        // NET_CAPABILITY_INTERNET capability, indicates that the device has an internet connection available or not
+        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
     private fun showSuccessDialog(message: String) {
@@ -366,7 +365,7 @@ class AddVenueActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun initialize() {
+    private fun initializeObjects() {
 
         // firebase
         auth = FirebaseAuth.getInstance()
@@ -397,7 +396,7 @@ class AddVenueActivity : AppCompatActivity() {
                 adapter: AdapterView<*>?,
                 view: View?,
                 position: Int,
-                id: Long
+                id: Long,
             ) {
 
                 var adapterCity = ArrayAdapter(applicationContext,
@@ -426,6 +425,7 @@ class AddVenueActivity : AppCompatActivity() {
         binding.selectedImagesRview.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
+        binding.goBack.setOnClickListener { finish() }
         binding.dealerPhNo.setText(user.email.toString())
     }
 
@@ -492,11 +492,6 @@ class AddVenueActivity : AppCompatActivity() {
                 put("Availability",
                     if (dayTimeAvailability.isChecked) "Yes" else "No")
 
-                /*if (bundle!!.getString("url0") == "" && urls?.isNotEmpty() == true)
-                    put("url0", urls?.firstOrNull()?.get("url") ?: "")
-
-                if (bundle!!.getString("url0") == "" && urls?.isEmpty() == true)
-                    put("url0", urls?.firstOrNull()?.get("url") ?: "")*/
             }
         }
     }

@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
@@ -200,11 +201,11 @@ class RegisterActivity : AppCompatActivity() {
         binding.etFullname.error=if(isNotValid) "Name cannot be empty" else null
     }
 
-    private fun showTextMinimalAlert(isNotValid: Boolean,text:String) {
+    private fun showTextMinimalAlert(isNotValid: Boolean,enteredtext:String) {
         /*if(text=="Username")
             et_username.error=if(isNotValid) "$text must be more than 6 letters!" else null
-        else*/ if(text=="Password")
-            binding.etPassword.error=if(isNotValid) "$text must be more than 8 letters!" else null
+        else*/ if(enteredtext=="Password")
+            binding.etPassword.error=if(isNotValid) "$enteredtext must be more than 8 letters!" else null
     }
 
     private fun showEmailValidAlert(isNotValid: Boolean) {
@@ -216,14 +217,12 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun isOnline(): Boolean {
-        val conMgr =
-            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = conMgr.activeNetworkInfo
-        if (netInfo == null || !netInfo.isConnected || !netInfo.isAvailable) {
-            //Toast.makeText(this, "No Internet connection!", Toast.LENGTH_LONG).show()
-            return false
-        }
-        return true
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork // returns a 'Network' object representing the currently active network.
+        // retrieve the network capabilities using the getNetworkCapabilities() method which returns a NetworkCapabilities object that provides information about the network.
+        val capabilities = connectivityManager.getNetworkCapabilities(network)
+        // NET_CAPABILITY_INTERNET capability, indicates that the device has an internet connection available or not
+        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
     private fun showErrorDialog(message: String) {

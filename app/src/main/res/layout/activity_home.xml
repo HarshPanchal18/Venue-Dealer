@@ -186,7 +186,7 @@
         android:layout_centerInParent="true" />
     <TextView
         android:id="@+id/bookingsLoadingText"
-        android:text="Getting things ready for you..."
+        android:text="Getting a few things ready for you..."
         android:textColor="@color/black"
         android:fontFamily="@font/montserrat"
         android:layout_centerHorizontal="true"

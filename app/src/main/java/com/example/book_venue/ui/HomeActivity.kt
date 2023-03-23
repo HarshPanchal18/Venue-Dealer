@@ -1,11 +1,13 @@
 package com.example.book_venue.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -24,11 +26,10 @@ import com.example.book_venue.adapters.PendingAdapter
 import com.example.book_venue.databinding.ActivityHomeBinding
 import com.example.book_venue.model.Booked
 import com.example.book_venue.model.Pending
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
-import java.util.*
 import kotlin.system.exitProcess
 
 @SuppressLint("NotifyDataSetChanged")
@@ -57,16 +58,17 @@ class HomeActivity : AppCompatActivity() {
         try {
             val ref = db.collection("cbooking")
             ref//.whereEqualTo("userId", user)
+                .whereGreaterThanOrEqualTo("enddate", Timestamp.now())
                 .get()
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
                         //binding.venueRecycler.visibility = View.INVISIBLE // for in case of deletion of a single remained card
-                        binding.confirmTxt.visibility = View.VISIBLE
+                        binding.confirmTxt.visible()
                         return@addOnSuccessListener
                     }
-                    binding.bookingsLoading.visibility = View.GONE
-                    binding.bookingsLoadingText.visibility = View.GONE
-                    binding.bookingHead.visibility = View.VISIBLE
+                    binding.bookingsLoading.gone()
+                    binding.bookingsLoadingText.gone()
+                    binding.bookingHead.visible()
 
                     adapterBooking = BookingAdapter(this, this,bookedCardList)
                     binding.confirmPager.adapter = adapterBooking
@@ -77,7 +79,8 @@ class HomeActivity : AppCompatActivity() {
                     adapterBooking.notifyDataSetChanged()
                 }
         } catch (e: Exception) {
-            Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
+            this.showToast(e.message.toString())
         }
     } // end of loadingBookingsFromDb()
 
@@ -85,6 +88,7 @@ class HomeActivity : AppCompatActivity() {
         try {
             val ref = db.collection("pbooking")
             ref//.whereEqualTo("userId", user)
+                .whereGreaterThanOrEqualTo("startdate", Timestamp.now())
                 .get()
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
@@ -105,7 +109,7 @@ class HomeActivity : AppCompatActivity() {
                     adapterPending.notifyDataSetChanged()
                 }
         } catch (e: Exception) {
-            Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
+            this.showToast(e.message.toString())
         }
     } // end of loadingBookingsFromDb()
 
@@ -120,7 +124,7 @@ class HomeActivity : AppCompatActivity() {
         else
             user.photoUrl.toString()
 
-        Glide.with(this).load(imageURI).into(binding.userPhoto)
+        binding.userPhoto.loadImage(imageURI)
 
         bookedCardList = ArrayList()
         adapterBooking = BookingAdapter(this, this, bookedCardList)
@@ -141,13 +145,13 @@ class HomeActivity : AppCompatActivity() {
             accountMail.text = user.email
 
             accountName.setOnClickListener {
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     homeTitle.setTextColor(Color.BLACK)
                     homeSubtitle.setTextColor(Color.BLACK)
                     accountName.setTextColor(Color.BLACK)
-                    accountMail.visibility = View.GONE
+                    accountMail.gone()
                 }, 1800)
-                accountMail.visibility = View.VISIBLE
+                accountMail.visible()
                 homeTitle.setTextColor(Color.WHITE)
                 homeSubtitle.setTextColor(Color.WHITE)
                 accountName.setTextColor(Color.WHITE)
@@ -216,5 +220,25 @@ class HomeActivity : AppCompatActivity() {
 
         Toast.makeText(this,"Press again to exit",Toast.LENGTH_SHORT).show()
         backPressedTime = System.currentTimeMillis()
+    }
+
+    private fun View.visible() {
+        visibility = View.VISIBLE
+    }
+
+    private fun View.gone() {
+        visibility = View.GONE
+    }
+
+    private fun ImageView.loadImage(url: String?) {
+        Glide.with(this)
+            .load(url)
+            .placeholder(R.drawable.logo)
+            .error(R.drawable.error)
+            .into(this)
+    }
+
+    private fun Context.showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
