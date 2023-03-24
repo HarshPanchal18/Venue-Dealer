@@ -13,7 +13,7 @@ data class Booked(
     val venuestate: String,
     var startdate: Timestamp,
     val enddate: Timestamp,
-    val venueownercontact: String,
+    val venueownercontct: String,
     val bookingId: String
 ) {
     constructor() : this(

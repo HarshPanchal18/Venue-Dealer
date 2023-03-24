@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView
+        <TextView
         android:id="@+id/pendingCity"
         android:text="CITY"
         android:layout_marginStart="10sp"
@@ -39,14 +39,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/pendingState"
-        android:text="STATE"
-        android:layout_marginStart="10sp"
-        android:layout_below="@id/pendingUsername"
-        android:layout_toEndOf="@id/pendingCity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/pendingState"
+            android:text="STATE"
+            android:layout_marginStart="10sp"
+            android:layout_below="@id/pendingUsername"
+            android:layout_toEndOf="@id/pendingCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/pendingStartDate"
@@ -60,17 +60,25 @@
             android:id="@+id/pendingEndDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10sp"
             android:layout_below="@id/pendingStartDate"
+            android:layout_marginStart="10sp"
             android:text="END DATE" />
 
-    <TextView
-        android:id="@+id/pendingUserMail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10sp"
-        android:layout_below="@id/pendingEndDate"
-        android:text="USER MAIL" />
+        <TextView
+            android:id="@+id/pendingUserMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pendingDuration"
+            android:layout_marginStart="10sp"
+            android:text="USER MAIL" />
+
+        <TextView
+            android:id="@+id/pendingDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pendingEndDate"
+            android:layout_marginStart="10sp"
+            android:text="USER MAIL" />
 
         <LinearLayout
             android:layout_width="match_parent"

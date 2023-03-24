@@ -58,6 +58,7 @@ class HomeActivity : AppCompatActivity() {
         try {
             val ref = db.collection("cbooking")
             ref//.whereEqualTo("userId", user)
+                //.orderBy("enddate")
                 .whereGreaterThanOrEqualTo("enddate", Timestamp.now())
                 .get()
                 .addOnSuccessListener { result ->
@@ -80,7 +81,9 @@ class HomeActivity : AppCompatActivity() {
                 }
         } catch (e: Exception) {
             //Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
-            this.showToast(e.message.toString())
+            //this.showToast(e.message.toString())
+            showErrorDialog(e.message.toString())
+
         }
     } // end of loadingBookingsFromDb()
 
@@ -109,7 +112,8 @@ class HomeActivity : AppCompatActivity() {
                     adapterPending.notifyDataSetChanged()
                 }
         } catch (e: Exception) {
-            this.showToast(e.message.toString())
+            //this.showToast(e.message.toString())
+            showErrorDialog(e.message.toString())
         }
     } // end of loadingBookingsFromDb()
 
@@ -119,13 +123,6 @@ class HomeActivity : AppCompatActivity() {
         user = auth.currentUser!!
         db = FirebaseFirestore.getInstance()
 
-        val imageURI: String = if (user.photoUrl == null)
-            resources.getResourceName(R.drawable.logo)
-        else
-            user.photoUrl.toString()
-
-        binding.userPhoto.loadImage(imageURI)
-
         bookedCardList = ArrayList()
         adapterBooking = BookingAdapter(this, this, bookedCardList)
         binding.confirmPager.adapter = adapterBooking
@@ -134,13 +131,8 @@ class HomeActivity : AppCompatActivity() {
         adapterPending = PendingAdapter(this, this, pendingCardList)
         binding.pendingPager.adapter = adapterPending
 
-        // disabling overScrollMode programmatically
-        var child: View = binding.confirmPager.getChildAt(0)
-        (child as? RecyclerView)?.overScrollMode = View.OVER_SCROLL_NEVER
-        child = binding.pendingPager.getChildAt(0)
-        (child as? RecyclerView)?.overScrollMode = View.OVER_SCROLL_NEVER
-
         binding.apply {
+            userPhoto.loadImage(user.photoUrl.toString())
             accountName.text = user.displayName
             accountMail.text = user.email
 
@@ -156,6 +148,13 @@ class HomeActivity : AppCompatActivity() {
                 homeSubtitle.setTextColor(Color.WHITE)
                 accountName.setTextColor(Color.WHITE)
             }
+
+            // disabling overScrollMode programmatically
+            var child: View = confirmPager.getChildAt(0)
+            (child as? RecyclerView)?.overScrollMode = View.OVER_SCROLL_NEVER
+            child = pendingPager.getChildAt(0)
+            (child as? RecyclerView)?.overScrollMode = View.OVER_SCROLL_NEVER
+
         }
 
         binding.addVenue.setOnClickListener {
@@ -217,8 +216,7 @@ class HomeActivity : AppCompatActivity() {
             super.onBackPressed()
             exitProcess(0)
         }
-
-        Toast.makeText(this,"Press again to exit",Toast.LENGTH_SHORT).show()
+        this.showToast("Press again to exit")
         backPressedTime = System.currentTimeMillis()
     }
 
@@ -233,12 +231,38 @@ class HomeActivity : AppCompatActivity() {
     private fun ImageView.loadImage(url: String?) {
         Glide.with(this)
             .load(url)
-            .placeholder(R.drawable.logo)
+            .placeholder(R.drawable.logo04)
             .error(R.drawable.error)
             .into(this)
     }
 
     private fun Context.showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
+
+    private fun showErrorDialog(message: String) {
+        val builder = android.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val view: View = LayoutInflater.from(this)
+            .inflate(R.layout.error_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+
+        builder.setView(view)
+        (view.findViewById<View>(R.id.textTitle) as TextView).text =
+            resources.getString(R.string.network_error_title)
+        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
+        (view.findViewById<View>(R.id.buttonAction) as Button).text =
+            resources.getString(R.string.okay)
+        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+
+        val alertDialog = builder.create()
+        view.findViewById<View>(R.id.buttonAction).setOnClickListener { alertDialog.dismiss() }
+
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
 }

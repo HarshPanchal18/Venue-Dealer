@@ -1,19 +1,24 @@
 package com.example.book_venue.adapters
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.book_venue.R
 import com.example.book_venue.databinding.BookedCardBinding
+import com.example.book_venue.databinding.WarningDialogBinding
 import com.example.book_venue.model.Booked
 import com.example.book_venue.model.BookingViewHolder
 import com.example.book_venue.ui.HomeActivity
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,21 +47,49 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
         holder.bind(currentCard)
         db = FirebaseFirestore.getInstance()
 
-        if(currentCard.startdate >= Timestamp.now()) {
-            holder.binding.activeStatusColor.visibility = View.GONE
-        } else {
-            holder.binding.upcomingStatusColor.visibility = View.GONE
-            holder.binding.cancelBookingButton.visibility = View.GONE
-        }
-
         val currentItem: Booked = items[position]
         holder.binding.cancelBookingButton.setOnClickListener {
-            db.collection("cbooking").document(currentItem.bookingId).delete()
-                .addOnSuccessListener {
-                    Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
-                    notifyRemoved(position)
+
+            val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
+            val binding: WarningDialogBinding =
+                WarningDialogBinding.bind(LayoutInflater.from(context)
+                    .inflate(R.layout.warning_dialog,
+                        holder.itemView.findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
+
+            binding.apply {
+                builder.setView(root)
+                textTitle.text = context.resources.getString(R.string.warning_title)
+                textMessage.text =
+                    "Are you sure you want to delete this booking??\nActions like this can be serious and irreversible."
+                buttonYes.text = context.resources.getString(R.string.yes)
+                buttonNo.text = context.resources.getString(R.string.no)
+                imageIcon.setImageResource(R.drawable.warning)
+
+                val alertDialog = builder.create()
+                buttonYes.setOnClickListener {
+                    alertDialog.dismiss()
+                    db.collection("cbooking").document(currentItem.bookingId).delete()
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
+                            notifyRemoved(position)
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT)
+                                .show()
+                        }
                 }
-                .addOnFailureListener { Toast.makeText(context,it.message.toString(),Toast.LENGTH_SHORT).show() }
+
+                buttonNo.setOnClickListener {
+                    alertDialog.dismiss()
+                }
+
+                if (alertDialog.window != null) {
+                    alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+                }
+
+                alertDialog.setCancelable(false)
+                alertDialog.show()
+            }
         }
     }
 

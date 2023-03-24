@@ -1,5 +1,6 @@
 package com.example.book_venue.adapters
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
+@SuppressLint("NotifyDataSetChanged")
 class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
 
     private var activity: ViewVenueActivity = ViewVenueActivity()
@@ -189,7 +191,7 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         alertDialog.show()
     }
 
-    fun showErrorDialog(message: String) {
+    private fun showErrorDialog(message: String) {
         val builder = android.app.AlertDialog.Builder(context, R.style.AlertDialogTheme)
         val view: View = LayoutInflater.from(context)
             .inflate(R.layout.error_dialog, (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer))

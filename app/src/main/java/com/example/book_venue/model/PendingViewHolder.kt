@@ -18,6 +18,14 @@ class PendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             pendingCity.text = pending.venuecity
             pendingState.text = pending.venuestate
 
+            val miliSeconds = pending.enddate.toDate().time - pending.startdate.toDate().time
+            val seconds = miliSeconds / 1000
+            val minutes = seconds / (60*1000)
+            val hours = minutes / (60*60*1000)
+            val days = miliSeconds  / (24*60*60*1000)
+            val duration = "$days days, $hours hours"//, $minutes minutes"
+            pendingDuration.text = duration
+
             val startdate = pending.startdate
             var formattedDate =
                 SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm a", Locale.getDefault()).format(

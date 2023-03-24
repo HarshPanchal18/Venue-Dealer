@@ -20,7 +20,7 @@
             android:padding="10sp"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/transparent"
+            android:backgroundTint="@color/white"
             android:src="@drawable/ic_back_24" />
 
         <TextView

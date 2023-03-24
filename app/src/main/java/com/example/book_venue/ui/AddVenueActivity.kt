@@ -16,8 +16,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -35,7 +33,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.regex.Pattern
 import kotlin.random.Random
-
 
 class AddVenueActivity : AppCompatActivity() {
 
@@ -74,6 +71,7 @@ class AddVenueActivity : AppCompatActivity() {
             if (bundle != null) {
                 docId = bundle!!.getString("docId").toString()
 
+                toolbarText.text = "Update "+bundle!!.getString("name")
                 addUpdateVenueBtn.text = "Update Venue"
                 venueTitle.setText(bundle!!.getString("name"))
                 venueDescription.setText(bundle!!.getString("description"))
