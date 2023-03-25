@@ -8,15 +8,16 @@ data class Booked(
     val venuename: String,
     val username: String,
     val useremail: String,
-    //val landmark: String,
+    val landmark: String,
     val venuecity: String,
     val venuestate: String,
     var startdate: Timestamp,
     val enddate: Timestamp,
-    val venueownercontct: String,
-    val bookingId: String
+    val venueownercontact: String,
+    val bookingId: String,
 ) {
     constructor() : this(
+        "",
         "",
         "",
         "",

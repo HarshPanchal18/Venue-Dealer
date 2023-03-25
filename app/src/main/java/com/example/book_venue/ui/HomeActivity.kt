@@ -26,7 +26,6 @@ import com.example.book_venue.adapters.PendingAdapter
 import com.example.book_venue.databinding.ActivityHomeBinding
 import com.example.book_venue.model.Booked
 import com.example.book_venue.model.Pending
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -57,9 +56,9 @@ class HomeActivity : AppCompatActivity() {
     private fun loadBookingsFromDb(user: String) {
         try {
             val ref = db.collection("cbooking")
-            ref//.whereEqualTo("userId", user)
-                //.orderBy("enddate")
-                .whereGreaterThanOrEqualTo("enddate", Timestamp.now())
+            ref//.orderBy("enddate")
+                .whereEqualTo("dealerid", user)
+                //.whereGreaterThanOrEqualTo("enddate", Timestamp.now())
                 .get()
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
@@ -79,19 +78,19 @@ class HomeActivity : AppCompatActivity() {
                     }
                     adapterBooking.notifyDataSetChanged()
                 }
+                .addOnFailureListener {
+                    showErrorDialog(it.message.toString())
+                }
         } catch (e: Exception) {
-            //Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
-            //this.showToast(e.message.toString())
             showErrorDialog(e.message.toString())
-
         }
     } // end of loadingBookingsFromDb()
 
     private fun loadPendingsFromDb(user: String) {
         try {
             val ref = db.collection("pbooking")
-            ref//.whereEqualTo("userId", user)
-                .whereGreaterThanOrEqualTo("startdate", Timestamp.now())
+            ref.whereEqualTo("dealerid", user)
+                //.whereGreaterThanOrEqualTo("startdate", Timestamp.now())
                 .get()
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
@@ -110,6 +109,9 @@ class HomeActivity : AppCompatActivity() {
                         pendingCardList.add(pendingModel)
                     }
                     adapterPending.notifyDataSetChanged()
+                }
+                .addOnFailureListener {
+                    showErrorDialog(it.message.toString())
                 }
         } catch (e: Exception) {
             //this.showToast(e.message.toString())
@@ -265,4 +267,9 @@ class HomeActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        loadBookingsFromDb(user.uid)
+        loadPendingsFromDb(user.uid)
+    }
 }

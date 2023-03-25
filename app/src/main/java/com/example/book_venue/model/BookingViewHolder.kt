@@ -24,6 +24,7 @@ class BookingViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
             bookingUserMail.text = booked.useremail
             bookingCity.text = booked.venuecity
             bookingState.text = booked.venuestate
+            bookingLandmark.text = booked.landmark
 
             val miliSeconds = booked.enddate.toDate().time - booked.startdate.toDate().time
             val seconds = miliSeconds / 1000

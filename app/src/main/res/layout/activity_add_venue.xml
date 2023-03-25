@@ -390,6 +390,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/titleInputLayout"
                 android:layout_marginTop="10dp"
+                android:drawableEnd="@drawable/ic_round_insert_photo_24"
+                android:drawablePadding="10sp"
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/colorSuccess"
                 android:paddingHorizontal="10sp"
@@ -421,7 +423,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/selected_images_Rview"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="180dp"
                 android:layout_below="@id/chooseImageBtn"
                 android:layout_marginTop="10sp"
                 android:background="@drawable/bg_btn"

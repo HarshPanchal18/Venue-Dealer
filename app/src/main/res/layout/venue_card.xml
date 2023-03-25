@@ -27,6 +27,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
                 android:text="VenueTitle"
+                android:textColor="@color/black"
                 android:textAlignment="textStart"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -60,6 +61,7 @@
                 android:layout_marginStart="10dp"
                 android:id="@+id/landmark_card"
                 android:text="Location"
+                android:textStyle="bold"
                 android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -68,6 +70,7 @@
                 android:id="@+id/city_card"
                 android:paddingHorizontal="4dp"
                 android:text="City"
+                android:textStyle="bold"
                 android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -75,6 +78,7 @@
             <TextView
                 android:id="@+id/state_card"
                 android:text="State"
+                android:textStyle="bold"
                 android:paddingHorizontal="4dp"
                 android:textSize="15sp"
                 android:layout_width="wrap_content"

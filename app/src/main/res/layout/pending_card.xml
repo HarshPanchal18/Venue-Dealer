@@ -12,38 +12,57 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/pendingUsername"
-        android:layout_marginStart="10sp"
-        android:layout_marginTop="20sp"
-        android:layout_marginEnd="20sp"
-        android:layout_marginBottom="10sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="USERNAME" />
-
-    <TextView
-        android:id="@+id/pendingLandmark"
-        android:text="Landmark"
-        android:layout_marginStart="10sp"
-        android:layout_below="@id/pendingUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/pendingUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginEnd="20sp"
+            android:layout_marginBottom="5sp"
+            android:text="USERNAME"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
-        android:id="@+id/pendingCity"
-        android:text="CITY"
-        android:layout_marginStart="10sp"
-        android:layout_below="@id/pendingUsername"
-        android:layout_toEndOf="@id/pendingLandmark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+            android:id="@+id/pendingVenuename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pendingUsername"
+            android:layout_marginStart="10sp"
+            android:text="Venue Title"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/pendingLandmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pendingVenuename"
+            android:layout_marginStart="10sp"
+            android:text="LANDMARK"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/pendingCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pendingVenuename"
+            android:layout_marginStart="10sp"
+            android:layout_toEndOf="@+id/pendingLandmark"
+            android:text="CITY"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/pendingState"
             android:text="STATE"
+            android:textSize="16sp"
+            android:textColor="@color/black"
             android:layout_marginStart="10sp"
-            android:layout_below="@id/pendingUsername"
+            android:layout_below="@id/pendingVenuename"
             android:layout_toEndOf="@id/pendingCity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -53,7 +72,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pendingLandmark"
+            android:textColor="@color/black"
             android:layout_marginStart="10sp"
+            android:textSize="16sp"
             android:text="START DATE" />
 
         <TextView
@@ -61,7 +82,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pendingStartDate"
+            android:textColor="@color/black"
             android:layout_marginStart="10sp"
+            android:textSize="16sp"
             android:text="END DATE" />
 
         <TextView
@@ -70,6 +93,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/pendingDuration"
             android:layout_marginStart="10sp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
             android:text="USER MAIL" />
 
         <TextView
@@ -77,7 +102,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pendingEndDate"
+            android:textColor="@color/black"
             android:layout_marginStart="10sp"
+            android:textSize="16sp"
             android:text="USER MAIL" />
 
         <LinearLayout
