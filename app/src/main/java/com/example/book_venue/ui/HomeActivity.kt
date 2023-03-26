@@ -26,6 +26,7 @@ import com.example.book_venue.adapters.PendingAdapter
 import com.example.book_venue.databinding.ActivityHomeBinding
 import com.example.book_venue.model.Booked
 import com.example.book_venue.model.Pending
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -56,9 +57,9 @@ class HomeActivity : AppCompatActivity() {
     private fun loadBookingsFromDb(user: String) {
         try {
             val ref = db.collection("cbooking")
-            ref//.orderBy("enddate")
-                .whereEqualTo("dealerid", user)
-                //.whereGreaterThanOrEqualTo("enddate", Timestamp.now())
+            ref.whereEqualTo("dealerid", user)
+                .orderBy("enddate")
+                .whereGreaterThanOrEqualTo("enddate", Timestamp.now())
                 .get()
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
@@ -90,7 +91,8 @@ class HomeActivity : AppCompatActivity() {
         try {
             val ref = db.collection("pbooking")
             ref.whereEqualTo("dealerid", user)
-                //.whereGreaterThanOrEqualTo("startdate", Timestamp.now())
+                .whereGreaterThanOrEqualTo("startdate", Timestamp.now())
+                .orderBy("startdate")
                 .get()
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {

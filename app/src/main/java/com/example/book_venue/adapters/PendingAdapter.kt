@@ -17,8 +17,6 @@ import com.example.book_venue.databinding.WarningDialogBinding
 import com.example.book_venue.model.Pending
 import com.example.book_venue.model.PendingViewHolder
 import com.example.book_venue.ui.HomeActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -29,8 +27,6 @@ class PendingAdapter() :  RecyclerView.Adapter<PendingViewHolder>() {
     private lateinit var context: Context
     private lateinit var items: ArrayList<Pending>
     private lateinit var documentRef: DocumentReference
-    private lateinit var auth: FirebaseAuth
-    private lateinit var user: FirebaseUser
 
     constructor( activity: HomeActivity, context: Context, items: ArrayList<Pending>) : this() {
         this.activity = activity
@@ -46,8 +42,6 @@ class PendingAdapter() :  RecyclerView.Adapter<PendingViewHolder>() {
     override fun onBindViewHolder(holder: PendingViewHolder, position: Int) {
         val currentCard: Pending = items[position]
         holder.bind(currentCard)
-        auth = FirebaseAuth.getInstance()
-        user = auth.currentUser!!
         db = FirebaseFirestore.getInstance()
 
         val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)

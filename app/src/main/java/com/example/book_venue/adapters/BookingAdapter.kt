@@ -4,11 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,17 +15,13 @@ import com.example.book_venue.databinding.WarningDialogBinding
 import com.example.book_venue.model.Booked
 import com.example.book_venue.model.BookingViewHolder
 import com.example.book_venue.ui.HomeActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private var user: FirebaseUser = auth.currentUser!!
     private lateinit var db: FirebaseFirestore
     private var activity : HomeActivity = HomeActivity()
     private lateinit var context: Context
-    var items = ArrayList<Booked>()
+    private var items = ArrayList<Booked>()
 
     constructor( activity: HomeActivity, context: Context, items: ArrayList<Booked>) : this() {
         this.activity = activity
@@ -42,6 +34,7 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
         return  BookingViewHolder(binding.root)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: BookingViewHolder, position: Int) {
         val currentCard: Booked = items[position]
         holder.bind(currentCard)

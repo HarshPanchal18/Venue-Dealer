@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.regex.Pattern
@@ -370,6 +371,11 @@ class AddVenueActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         mStorage = FirebaseStorage.getInstance()
         mStorageRef = mStorage.reference
+
+        val settings = FirebaseFirestoreSettings.Builder()
+            .setPersistenceEnabled(true)
+            .build()
+        firestore.firestoreSettings = settings
 
         user = auth.currentUser!!
 
