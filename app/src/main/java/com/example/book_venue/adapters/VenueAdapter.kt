@@ -17,7 +17,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.book_venue.*
+import com.example.book_venue.databinding.ErrorDialogBinding
+import com.example.book_venue.databinding.SuccessDialogBinding
 import com.example.book_venue.databinding.VenueCardBinding
+import com.example.book_venue.databinding.WarningDialogBinding
 import com.example.book_venue.model.Venue
 import com.example.book_venue.model.VenueViewHolder
 import com.example.book_venue.ui.AddVenueActivity
@@ -67,23 +70,19 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
     fun deleteData(position: Int) {
 
         val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(context)
+        val wbinding: WarningDialogBinding = WarningDialogBinding.bind(LayoutInflater.from(context)
             .inflate(R.layout.warning_dialog,
-                (context as Activity).findViewById(R.id.layoutDialogContainer))
+                (context as Activity).findViewById(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<TextView>(R.id.textTitle)).text =
-            context.getString(R.string.delete_venue)
-        (view.findViewById<TextView>(R.id.textMessage)).text =
-            context.getString(R.string.delete_venue_text)
-        (view.findViewById<Button>(R.id.buttonYes)).text =
-            context.resources.getString(R.string.yes)
-        (view.findViewById<Button>(R.id.buttonNo)).text =
-            context.resources.getString(R.string.no)
-        (view.findViewById<ImageView>(R.id.imageIcon)).setImageResource(R.drawable.warning)
+        builder.setView(wbinding.root)
+        wbinding.textTitle.text = context.getString(R.string.delete_venue)
+        wbinding.textMessage.text = context.getString(R.string.delete_venue_text)
+        wbinding.buttonYes.text = context.resources.getString(R.string.yes)
+        wbinding.buttonNo.text = context.resources.getString(R.string.no)
+        wbinding.imageIcon.setImageResource(R.drawable.warning)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonYes).setOnClickListener {
+        wbinding.buttonYes.setOnClickListener {
             alertDialog.dismiss()
             val item: Venue = items[position]
             db.collection("venue").document(item.docId).delete()
@@ -93,7 +92,7 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
                 }
                 .addOnFailureListener { showErrorDialog(it.message.toString()) }
         }
-        view.findViewById<View>(R.id.buttonNo).setOnClickListener {
+        wbinding.buttonNo.setOnClickListener {
             activity.binding.venueRecycler.adapter?.notifyDataSetChanged()
             alertDialog.dismiss()
         }
@@ -111,23 +110,19 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
 
     fun updateData(position: Int) {
         val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(context)
+        val wbinding: WarningDialogBinding = WarningDialogBinding.bind(LayoutInflater.from(context)
             .inflate(R.layout.warning_dialog,
-                (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+                (context as Activity).findViewById(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<TextView>(R.id.textTitle)).text =
-            context.resources.getString(R.string.warning_title)
-        (view.findViewById<TextView>(R.id.textMessage)).text =
-            context.getString(R.string.venue_update_text)
-        (view.findViewById<Button>(R.id.buttonYes)).text =
-            context.resources.getString(R.string.yes)
-        (view.findViewById<Button>(R.id.buttonNo)).text =
-            context.resources.getString(R.string.no)
-        (view.findViewById<ImageView>(R.id.imageIcon)).setImageResource(R.drawable.warning)
+        builder.setView(wbinding.root)
+        wbinding.textTitle.text = context.resources.getString(R.string.warning_title)
+        wbinding.textMessage.text = context.getString(R.string.venue_update_text)
+        wbinding.buttonYes.text = context.resources.getString(R.string.yes)
+        wbinding.buttonNo.text = context.resources.getString(R.string.no)
+        wbinding.imageIcon.setImageResource(R.drawable.warning)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonYes).setOnClickListener {
+        wbinding.buttonYes.setOnClickListener {
             alertDialog.dismiss()
             val item: Venue = items[position]
             val bundle = Bundle().apply {
@@ -153,7 +148,7 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
             activity.finish()
 
         }
-        view.findViewById<View>(R.id.buttonNo).setOnClickListener {
+        wbinding.buttonNo.setOnClickListener {
             activity.binding.venueRecycler.adapter?.notifyDataSetChanged()
             alertDialog.dismiss()
         }
@@ -172,18 +167,18 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
 
     private fun showSuccessDialog(message:String) {
         val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(context)
+        val sbinding: SuccessDialogBinding = SuccessDialogBinding.bind(LayoutInflater.from(context)
             .inflate(R.layout.success_dialog,
-                (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+                (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text = context.resources.getString(R.string.success_title)
-        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text = context.resources.getString(R.string.okay)
-        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
+        builder.setView(sbinding.root)
+        sbinding.textTitle.text = context.resources.getString(R.string.success_title)
+        sbinding.textMessage.text = message
+        sbinding.buttonAction.text = context.resources.getString(R.string.okay)
+        sbinding.imageIcon.setImageResource(R.drawable.done)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener { alertDialog.dismiss() }
+        sbinding.buttonAction.setOnClickListener { alertDialog.dismiss() }
 
         if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
 
@@ -193,17 +188,19 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
 
     private fun showErrorDialog(message: String) {
         val builder = android.app.AlertDialog.Builder(context, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(context)
-            .inflate(R.layout.error_dialog, (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+        val ebinding: ErrorDialogBinding =
+            ErrorDialogBinding.bind(LayoutInflater.from(context)
+                .inflate(R.layout.error_dialog,
+                    (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text = context.resources.getString(R.string.network_error_title)
-        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text = context.resources.getString(R.string.okay)
-        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+        builder.setView(ebinding.root)
+        ebinding.textTitle.text = context.resources.getString(R.string.network_error_title)
+        ebinding.textMessage.text = message
+        ebinding.buttonAction.text = context.resources.getString(R.string.okay)
+        ebinding.imageIcon.setImageResource(R.drawable.error)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+        ebinding.buttonAction.setOnClickListener {
             alertDialog.dismiss()
         }
         if (alertDialog.window != null) {

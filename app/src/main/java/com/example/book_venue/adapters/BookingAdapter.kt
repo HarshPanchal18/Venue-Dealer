@@ -1,9 +1,11 @@
 package com.example.book_venue.adapters
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -11,10 +13,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.book_venue.R
 import com.example.book_venue.databinding.BookedCardBinding
+import com.example.book_venue.databinding.SuccessDialogBinding
 import com.example.book_venue.databinding.WarningDialogBinding
 import com.example.book_venue.model.Booked
 import com.example.book_venue.model.BookingViewHolder
 import com.example.book_venue.ui.HomeActivity
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
@@ -44,12 +48,12 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
         holder.binding.cancelBookingButton.setOnClickListener {
 
             val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
-            val binding: WarningDialogBinding =
+            val wbinding: WarningDialogBinding =
                 WarningDialogBinding.bind(LayoutInflater.from(context)
                     .inflate(R.layout.warning_dialog,
                         holder.itemView.findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
 
-            binding.apply {
+            wbinding.apply {
                 builder.setView(root)
                 textTitle.text = context.resources.getString(R.string.warning_title)
                 textMessage.text =
@@ -63,12 +67,11 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
                     alertDialog.dismiss()
                     db.collection("cbooking").document(currentItem.bookingId).delete()
                         .addOnSuccessListener {
-                            Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
+                            showSuccessDialog("The booking was deleted")
                             notifyRemoved(position)
                         }
                         .addOnFailureListener {
-                            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT)
-                                .show()
+                            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT).show()
                         }
                 }
 
@@ -102,6 +105,27 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
             pendingIntent.send()
             activity.finish()
         }*/
+    }
+
+    private fun showSuccessDialog(message:String) {
+        val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
+        val sbinding: SuccessDialogBinding = SuccessDialogBinding.bind(LayoutInflater.from(context)
+            .inflate(R.layout.success_dialog,
+                (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
+
+        builder.setView(sbinding.root)
+        sbinding.textTitle.text = context.resources.getString(R.string.success_title)
+        sbinding.textMessage.text = message
+        sbinding.buttonAction.text = context.resources.getString(R.string.okay)
+        sbinding.imageIcon.setImageResource(R.drawable.done)
+
+        val alertDialog = builder.create()
+        sbinding.buttonAction.setOnClickListener { alertDialog.dismiss() }
+
+        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 
 }

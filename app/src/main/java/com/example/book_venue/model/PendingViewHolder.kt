@@ -18,6 +18,7 @@ class PendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             pendingCity.text = pending.venuecity
             pendingState.text = pending.venuestate
             pendingVenuename.text = pending.venuename
+            pendingLandmark.text = pending.landmark
 
             val miliSeconds = pending.enddate.toDate().time - pending.startdate.toDate().time
             val seconds = miliSeconds / 1000

@@ -62,12 +62,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation('com.google.android.gms:play-services-auth:20.4.1')
     implementation 'com.firebaseui:firebase-ui-firestore:8.0.2'
-    implementation 'com.firebaseui:firebase-ui-database:8.0.2'
+    //implementation 'com.firebaseui:firebase-ui-database:8.0.2'
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
-    implementation 'com.google.firebase:firebase-auth:21.1.0'
-    implementation 'com.google.firebase:firebase-core:19.0.0'
+    //implementation 'com.google.firebase:firebase-auth:21.1.0'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-storage:20.1.0'
-    implementation 'com.google.firebase:firebase-database:20.1.0'
+    //implementation 'com.google.firebase:firebase-database:20.1.0'
     // Add the dependency for the Performance Monitoring library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-perf-ktx'

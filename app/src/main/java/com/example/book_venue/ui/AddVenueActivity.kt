@@ -24,6 +24,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.book_venue.R
 import com.example.book_venue.adapters.ImageAdapter
 import com.example.book_venue.databinding.ActivityAddVenueBinding
+import com.example.book_venue.databinding.ErrorDialogBinding
+import com.example.book_venue.databinding.SuccessDialogBinding
+import com.example.book_venue.databinding.WarningDialogBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
@@ -146,8 +149,8 @@ class AddVenueActivity : AppCompatActivity() {
                     } // end of isOnline()
                 } else {
                     showErrorDialog("Empty fields are not allowed :(")
-                } // end of validateAndBind()
-            } // end of .setOnClickListener{}
+                } // end of if(validateAndBind())...else
+            } // end of Listener
 
             chooseImageBtn.setOnClickListener { checkPermissionAndGo() }
 
@@ -180,17 +183,45 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun updateToFireStore(currentDocId: String, updateList: HashMap<String, Any>) {
-        if (validateAndBind()) {
-            if (urls?.isNotEmpty() == true) {
+
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val wbinding: WarningDialogBinding = WarningDialogBinding.bind(LayoutInflater.from(this)
+            .inflate(R.layout.warning_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
+
+        builder.setView(wbinding.root)
+        wbinding.textTitle.text = resources.getString(R.string.warning_title)
+        wbinding.textMessage.text = resources.getString(R.string.continue_text)
+        wbinding.buttonYes.text = resources.getString(R.string.yes)
+        wbinding.buttonNo.text = resources.getString(R.string.no)
+        wbinding.imageIcon.setImageResource(R.drawable.warning)
+
+        val alertDialog = builder.create()
+        wbinding.buttonYes.setOnClickListener {
+            alertDialog.dismiss()
+            if (validateAndBind()) {
+                if (urls?.isNotEmpty() == true) {
+                    firestore.collection("venue")
+                        .document(currentDocId)
+                        .update("images", FieldValue.arrayUnion(*(urls!!.toTypedArray())))
+                }
                 firestore.collection("venue")
-                    .document(currentDocId)
-                    .update("images", FieldValue.arrayUnion(*(urls!!.toTypedArray())))
+                    .document(currentDocId).update(updateList)
+                    .addOnSuccessListener { showSuccessDialog("Venue updated successfully") }
+                    .addOnFailureListener { e -> showErrorDialog(e.message.toString()) }
             }
-            firestore.collection("venue")
-                .document(currentDocId).update(updateList)
-                .addOnSuccessListener { showSuccessDialog("Venue updated successfully") }
-                .addOnFailureListener { e -> showErrorDialog(e.message.toString()) }
         }
+        wbinding.buttonNo.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+
     }
 
     private fun openFileChooser() {
@@ -236,7 +267,7 @@ class AddVenueActivity : AppCompatActivity() {
                 }
             }
         }
-    }
+    } // end of onActivityResult()
 
     private fun validateAndBind(): Boolean {
 
@@ -254,12 +285,12 @@ class AddVenueActivity : AppCompatActivity() {
             val rentPerHour = rentPrice.text.toString()
             val restRooms = restRooms.text.toString()
 
-            if (convHall.isChecked) venue_types.add(convHall.text.toString())
-            if (wedding.isChecked) venue_types.add(wedding.text.toString())
-            if (festivity.isChecked) venue_types.add(festivity.text.toString())
-            if (party.isChecked) venue_types.add(party.text.toString())
-            if (exhibition.isChecked) venue_types.add(exhibition.text.toString())
-            if (sports.isChecked) venue_types.add(sports.text.toString())
+            val checkBoxes = listOf(convHall, wedding, festivity, party, exhibition, sports)
+
+            for (checkBox in checkBoxes) {
+                if (checkBox.isChecked)
+                    venue_types.add(checkBox.text.toString())
+            }
 
             if (
                 (name.isNotEmpty()
@@ -300,8 +331,8 @@ class AddVenueActivity : AppCompatActivity() {
                 return true
             }
             return false
-        }
-    }
+        } // end of binding.apply{}
+    } // end of validateAndBind()
 
     private fun isOnline(): Boolean {
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -313,21 +344,19 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun showSuccessDialog(message: String) {
-        val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(this)
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val sbinding: SuccessDialogBinding = SuccessDialogBinding.bind(LayoutInflater.from(this)
             .inflate(R.layout.success_dialog,
-                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+                this.findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text =
-            resources.getString(R.string.success_title)
-        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text =
-            resources.getString(R.string.okay)
-        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
+        builder.setView(sbinding.root)
+        sbinding.textTitle.text = resources.getString(R.string.success_title)
+        sbinding.textMessage.text = message
+        sbinding.buttonAction.text = resources.getString(R.string.okay)
+        sbinding.imageIcon.setImageResource(R.drawable.done)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+        sbinding.buttonAction.setOnClickListener {
             alertDialog.dismiss()
             finish()
         }
@@ -341,20 +370,18 @@ class AddVenueActivity : AppCompatActivity() {
 
     private fun showErrorDialog(message: String) {
         val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(this)
+        val ebinding: ErrorDialogBinding = ErrorDialogBinding.bind(LayoutInflater.from(this)
             .inflate(R.layout.error_dialog,
-                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text =
-            resources.getString(R.string.network_error_title)
-        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text =
-            resources.getString(R.string.okay)
-        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+        builder.setView(ebinding.root)
+        ebinding.textTitle.text = resources.getString(R.string.network_error_title)
+        ebinding.textMessage.text = message
+        ebinding.buttonAction.text = resources.getString(R.string.okay)
+        ebinding.imageIcon.setImageResource(R.drawable.error)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener { alertDialog.dismiss() }
+        ebinding.buttonAction.setOnClickListener { alertDialog.dismiss() }
 
         if (alertDialog.window != null) {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
@@ -473,12 +500,12 @@ class AddVenueActivity : AppCompatActivity() {
 
         binding.apply {
 
-            if (convHall.isChecked) venue_types.add(convHall.text.toString())
-            if (wedding.isChecked) venue_types.add(wedding.text.toString())
-            if (festivity.isChecked) venue_types.add(festivity.text.toString())
-            if (party.isChecked) venue_types.add(party.text.toString())
-            if (exhibition.isChecked) venue_types.add(exhibition.text.toString())
-            if (sports.isChecked) venue_types.add(sports.text.toString())
+            val checkBoxes = listOf(convHall, wedding, festivity, party, exhibition, sports)
+
+            for (checkBox in checkBoxes) {
+                if (checkBox.isChecked)
+                    venue_types.add(checkBox.text.toString())
+            }
 
             summaryResult.apply {
                 put("Name", venueTitle.text.toString())
@@ -497,7 +524,7 @@ class AddVenueActivity : AppCompatActivity() {
                     if (dayTimeAvailability.isChecked) "Yes" else "No")
 
             }
-        }
-    }
+        } // end of binding.apply{}
+    } // end of setHashmapForUpdate()
 
 }

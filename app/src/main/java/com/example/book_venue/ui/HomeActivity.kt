@@ -24,6 +24,8 @@ import com.example.book_venue.R
 import com.example.book_venue.adapters.BookingAdapter
 import com.example.book_venue.adapters.PendingAdapter
 import com.example.book_venue.databinding.ActivityHomeBinding
+import com.example.book_venue.databinding.ErrorDialogBinding
+import com.example.book_venue.databinding.WarningDialogBinding
 import com.example.book_venue.model.Booked
 import com.example.book_venue.model.Pending
 import com.google.firebase.Timestamp
@@ -175,22 +177,19 @@ class HomeActivity : AppCompatActivity() {
 
         binding.logoutbtn.setOnClickListener {
             val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
-            val view: View = LayoutInflater.from(this)
+            val wbinding: WarningDialogBinding = WarningDialogBinding.bind(LayoutInflater.from(this)
                 .inflate(R.layout.warning_dialog,
-                    findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
-            builder.setView(view)
-            (view.findViewById<View>(R.id.textTitle) as TextView).text =
-                resources.getString(R.string.warning_title)
-            (view.findViewById<View>(R.id.textMessage) as TextView).text =
-                resources.getString(R.string.logout_text)
-            (view.findViewById<View>(R.id.buttonYes) as Button).text =
-                resources.getString(R.string.yes)
-            (view.findViewById<View>(R.id.buttonNo) as Button).text =
-                resources.getString(R.string.no)
-            (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.warning)
+                    findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
+
+            builder.setView(wbinding.root)
+            wbinding.textTitle.text = resources.getString(R.string.warning_title)
+            wbinding.textMessage.text = resources.getString(R.string.logout_text)
+            wbinding.buttonYes.text = resources.getString(R.string.yes)
+            wbinding.buttonNo.text = resources.getString(R.string.no)
+            wbinding.imageIcon.setImageResource(R.drawable.warning)
 
             val alertDialog = builder.create()
-            view.findViewById<View>(R.id.buttonYes).setOnClickListener {
+            wbinding.buttonYes.setOnClickListener {
                 alertDialog.dismiss()
                 auth.signOut()
                 Intent(this, MainActivity::class.java).also {
@@ -198,7 +197,7 @@ class HomeActivity : AppCompatActivity() {
                     startActivity(it)
                 }
             }
-            view.findViewById<View>(R.id.buttonNo).setOnClickListener {
+            wbinding.buttonNo.setOnClickListener {
                 alertDialog.dismiss()
             }
 
@@ -246,27 +245,28 @@ class HomeActivity : AppCompatActivity() {
 
     private fun showErrorDialog(message: String) {
         val builder = android.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(this)
-            .inflate(R.layout.error_dialog,
-                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+        val ebinding: ErrorDialogBinding =
+            ErrorDialogBinding.bind(LayoutInflater.from(this)
+                .inflate(R.layout.error_dialog,
+                    this.findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text =
-            resources.getString(R.string.network_error_title)
-        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text =
-            resources.getString(R.string.okay)
-        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+        ebinding.apply {
+            builder.setView(root)
+            textTitle.text = resources.getString(R.string.network_error_title)
+            textMessage.text = message
+            buttonAction.text = resources.getString(R.string.okay)
+            imageIcon.setImageResource(R.drawable.error)
 
-        val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener { alertDialog.dismiss() }
+            val alertDialog = builder.create()
+            buttonAction.setOnClickListener { alertDialog.dismiss() }
 
-        if (alertDialog.window != null) {
-            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+            if (alertDialog.window != null) {
+                alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+            }
+
+            alertDialog.setCancelable(false)
+            alertDialog.show()
         }
-
-        alertDialog.setCancelable(false)
-        alertDialog.show()
     }
 
     override fun onRestart() {

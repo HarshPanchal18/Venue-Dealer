@@ -1,6 +1,7 @@
 package com.example.book_venue.adapters
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -13,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.book_venue.R
 import com.example.book_venue.databinding.PendingCardBinding
+import com.example.book_venue.databinding.SuccessDialogBinding
 import com.example.book_venue.databinding.WarningDialogBinding
 import com.example.book_venue.model.Pending
 import com.example.book_venue.model.PendingViewHolder
@@ -21,7 +23,8 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 @SuppressLint("NotifyDataSetChanged","CutPasteId", "SetTextI18n", "UnspecifiedImmutableFlag")
-class PendingAdapter() :  RecyclerView.Adapter<PendingViewHolder>() {
+class PendingAdapter() :
+    RecyclerView.Adapter<PendingViewHolder>() {
     private lateinit var db: FirebaseFirestore
     private var activity : HomeActivity = HomeActivity()
     private lateinit var context: Context
@@ -45,35 +48,37 @@ class PendingAdapter() :  RecyclerView.Adapter<PendingViewHolder>() {
         db = FirebaseFirestore.getInstance()
 
         val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
-        val binding: WarningDialogBinding =
+        val bindingW: WarningDialogBinding =
             WarningDialogBinding.bind(LayoutInflater.from(context).inflate(
                 R.layout.warning_dialog,
                 holder.itemView.findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
-        builder.setView(binding.root)
-        binding.textTitle.text = context.resources.getString(R.string.warning_title)
-        binding.buttonYes.text = context.resources.getString(R.string.yes)
-        binding.buttonNo.text = context.resources.getString(R.string.no)
-        binding.imageIcon.setImageResource(R.drawable.warning)
-
-        val alertDialog = builder.create()
-        binding.buttonNo.setOnClickListener {
-            alertDialog.dismiss()
-        }
-        alertDialog.setCancelable(false)
-        if (alertDialog.window != null)
-            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
 
         val currentItem: Pending = items[position]
-        holder.binding.rejectButton.setOnClickListener {
-            binding.apply {
+        bindingW.apply {
+
+            builder.setView(root)
+            textTitle.text = context.resources.getString(R.string.warning_title)
+            buttonYes.text = context.resources.getString(R.string.yes)
+            buttonNo.text = context.resources.getString(R.string.no)
+            imageIcon.setImageResource(R.drawable.warning)
+
+            val alertDialog = builder.create()
+            buttonNo.setOnClickListener {
+                alertDialog.dismiss()
+            }
+            alertDialog.setCancelable(false)
+            if (alertDialog.window != null)
+                alertDialog.window?.setBackgroundDrawable(ColorDrawable(0))
+
+            holder.binding.rejectButton.setOnClickListener {
                 textMessage.text =
                     "Are you sure you want to delete this request??" +
-                    "\nActions like this can be serious and irreversible."
+                            "\nActions like this can be serious and irreversible."
                 buttonYes.setOnClickListener {
                     alertDialog.dismiss()
                     db.collection("pbooking").document(currentItem.requestId).delete()
                         .addOnSuccessListener {
-                            Toast.makeText(context, "Rejected", Toast.LENGTH_SHORT).show()
+                            showSuccessDialog("Booking request for ${currentItem.venuename} is rejected")
                             notifyRemoved(position)
                         }
                         .addOnFailureListener {
@@ -84,10 +89,8 @@ class PendingAdapter() :  RecyclerView.Adapter<PendingViewHolder>() {
                 }
                 alertDialog.show()
             }
-        }
 
-        holder.binding.acceptButton.setOnClickListener {
-            binding.apply {
+            holder.binding.acceptButton.setOnClickListener {
                 builder.setView(root)
                 textMessage.text = "Are you sure you want to accept this request?"
                 buttonYes.setOnClickListener {
@@ -96,7 +99,10 @@ class PendingAdapter() :  RecyclerView.Adapter<PendingViewHolder>() {
                     currentItem.bookingId = documentRef.id
                     documentRef.set(currentItem)
                         .addOnSuccessListener {
+                            showSuccessDialog("Booking request for ${currentItem.venuename} is accepted")
                             Toast.makeText(context, "Accepted", Toast.LENGTH_SHORT).show()
+                            // delete the accepted request from the pending collection
+                            db.collection("pbooking").document(currentItem.requestId).delete()
                             notifyRemoved(position)
                             refreshPager()
                         }
@@ -106,7 +112,8 @@ class PendingAdapter() :  RecyclerView.Adapter<PendingViewHolder>() {
                 }
                 alertDialog.show()
             }
-        }
+
+        } // end of bindingW.apply{}
     }
 
     private fun refreshPager() {
@@ -125,6 +132,27 @@ class PendingAdapter() :  RecyclerView.Adapter<PendingViewHolder>() {
         items.removeAt(position)
         notifyItemRemoved(position)
         activity.binding.pendingPager.adapter?.notifyDataSetChanged()
+    }
+
+    private fun showSuccessDialog(message:String) {
+        val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
+        val sbinding: SuccessDialogBinding = SuccessDialogBinding.bind(LayoutInflater.from(context)
+            .inflate(R.layout.success_dialog,
+                (context as Activity).findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
+
+        builder.setView(sbinding.root)
+        sbinding.textTitle.text = context.resources.getString(R.string.success_title)
+        sbinding.textMessage.text = message
+        sbinding.buttonAction.text = context.resources.getString(R.string.okay)
+        sbinding.imageIcon.setImageResource(R.drawable.done)
+
+        val alertDialog = builder.create()
+        sbinding.buttonAction.setOnClickListener { alertDialog.dismiss() }
+
+        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 
 }

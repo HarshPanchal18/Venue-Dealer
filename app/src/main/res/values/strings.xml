@@ -69,6 +69,7 @@
     <string name="venue_update_text">Are you sure you want to modify the venue data?</string>
     <string name="venue_delete_success">Venue is deleted successfully</string>
     <string name="logout_text">Are you sure you want to logout?</string>
+    <string name="continue_text">Are you sure you want to continue?</string>
     <string name="no_bookings">Bookings are coming very soon</string>
     <string name="app_description">
         App Description: \n\t\tThe Venue Dock app is a tool designed for venue dealers to add their venues online.
