@@ -11,7 +11,7 @@ data class Pending(
     val venuestate: String,
     var startdate: Timestamp,
     val enddate: Timestamp,
-    val requestId: String,
+    val pendingId: String,
     var bookingId: String,
 ) {
     constructor() : this(

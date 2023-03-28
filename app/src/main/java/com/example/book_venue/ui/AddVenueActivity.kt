@@ -327,6 +327,9 @@ class AddVenueActivity : AppCompatActivity() {
                     put("Parking", parkingAvailability)
                     put("Availability", availability)
                     put("userId", user.uid)
+
+                    if(additionalTextbox.text.toString().isNotEmpty())
+                        put("Notes",additionalTextbox.text.toString())
                 }
                 return true
             }
@@ -478,6 +481,12 @@ class AddVenueActivity : AppCompatActivity() {
         return m.matches()
     }
 
+    private fun hasMultipleWords(text: String?): Boolean {
+        val pattern = Pattern.compile("^\\w+(\\s\\w+)+\$")
+        val m = pattern.matcher(text!!)
+        return m.matches()
+    }
+
     private fun verifyInputs() {
 
         binding.dealerPhNo.addTextChangedListener(object : TextWatcher {
@@ -488,6 +497,21 @@ class AddVenueActivity : AppCompatActivity() {
                 else {
                     binding.addUpdateVenueBtn.isEnabled = false
                     binding.dealerPhNo.error = "Invalid input"
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {}
+        })
+
+        binding.venueLandmark.addTextChangedListener(object : TextWatcher {
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (hasMultipleWords(binding.venueLandmark.text.toString()))
+                    binding.addUpdateVenueBtn.isEnabled = true
+                else {
+                    binding.addUpdateVenueBtn.isEnabled = false
+                    binding.venueLandmark.error = "Add detailed address"
                 }
             }
 
@@ -523,6 +547,8 @@ class AddVenueActivity : AppCompatActivity() {
                 put("Availability",
                     if (dayTimeAvailability.isChecked) "Yes" else "No")
 
+                if(additionalTextbox.text.toString().isNotEmpty())
+                    put("Notes",additionalTextbox.text.toString())
             }
         } // end of binding.apply{}
     } // end of setHashmapForUpdate()

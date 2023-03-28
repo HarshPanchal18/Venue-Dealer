@@ -88,10 +88,11 @@
                     android:id="@+id/venueDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapSentences"
+                    android:inputType="textMultiLine"
                     style="@style/TextInputEditText"
-                    android:lines="1"
-                    android:maxLines="1" />
+                    android:lines="3"
+                    android:minLines="1"
+                    android:maxLines="3" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -110,8 +111,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences"
                 style="@style/TextInputEditText"
-                android:lines="3"
-                android:maxLines="3" />
+                android:lines="1"
+                android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -158,6 +159,25 @@
                 android:inputType="textEmailAddress"
                 style="@style/TextInputEditText"
                 android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/additionalInputLayout"
+                android:layout_marginTop="10dp"
+                android:hint="@string/additional_notes"
+                android:layout_below="@id/contactInputLayout"
+                style="@style/TextInputLayout"
+                android:layout_marginHorizontal="2sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/additionalTextbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="1"
+                android:maxLines="5"
+                style="@style/TextInputEditText" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView

@@ -14,7 +14,7 @@ data class Booked(
     var startdate: Timestamp,
     val enddate: Timestamp,
     val venueownercontact: String,
-    val bookingId: String,
+    val pendingId: String,
 ) {
     constructor() : this(
         "",

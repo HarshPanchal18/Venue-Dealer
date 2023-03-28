@@ -87,6 +87,7 @@
         \nThey have also incorporated user feedback into the development process, ensuring that the app meets the needs of venue dealers and end-users alike.
     </string>
     <string name="devContact">Facing issues? or want to add more locations?</string>
+    <string name="additional_notes">Add any additional notes here</string>
 
     <string-array name="gj_cities">
         <item>Surat</item>

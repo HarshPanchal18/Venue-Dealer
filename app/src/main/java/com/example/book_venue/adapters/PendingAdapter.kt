@@ -72,19 +72,16 @@ class PendingAdapter() :
 
             holder.binding.rejectButton.setOnClickListener {
                 textMessage.text =
-                    "Are you sure you want to delete this request??" +
-                            "\nActions like this can be serious and irreversible."
+                    "Are you sure you want to delete this request?\tActions like this can be serious and irreversible."
                 buttonYes.setOnClickListener {
                     alertDialog.dismiss()
-                    db.collection("pbooking").document(currentItem.requestId).delete()
+                    db.collection("pbooking").document(currentItem.pendingId).delete()
                         .addOnSuccessListener {
-                            showSuccessDialog("Booking request for ${currentItem.venuename} is rejected")
+                            showSuccessDialog("Booking request for ${currentItem.venuename} has been rejected")
                             notifyRemoved(position)
                         }
                         .addOnFailureListener {
-                            Toast.makeText(context,
-                                it.message.toString(),
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT).show()
                         }
                 }
                 alertDialog.show()
@@ -99,10 +96,10 @@ class PendingAdapter() :
                     currentItem.bookingId = documentRef.id
                     documentRef.set(currentItem)
                         .addOnSuccessListener {
-                            showSuccessDialog("Booking request for ${currentItem.venuename} is accepted")
+                            showSuccessDialog("Booking request for ${currentItem.venuename} has been accepted")
                             Toast.makeText(context, "Accepted", Toast.LENGTH_SHORT).show()
                             // delete the accepted request from the pending collection
-                            db.collection("pbooking").document(currentItem.requestId).delete()
+                            db.collection("pbooking").document(currentItem.pendingId).delete()
                             notifyRemoved(position)
                             refreshPager()
                         }
@@ -117,11 +114,12 @@ class PendingAdapter() :
     }
 
     private fun refreshPager() {
-        val intent = Intent(context, HomeActivity::class.java)
+        activity.recreate()
+        /*val intent = Intent(context, HomeActivity::class.java)
         val pendingIntent =
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
         pendingIntent.send()
-        activity.finish()
+        activity.finish()*/
     }
 
     override fun getItemCount(): Int {
@@ -132,6 +130,8 @@ class PendingAdapter() :
         items.removeAt(position)
         notifyItemRemoved(position)
         activity.binding.pendingPager.adapter?.notifyDataSetChanged()
+        activity.adapterBooking.notifyDataSetChanged()
+        activity.binding.confirmPager.adapter?.notifyDataSetChanged()
     }
 
     private fun showSuccessDialog(message:String) {

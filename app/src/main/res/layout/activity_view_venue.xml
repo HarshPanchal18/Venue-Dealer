@@ -9,7 +9,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/viewVenueToolbar"
-        android:background="#8AEF7564"
+        android:background="#BAEFB68B"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         android:layout_width="match_parent"

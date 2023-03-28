@@ -41,7 +41,6 @@
             android:layout_below="@id/venueTitle"
             android:layout_marginStart="10sp"
             android:layout_marginTop="2sp"
-            android:layout_marginEnd="10sp"
             android:text="LANDMARK"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -119,14 +118,38 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/bookingDuration"
+            android:id="@+id/durationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/bookingEndDate"
             android:layout_marginStart="10sp"
             android:layout_marginTop="2sp"
+            android:layout_marginEnd="2sp"
+            android:text="DURATION"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/bookingDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bookingEndDate"
+            android:layout_toEndOf="@id/durationText"
+            android:layout_marginStart="2sp"
+            android:layout_marginTop="2sp"
             android:layout_marginEnd="10sp"
             android:text="DURATION"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/bookingUserMailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bookingDuration"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="2sp"
+            android:layout_marginEnd="2sp"
+            android:text="Client mail"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -135,7 +158,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/bookingDuration"
-            android:layout_marginStart="10sp"
+            android:layout_toEndOf="@id/bookingUserMailText"
+            android:layout_marginStart="2sp"
             android:layout_marginTop="2sp"
             android:layout_marginEnd="10sp"
             android:text="USER MAIL"
@@ -191,7 +215,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="5sp"
             android:background="@drawable/round_corners"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/colorError"
             android:text="Cancel" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -57,7 +57,7 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
                 builder.setView(root)
                 textTitle.text = context.resources.getString(R.string.warning_title)
                 textMessage.text =
-                    "Are you sure you want to delete this booking??\nActions like this can be serious and irreversible."
+                    "Are you sure you want to delete this booking??\tActions like this can be serious and irreversible."
                 buttonYes.text = context.resources.getString(R.string.yes)
                 buttonNo.text = context.resources.getString(R.string.no)
                 imageIcon.setImageResource(R.drawable.warning)
@@ -65,7 +65,7 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
                 val alertDialog = builder.create()
                 buttonYes.setOnClickListener {
                     alertDialog.dismiss()
-                    db.collection("cbooking").document(currentItem.bookingId).delete()
+                    db.collection("cbooking").document(currentItem.pendingId).delete()
                         .addOnSuccessListener {
                             showSuccessDialog("The booking was deleted")
                             notifyRemoved(position)

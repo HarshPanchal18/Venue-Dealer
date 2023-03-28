@@ -39,7 +39,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
     lateinit var binding : ActivityHomeBinding
-    private lateinit var adapterBooking: BookingAdapter
+    lateinit var adapterBooking: BookingAdapter
     private lateinit var adapterPending: PendingAdapter
     private lateinit var bookedCardList: ArrayList<Booked>
     private lateinit var pendingCardList: ArrayList<Pending>
@@ -271,6 +271,15 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
+
+        bookedCardList = ArrayList()
+        adapterBooking = BookingAdapter(this, this, bookedCardList)
+        binding.confirmPager.adapter = adapterBooking
+
+        pendingCardList = ArrayList()
+        adapterPending = PendingAdapter(this, this, pendingCardList)
+        binding.pendingPager.adapter = adapterPending
+
         loadBookingsFromDb(user.uid)
         loadPendingsFromDb(user.uid)
     }

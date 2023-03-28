@@ -34,9 +34,10 @@
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/splash_bg.xml" value="0.1495" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/success_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/view_venue.xml" value="0.161" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/warning.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/warning_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_about_app.xml" value="0.20519159456118666" />
-        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_add_venue.xml" value="0.19" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_add_venue.xml" value="0.18" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_home.xml" value="0.2" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_login.xml" value="0.2915811088295688" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_main.xml" value="0.209375" />
@@ -45,7 +46,7 @@
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_reset_password.xml" value="0.209375" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_splash.xml" value="0.22" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_view_venue.xml" value="0.2" />
-        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/booked_card.xml" value="0.5" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/booked_card.xml" value="0.21082621082621084" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/booked_venue_card.xml" value="0.33" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/dialog_image.xml" value="0.209375" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/dropdown_item.xml" value="0.20833333333333334" />

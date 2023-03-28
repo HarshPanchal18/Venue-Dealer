@@ -151,6 +151,11 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/addVenue"
                 android:layout_width="wrap_content"
@@ -158,6 +163,18 @@
                 android:layout_marginHorizontal="10sp"
                 android:tooltipText="Add Venue"
                 android:src="@drawable/add_venue"/>
+                <TextView
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:text="ADD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/viewVenue"
@@ -166,7 +183,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10sp"
                 android:src="@drawable/view_venue"/>
+                <TextView
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:text="VIEW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/aboutDevBtn"
                 android:layout_width="wrap_content"
@@ -174,7 +202,18 @@
                 android:layout_marginHorizontal="10sp"
                 android:tooltipText="About this app"
                 android:src="@drawable/about_app"/>
+                <TextView
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:text="ABOUT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/logoutbtn"
                 android:layout_width="wrap_content"
@@ -182,6 +221,13 @@
                 android:layout_marginHorizontal="10sp"
                 android:tooltipText="Log out"
                 android:src="@drawable/logout"/>
+                <TextView
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:text="LOGOUT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
