@@ -67,6 +67,8 @@ class HomeActivity : AppCompatActivity() {
                     if (result.isEmpty) {
                         //binding.venueRecycler.visibility = View.INVISIBLE // for in case of deletion of a single remained card
                         binding.confirmTxt.visible()
+                        binding.bookingsLoading.gone()
+                        binding.bookingsLoadingText.gone()
                         return@addOnSuccessListener
                     }
                     binding.bookingsLoading.gone()
@@ -99,12 +101,14 @@ class HomeActivity : AppCompatActivity() {
                 .addOnSuccessListener { result ->
                     if (result.isEmpty) {
                         //binding.venueRecycler.visibility = View.INVISIBLE // for in case of deletion of a single remained card
-                        binding.pendingTxt.visibility = View.VISIBLE
+                        binding.pendingTxt.visible()
+                        binding.bookingsLoading.gone()
+                        binding.bookingsLoadingText.gone()
                         return@addOnSuccessListener
                     }
-                    binding.bookingsLoading.visibility = View.GONE
-                    binding.bookingsLoadingText.visibility = View.GONE
-                    binding.pendingHead.visibility = View.VISIBLE
+                    binding.bookingsLoading.gone()
+                    binding.bookingsLoadingText.gone()
+                    binding.pendingHead.visible()
 
                     adapterPending = PendingAdapter(this, this,pendingCardList)
                     binding.pendingPager.adapter = adapterPending
@@ -118,7 +122,6 @@ class HomeActivity : AppCompatActivity() {
                     showErrorDialog(it.message.toString())
                 }
         } catch (e: Exception) {
-            //this.showToast(e.message.toString())
             showErrorDialog(e.message.toString())
         }
     } // end of loadingBookingsFromDb()

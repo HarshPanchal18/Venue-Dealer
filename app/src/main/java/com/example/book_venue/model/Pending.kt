@@ -11,6 +11,9 @@ data class Pending(
     val venuestate: String,
     var startdate: Timestamp,
     val enddate: Timestamp,
+    val images: String,
+    val rent: String,
+    val dealerid: String,
     val pendingId: String,
     var bookingId: String,
 ) {
@@ -23,6 +26,9 @@ data class Pending(
         "",
         Timestamp.now(),
         Timestamp.now(),
+        "",
+        "",
+        "",
         "",
         ""
     )

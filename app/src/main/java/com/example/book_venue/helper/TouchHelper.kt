@@ -47,7 +47,7 @@ class TouchHelper(adapter: VenueAdapter) :
             isCurrentlyActive)
             .addSwipeRightBackgroundColor(Color.RED)
             .addSwipeRightActionIcon(R.drawable.ic_baseline_delete_outline_24)
-            .addSwipeLeftBackgroundColor(R.color.purple_500)
+            .addSwipeLeftBackgroundColor(Color.LTGRAY)
             .addSwipeLeftActionIcon(R.drawable.ic_baseline_edit_24)
             .create()
             .decorate()

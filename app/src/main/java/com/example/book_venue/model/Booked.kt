@@ -14,6 +14,10 @@ data class Booked(
     var startdate: Timestamp,
     val enddate: Timestamp,
     val venueownercontact: String,
+    val images: String,
+    val dealerid: String,
+    val rent: String,
+    val bookingId: String,
     val pendingId: String,
 ) {
     constructor() : this(
@@ -25,6 +29,10 @@ data class Booked(
         "",
         Timestamp.now(),
         Timestamp.now(),
+        "",
+        "",
+        "",
+        "",
         "",
         ""
     )

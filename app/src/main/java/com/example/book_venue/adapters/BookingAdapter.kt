@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -18,7 +17,6 @@ import com.example.book_venue.databinding.WarningDialogBinding
 import com.example.book_venue.model.Booked
 import com.example.book_venue.model.BookingViewHolder
 import com.example.book_venue.ui.HomeActivity
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
@@ -65,7 +63,7 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
                 val alertDialog = builder.create()
                 buttonYes.setOnClickListener {
                     alertDialog.dismiss()
-                    db.collection("cbooking").document(currentItem.pendingId).delete()
+                    db.collection("cbooking").document(currentItem.bookingId).delete()
                         .addOnSuccessListener {
                             showSuccessDialog("The booking was deleted")
                             notifyRemoved(position)
@@ -89,9 +87,7 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
         }
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 
     @SuppressLint("NotifyDataSetChanged")
     private fun notifyRemoved(position: Int) {

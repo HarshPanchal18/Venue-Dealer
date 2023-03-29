@@ -49,18 +49,12 @@
                     android:contentDescription="Venue Logo" />
             </androidx.cardview.widget.CardView>
 
-        <LinearLayout
-            android:id="@+id/venueLandmark_card"
-            android:orientation="horizontal"
-            android:layout_below="@id/venueTitle_card"
-            android:layout_marginTop="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
             <TextView
                 android:layout_marginStart="10dp"
                 android:id="@+id/landmark_card"
                 android:text="Location"
+                android:layout_below="@id/venueTitle_card"
+                android:layout_marginTop="5dp"
                 android:textStyle="bold"
                 android:textSize="15sp"
                 android:layout_width="wrap_content"
@@ -68,27 +62,32 @@
 
             <TextView
                 android:id="@+id/city_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/landmark_card"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="5sp"
                 android:paddingHorizontal="4dp"
                 android:text="City"
-                android:textStyle="bold"
                 android:textSize="15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/state_card"
                 android:text="State"
+                android:layout_toEndOf="@id/city_card"
+                android:layout_marginTop="5sp"
+                android:layout_below="@id/landmark_card"
                 android:textStyle="bold"
                 android:paddingHorizontal="4dp"
                 android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-        </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/capacityAndParking"
                 android:layout_marginTop="6dp"
-                android:layout_below="@id/venueLandmark_card"
+                android:layout_below="@id/city_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

@@ -140,6 +140,7 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
                 putString("types", item.Types)
                 putString("parking", item.Parking)
                 putString("url0", item.url0)
+                putString("notes", item.Notes)
             }
 
             val intent = Intent(activity, AddVenueActivity::class.java)

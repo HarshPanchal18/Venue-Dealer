@@ -84,6 +84,7 @@ class AddVenueActivity : AppCompatActivity() {
                 rentPrice.setText(bundle!!.getString("rentHour"))
                 venueCapacity.setText(bundle!!.getString("capacity"))
                 restRooms.setText(bundle!!.getString("restRooms"))
+                additionalTextbox.setText(bundle!!.getString("notes"))
 
                 if (bundle!!.getString("parking") != "Yes") parkingNo.isChecked = true
                 else parkingYes.isChecked = true
@@ -175,7 +176,12 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun createNewVenue(summaryResult: HashMap<String, Any>) {
-        if (imgdata.isEmpty()) summaryResult["url0"] = ""
+        if(bundle?.getString("url0").isNullOrEmpty() && urls?.isNotEmpty()==true)
+            summaryResult["url0"] = urls?.first()?.get("url") ?: ""
+
+        if (urls?.isNotEmpty() == true)
+            summaryResult["images"] = FieldValue.arrayUnion(*(urls!!.toTypedArray()))
+
         summaryResult["docId"] = documentRef.id
         documentRef.set(summaryResult)
             .addOnSuccessListener { showSuccessDialog("Venue is created") }
@@ -482,7 +488,7 @@ class AddVenueActivity : AppCompatActivity() {
     }
 
     private fun hasMultipleWords(text: String?): Boolean {
-        val pattern = Pattern.compile("^\\w+(\\s\\w+)+\$")
+        val pattern = Pattern.compile("^[\\w\\d, ]+\$")
         val m = pattern.matcher(text!!)
         return m.matches()
     }

@@ -18,8 +18,9 @@
         <ImageButton
             android:id="@+id/goBack"
             android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:backgroundTint="@color/transparent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:background="@drawable/bg_btn"
             android:src="@drawable/ic_back_24" />
 
         <androidx.appcompat.widget.SearchView

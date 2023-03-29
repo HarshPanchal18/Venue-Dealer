@@ -34,18 +34,20 @@
             android:textColor="@color/white"
             android:textSize="20sp" />
     </androidx.appcompat.widget.Toolbar>
+
     <ScrollView
         android:layout_below="@id/toolBar"
         android:layout_above="@id/add_update_venue_btn"
         android:overScrollMode="never"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="12dp">
+
 
             <ProgressBar
                 android:id="@+id/imageProgress"
@@ -410,10 +412,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/titleInputLayout"
                 android:layout_marginTop="10dp"
-                android:drawableEnd="@drawable/ic_round_insert_photo_24"
-                android:drawablePadding="10sp"
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/colorSuccess"
+                android:drawableEnd="@drawable/ic_round_insert_photo_24"
+                android:drawablePadding="10sp"
                 android:paddingHorizontal="10sp"
                 android:text="Pick venue images" />
 
@@ -429,16 +431,6 @@
                 android:layout_marginTop="10dp"
                 android:text="Clear images"
                 android:visibility="gone" />
-
-            <ProgressBar
-                android:id="@+id/uploadProgressbar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/chooseImageBtn"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="17dp"
-                android:visibility="invisible" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/selected_images_Rview"

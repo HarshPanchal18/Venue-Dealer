@@ -19,7 +19,7 @@
             android:id="@+id/textTitle"
             android:background="@drawable/success_bg"
             android:padding="10dp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -53,7 +53,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
         android:background="@drawable/btn_success_bg"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/layoutDialog"
         app:layout_constraintTop_toBottomOf="@id/layoutDialog"/>

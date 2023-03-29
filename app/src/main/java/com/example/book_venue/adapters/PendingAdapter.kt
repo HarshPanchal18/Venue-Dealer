@@ -114,17 +114,15 @@ class PendingAdapter() :
     }
 
     private fun refreshPager() {
-        activity.recreate()
-        /*val intent = Intent(context, HomeActivity::class.java)
+        //activity.recreate()
+        val intent = Intent(context, HomeActivity::class.java)
         val pendingIntent =
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
         pendingIntent.send()
-        activity.finish()*/
+        activity.finish()
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 
     private fun notifyRemoved(position: Int) {
         items.removeAt(position)
