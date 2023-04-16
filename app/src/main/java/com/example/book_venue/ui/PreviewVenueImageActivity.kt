@@ -18,7 +18,7 @@ class PreviewVenueImageActivity : AppCompatActivity() {
         // Create a list to hold the image data
         val imageList = ArrayList<Venue>()
 
-        val adapter = VenueImageAdapter(imageList)
+        val adapter = VenueImageAdapter(this, imageList)
         binding.venueImageRecycler.layoutManager = LinearLayoutManager(this@PreviewVenueImageActivity)
         binding.venueImageRecycler.adapter = adapter
     }
