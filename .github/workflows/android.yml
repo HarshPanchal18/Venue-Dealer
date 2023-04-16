@@ -24,6 +24,10 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    # Install NDK
+    - name: Install NDK
+      run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
@@ -67,11 +71,11 @@ jobs:
     - name: Build debug APK
       env:
         org.gradle.daemon: true
-      run: ./gradlew assembleDebug --stacktrace #-PapiLevel=${{ matrix.api-level }}
+      run: ./gradlew assemble #Debug --stacktrace #-PapiLevel=${{ matrix.api-level }}
 
     - name: Upload APK
       uses: actions/upload-artifact@v3
       #if: "!contains(github.event.head_commit.message, '[skip build]') && !contains(github.event.head_commit.message, '[ci skip]')"
       with:
-        name: app
+        name: Venue-Dock
         path: app/build/outputs/apk/debug/app-debug.apk

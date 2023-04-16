@@ -1,11 +1,9 @@
-package com.example.book_venue.model
+package com.example.book_venue.viewModel
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.Color.red
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.example.book_venue.R
+import com.example.book_venue.data.Booked
 import com.example.book_venue.databinding.BookedCardBinding
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth

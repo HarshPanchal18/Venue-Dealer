@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -16,8 +17,8 @@ import com.example.book_venue.R
 import com.example.book_venue.databinding.PendingCardBinding
 import com.example.book_venue.databinding.SuccessDialogBinding
 import com.example.book_venue.databinding.WarningDialogBinding
-import com.example.book_venue.model.Pending
-import com.example.book_venue.model.PendingViewHolder
+import com.example.book_venue.data.Pending
+import com.example.book_venue.viewModel.PendingViewHolder
 import com.example.book_venue.ui.HomeActivity
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -114,7 +115,6 @@ class PendingAdapter() :
     }
 
     private fun refreshPager() {
-        //activity.recreate()
         val intent = Intent(context, HomeActivity::class.java)
         val pendingIntent =
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
@@ -130,6 +130,11 @@ class PendingAdapter() :
         activity.binding.pendingPager.adapter?.notifyDataSetChanged()
         activity.adapterBooking.notifyDataSetChanged()
         activity.binding.confirmPager.adapter?.notifyDataSetChanged()
+
+        if(items.isEmpty()) {
+            activity.binding.pendingTxt.visibility = View.VISIBLE
+            activity.binding.pendingHead.visibility = View.INVISIBLE
+        }
     }
 
     private fun showSuccessDialog(message:String) {

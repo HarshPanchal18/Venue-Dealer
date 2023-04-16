@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.book_venue.adapters.VenueAdapter
 import com.example.book_venue.databinding.ActivityViewVenueBinding
 import com.example.book_venue.helper.TouchHelper
-import com.example.book_venue.model.Venue
+import com.example.book_venue.data.Venue
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore

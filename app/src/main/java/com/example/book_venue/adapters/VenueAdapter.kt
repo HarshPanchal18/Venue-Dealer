@@ -9,9 +9,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -21,12 +18,11 @@ import com.example.book_venue.databinding.ErrorDialogBinding
 import com.example.book_venue.databinding.SuccessDialogBinding
 import com.example.book_venue.databinding.VenueCardBinding
 import com.example.book_venue.databinding.WarningDialogBinding
-import com.example.book_venue.model.Venue
-import com.example.book_venue.model.VenueViewHolder
+import com.example.book_venue.data.Venue
+import com.example.book_venue.viewModel.VenueViewHolder
 import com.example.book_venue.ui.AddVenueActivity
+import com.example.book_venue.ui.PreviewVenueImageActivity
 import com.example.book_venue.ui.ViewVenueActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
 @SuppressLint("NotifyDataSetChanged")
@@ -34,8 +30,6 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
 
     private var activity: ViewVenueActivity = ViewVenueActivity()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private var user: FirebaseUser = auth.currentUser!!
     private lateinit var items: ArrayList<Venue>
     private lateinit var context: Context
 
@@ -51,13 +45,24 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: VenueViewHolder, position: Int) {
-        val currentVenue=items[position]
+        val currentVenue = items[position]
         holder.bind(currentVenue)
 
-        holder.binding.venueHeadImage.setOnClickListener {
-            val dialogView : View = LayoutInflater.from(context).inflate(R.layout.dialog_image,null)
+        holder.binding.venueCard.setOnClickListener {
+            //context.startActivity(Intent(context,PreviewVenueImageActivity::class.java))
+            val dialogView: View = LayoutInflater.from(context).inflate(R.layout.dialog_image, null)
 
-            val imageUrl = if(currentVenue.url0 != "") currentVenue.url0 else R.drawable.logo
+            val imageUrl = if (currentVenue.url0 != "") currentVenue.url0 else R.drawable.logo
+            Glide.with(context).load(imageUrl).into(dialogView.findViewById(R.id.previewedImage))
+
+            val imageDialog = AlertDialog.Builder(context)
+            imageDialog.setView(dialogView).show()
+        }
+
+        holder.binding.venueHeadImage.setOnClickListener {
+            val dialogView: View = LayoutInflater.from(context).inflate(R.layout.dialog_image, null)
+
+            val imageUrl = if (currentVenue.url0 != "") currentVenue.url0 else R.drawable.logo
             Glide.with(context).load(imageUrl).into(dialogView.findViewById(R.id.previewedImage))
 
             val imageDialog = AlertDialog.Builder(context)
@@ -65,7 +70,7 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         }
     }
 
-    override fun getItemCount() : Int = items.size
+    override fun getItemCount(): Int = items.size
 
     fun deleteData(position: Int) {
 
@@ -103,8 +108,8 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         alertDialog.show()
     }
 
-    fun setFilterList(filteredList:ArrayList<Venue>) {
-        this.items=filteredList
+    fun setFilterList(filteredList: ArrayList<Venue>) {
+        this.items = filteredList
         notifyDataSetChanged()
     }
 
@@ -154,7 +159,9 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
             alertDialog.dismiss()
         }
 
-        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
 
         alertDialog.setCancelable(false)
         alertDialog.show()
@@ -166,7 +173,7 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         activity.binding.venueRecycler.adapter?.notifyDataSetChanged()
     }
 
-    private fun showSuccessDialog(message:String) {
+    private fun showSuccessDialog(message: String) {
         val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
         val sbinding: SuccessDialogBinding = SuccessDialogBinding.bind(LayoutInflater.from(context)
             .inflate(R.layout.success_dialog,
@@ -181,7 +188,9 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         val alertDialog = builder.create()
         sbinding.buttonAction.setOnClickListener { alertDialog.dismiss() }
 
-        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
 
         alertDialog.setCancelable(false)
         alertDialog.show()

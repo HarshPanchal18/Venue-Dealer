@@ -1,9 +1,10 @@
-package com.example.book_venue.model
+package com.example.book_venue.viewModel
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.book_venue.R
+import com.example.book_venue.data.Venue
 import com.example.book_venue.databinding.VenueCardBinding
 import com.google.firebase.auth.FirebaseAuth
 

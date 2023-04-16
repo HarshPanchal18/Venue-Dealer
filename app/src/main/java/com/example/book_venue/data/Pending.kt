@@ -1,4 +1,4 @@
-package com.example.book_venue.model
+package com.example.book_venue.data
 
 import com.google.firebase.Timestamp
 

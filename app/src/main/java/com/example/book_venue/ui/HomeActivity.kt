@@ -10,9 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -24,10 +22,10 @@ import com.example.book_venue.R
 import com.example.book_venue.adapters.BookingAdapter
 import com.example.book_venue.adapters.PendingAdapter
 import com.example.book_venue.databinding.ActivityHomeBinding
-import com.example.book_venue.databinding.ErrorDialogBinding
 import com.example.book_venue.databinding.WarningDialogBinding
-import com.example.book_venue.model.Booked
-import com.example.book_venue.model.Pending
+import com.example.book_venue.data.Booked
+import com.example.book_venue.data.Pending
+import com.example.book_venue.databinding.ErrorDialogBinding
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

@@ -143,7 +143,7 @@ class AddVenueActivity : AppCompatActivity() {
                         } // if(bundle!=null)
                     } else {
                         try {
-                            showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.")
+                            showErrorDialog( "You\\'re not connected with Internet! Check your connection and retry.")
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }

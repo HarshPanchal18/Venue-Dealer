@@ -1,4 +1,4 @@
-package com.example.book_venue.model
+package com.example.book_venue.data
 
 data class Venue(
     val Name: String,
@@ -16,7 +16,7 @@ data class Venue(
     val docId: String,
     val url0: String,
     val Notes: String,
-    //val images: ArrayList<Map<String,String>>
+    val images: ArrayList<HashMap<String,String>>
 ) {
     constructor():this(
         "",
@@ -24,16 +24,16 @@ data class Venue(
         "",
         "",
         "",
-        "0",
-        "",
-        "",
-        "",
-        "0",
         "",
         "",
         "",
         "",
         "",
-        //ArrayList<Map<String, String>>()
+        "",
+        "",
+        "",
+        "",
+        "",
+        ArrayList<HashMap<String, String>>()
     )
 }

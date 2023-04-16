@@ -1,7 +1,8 @@
-package com.example.book_venue.model
+package com.example.book_venue.viewModel
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.example.book_venue.data.Pending
 import com.example.book_venue.databinding.PendingCardBinding
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
@@ -11,7 +12,7 @@ class PendingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var binding = PendingCardBinding.bind(itemView)
     val user = FirebaseAuth.getInstance().currentUser
 
-    fun bind(pending:  Pending) {
+    fun bind(pending: Pending) {
         binding.apply {
             pendingUsername.text = pending.username
             pendingUserMail.text = pending.useremail
