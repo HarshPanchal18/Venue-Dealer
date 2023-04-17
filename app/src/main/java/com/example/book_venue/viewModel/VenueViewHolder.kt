@@ -6,13 +6,10 @@ import com.bumptech.glide.Glide
 import com.example.book_venue.R
 import com.example.book_venue.data.Venue
 import com.example.book_venue.databinding.VenueCardBinding
-import com.google.firebase.auth.FirebaseAuth
 
 class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    var binding=VenueCardBinding.bind(itemView)
-
-    val user=FirebaseAuth.getInstance().currentUser
+    var binding = VenueCardBinding.bind(itemView)
 
     fun bind(venue: Venue) {
 

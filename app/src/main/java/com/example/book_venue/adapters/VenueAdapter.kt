@@ -11,17 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.book_venue.*
-import com.example.book_venue.databinding.ErrorDialogBinding
-import com.example.book_venue.databinding.SuccessDialogBinding
-import com.example.book_venue.databinding.VenueCardBinding
-import com.example.book_venue.databinding.WarningDialogBinding
 import com.example.book_venue.data.Venue
+import com.example.book_venue.databinding.*
 import com.example.book_venue.viewModel.VenueViewHolder
 import com.example.book_venue.ui.AddVenueActivity
-import com.example.book_venue.ui.PreviewVenueImageActivity
 import com.example.book_venue.ui.ViewVenueActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -49,24 +46,29 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
         holder.bind(currentVenue)
 
         holder.binding.venueCard.setOnClickListener {
-            //context.startActivity(Intent(context,PreviewVenueImageActivity::class.java))
-            val dialogView: View = LayoutInflater.from(context).inflate(R.layout.dialog_image, null)
+            val dialogView: View =
+                LayoutInflater.from(context).inflate(R.layout.venue_images_recyclerview, null)
 
-            val imageUrl = if (currentVenue.url0 != "") currentVenue.url0 else R.drawable.logo
-            Glide.with(context).load(imageUrl).into(dialogView.findViewById(R.id.previewedImage))
+            val recycler = dialogView.findViewById<RecyclerView>(R.id.venueImgRecycler)
+            recycler.layoutManager =
+                LinearLayoutManager(context)
+            //LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            recycler.adapter = VenueImageAdapter(currentVenue.images)
 
-            val imageDialog = AlertDialog.Builder(context)
-            imageDialog.setView(dialogView).show()
+            AlertDialog.Builder(context).setView(dialogView)
+                .setTitle(currentVenue.Name)
+                .setPositiveButton("Close") { _, _ -> }
+                .create().show()
+
         }
 
         holder.binding.venueHeadImage.setOnClickListener {
             val dialogView: View = LayoutInflater.from(context).inflate(R.layout.dialog_image, null)
 
-            val imageUrl = if (currentVenue.url0 != "") currentVenue.url0 else R.drawable.logo
+            val imageUrl = currentVenue.url0.ifEmpty { R.drawable.logo }
             Glide.with(context).load(imageUrl).into(dialogView.findViewById(R.id.previewedImage))
 
-            val imageDialog = AlertDialog.Builder(context)
-            imageDialog.setView(dialogView).show()
+            AlertDialog.Builder(context).setView(dialogView).show()
         }
     }
 

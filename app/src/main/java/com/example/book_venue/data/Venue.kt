@@ -34,6 +34,6 @@ data class Venue(
         "",
         "",
         "",
-        ArrayList<HashMap<String, String>>()
+        ArrayList()
     )
 }

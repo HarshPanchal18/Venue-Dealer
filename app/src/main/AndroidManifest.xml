@@ -19,9 +19,6 @@
         android:theme="@style/Theme.BookVenue"
         tools:targetApi="31">
         <activity
-            android:name=".ui.PreviewVenueImageActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.AboutAppActivity"
             android:exported="false" />
         <activity
