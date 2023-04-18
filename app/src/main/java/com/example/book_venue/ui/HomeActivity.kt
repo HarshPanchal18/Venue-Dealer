@@ -36,7 +36,7 @@ import kotlin.system.exitProcess
 class HomeActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
-    lateinit var binding : ActivityHomeBinding
+    lateinit var binding: ActivityHomeBinding
     lateinit var adapterBooking: BookingAdapter
     private lateinit var adapterPending: PendingAdapter
     private lateinit var bookedCardList: ArrayList<Booked>
@@ -73,7 +73,7 @@ class HomeActivity : AppCompatActivity() {
                     binding.bookingsLoadingText.gone()
                     binding.bookingHead.visible()
 
-                    adapterBooking = BookingAdapter(this, this,bookedCardList)
+                    adapterBooking = BookingAdapter(this, this, bookedCardList)
                     binding.confirmPager.adapter = adapterBooking
                     for (doc in result) {
                         val bookingModel = doc.toObject(Booked::class.java)
@@ -108,7 +108,7 @@ class HomeActivity : AppCompatActivity() {
                     binding.bookingsLoadingText.gone()
                     binding.pendingHead.visible()
 
-                    adapterPending = PendingAdapter(this, this,pendingCardList)
+                    adapterPending = PendingAdapter(this, this, pendingCardList)
                     binding.pendingPager.adapter = adapterPending
                     for (doc in result) {
                         val pendingModel = doc.toObject(Pending::class.java)
@@ -216,7 +216,7 @@ class HomeActivity : AppCompatActivity() {
     private var backPressedTime: Long = 0
     override fun onBackPressed() {
 
-        if(backPressedTime+2000 > System.currentTimeMillis()) {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
             super.onBackPressed()
             exitProcess(0)
         }

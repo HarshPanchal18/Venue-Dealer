@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,9 +17,9 @@
 
         <ImageButton
             android:id="@+id/goBack"
-            android:layout_marginStart="2sp"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
+            android:layout_marginStart="2sp"
             android:backgroundTint="@color/white"
             android:src="@drawable/ic_back_24" />
 
@@ -36,11 +35,11 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
-        android:layout_below="@id/toolBar"
-        android:layout_above="@id/add_update_venue_btn"
-        android:overScrollMode="never"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_above="@id/add_update_venue_btn"
+        android:layout_below="@id/toolBar"
+        android:overScrollMode="never">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -48,138 +47,139 @@
             android:orientation="vertical"
             android:padding="12dp">
 
-
             <ProgressBar
                 android:id="@+id/imageProgress"
-                android:layout_centerInParent="true"
-                android:visibility="invisible"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="invisible" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/titleInputLayout"
-                android:layout_marginTop="10dp"
-                android:hint="@string/venue_name"
                 style="@style/TextInputLayout"
-                android:layout_marginHorizontal="2sp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2sp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/venue_name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/venueTitle"
+                    style="@style/TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:inputType="textCapSentences"
                     android:lines="1"
-                    style="@style/TextInputEditText"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/descriptionInputLayout"
-                android:layout_marginTop="10dp"
-                android:hint="Enter venue description"
-                android:layout_below="@id/cityState"
-                android:layout_marginHorizontal="2sp"
                 style="@style/TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cityState"
+                android:layout_marginHorizontal="2sp"
+                android:layout_marginTop="10dp"
+                android:hint="Enter venue description">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/venueDescription"
+                    style="@style/TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
-                    style="@style/TextInputEditText"
                     android:lines="3"
-                    android:minLines="1"
-                    android:maxLines="3" />
+                    android:maxLines="3"
+                    android:minLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/landmarkInputLayout"
-                android:layout_marginTop="10dp"
-                android:hint="@string/venue_landmark"
-                android:layout_below="@id/selected_images_Rview"
-                android:layout_marginHorizontal="2sp"
                 style="@style/TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/venueLandmark"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences"
-                style="@style/TextInputEditText"
-                android:lines="1"
-                android:maxLines="1" />
+                android:layout_below="@id/selected_images_Rview"
+                android:layout_marginHorizontal="2sp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/venue_landmark">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/venueLandmark"
+                    style="@style/TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences"
+                    android:lines="1"
+                    android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/cityState"
-                android:layout_below="@id/landmarkInputLayout"
-                android:orientation="horizontal"
-                android:layout_marginTop="10sp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_below="@id/landmarkInputLayout"
+                android:layout_marginTop="10sp"
+                android:orientation="horizontal">
 
                 <Spinner
                     android:id="@+id/spinnerState"
-                    android:layout_weight="1"
-                    android:background="@drawable/spinner_border"
-                    android:layout_marginHorizontal="2sp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="2sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/spinner_border" />
 
                 <Spinner
                     android:id="@+id/spinnerCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="2sp"
                     android:layout_weight="1"
                     android:background="@drawable/spinner_border"
                     android:backgroundTintMode="multiply"
-                    android:foregroundTintMode="multiply"
-                    android:layout_marginHorizontal="2sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:foregroundTintMode="multiply" />
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/contactInputLayout"
+                style="@style/TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/parkingLayout"
+                android:layout_marginHorizontal="2sp"
                 android:layout_marginTop="10dp"
                 android:hint="@string/dealer_contact_number"
-                android:layout_below="@id/parkingLayout"
-                style="@style/TextInputLayout"
-                android:layout_marginHorizontal="2sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 app:startIconDrawable="@drawable/ic_circle_account">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dealerPhNo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                style="@style/TextInputEditText"
-                android:maxLines="1" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dealerPhNo"
+                    style="@style/TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/additionalInputLayout"
-                android:layout_marginTop="10dp"
-                android:hint="@string/additional_notes"
-                android:layout_below="@id/contactInputLayout"
                 style="@style/TextInputLayout"
-                android:layout_marginHorizontal="2sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/additionalTextbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:minLines="1"
-                android:maxLines="5"
-                style="@style/TextInputEditText" />
+                android:layout_below="@id/contactInputLayout"
+                android:layout_marginHorizontal="2sp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/additional_notes">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/additionalTextbox"
+                    style="@style/TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:maxLines="5"
+                    android:minLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -187,222 +187,231 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/descriptionInputLayout"
                 android:layout_marginTop="10dp"
-                android:textColor="@color/black"
                 android:text="Your venue will be available for:"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/venueTypes"
-                android:orientation="horizontal"
-                android:layout_marginTop="25dp"
-                android:layout_below="@id/descriptionInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/descriptionInputLayout"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal">
 
                 <CheckBox
                     android:id="@+id/convHall"
-                    android:text="Convention Hall"
-                    android:layout_weight="1"
-                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Convention Hall"
+                    android:textColor="@color/black" />
+
                 <CheckBox
                     android:id="@+id/wedding"
-                    android:text="Wedding"
-                    android:textColor="@color/black"
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Wedding"
+                    android:textColor="@color/black" />
+
                 <CheckBox
                     android:id="@+id/festivity"
-                    android:text="Festivity"
-                    android:textColor="@color/black"
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Festivity"
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/venueTypes1"
-                android:orientation="horizontal"
-                android:layout_below="@id/venueTypes"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/venueTypes"
+                android:orientation="horizontal">
+
                 <CheckBox
                     android:id="@+id/exhibition"
-                    android:text="Exhibition"
-                    android:layout_weight="1"
-                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Exhibition"
+                    android:textColor="@color/black" />
+
                 <CheckBox
                     android:id="@+id/sports"
-                    android:text="Sports"
-                    android:layout_weight="1"
-                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sports"
+                    android:textColor="@color/black" />
+
                 <CheckBox
                     android:id="@+id/party"
-                    android:text="Party"
-                    android:textColor="@color/black"
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Party"
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_below="@id/venueTypes1"
                 android:id="@+id/capacity"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/venueTypes1"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:hint="Venue capacity(Person)"
-                    android:layout_weight="1"
                     style="@style/TextInputLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="Venue capacity(Person)">
 
                     <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/venueCapacity"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="2dp"
-                    android:layout_marginStart="2dp"
-                    android:layout_gravity="center"
-                    style="@style/TextInputEditText"
-                    android:inputType="phone|number"
-                    android:lines="1"
-                    android:maxLength="10" />
+                        android:id="@+id/venueCapacity"
+                        style="@style/TextInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:inputType="phone|number"
+                        android:lines="1"
+                        android:maxLength="10" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/TextInputLayout"
-                    android:layout_weight="1.2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/restRooms"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginEnd="2dp"
-                    android:hint="No. of Rest Rooms"
-                    android:inputType="number"
-                    style="@style/TextInputEditText"
-                    android:lines="1"
-                    android:maxLength="3" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/restRooms"
+                        style="@style/TextInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:hint="No. of Rest Rooms"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLength="3" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="5dp"
                 android:id="@+id/availableLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/capacity"
+                android:layout_marginTop="5dp"
                 android:baselineAligned="false">
 
                 <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:text="Day/Time Availability:" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Day/Time Availability:"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/dayTimeAvailability"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:layout_marginStart="6dp" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/dayTimeAvailability"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:checked="true" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_weight="2"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                    android:text="@string/indian_ruppee"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginStart="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:id="@+id/rentPrice"
-                    android:layout_marginHorizontal="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:inputType="numberDecimal"
-                    android:textColor="@color/black"
-                    android:maxLines="1"
-                    android:hint=" Rent "/>
-                <TextView
-                    android:textSize="20sp"
-                    android:text="/ hour"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="@string/indian_ruppee"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/rentPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginStart="5dp"
+                        android:hint=" Rent "
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="/ hour"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/parkingLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/availableLayout"
-                android:orientation="horizontal"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:text="Parking spaces : "
                     android:textColor="@color/black"
-                    android:text="Parking spaces : " />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <RadioGroup
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
                     <RadioButton
                         android:id="@+id/parkingYes"
-                        android:layout_marginStart="16sp"
-                        android:text="Yes"
-                        android:textColor="@color/black"
-                        android:checked="true"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16sp"
+                        android:checked="true"
+                        android:text="Yes"
+                        android:textColor="@color/black" />
+
                     <RadioButton
                         android:id="@+id/parkingNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="16sp"
                         android:text="No"
-                        android:textColor="@color/black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:textColor="@color/black" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -425,10 +434,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/titleInputLayout"
                 android:layout_alignParentEnd="true"
-                android:paddingHorizontal="10sp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/colorError"
-                android:layout_marginTop="10dp"
+                android:paddingHorizontal="10sp"
                 android:text="Clear images"
                 android:visibility="gone" />
 

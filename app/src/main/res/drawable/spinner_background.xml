@@ -3,13 +3,10 @@
     <item>
         <layer-list>
             <item>
-                <color
-                    android:color="@android:color/white"/>
+                <color android:color="@android:color/white" />
             </item>
             <item>
-                <bitmap
-                    android:gravity="center_vertical|right"
-                    android:src="@drawable/arrow_down"/>
+                <bitmap android:gravity="center_vertical|right" android:src="@drawable/arrow_down" />
             </item>
         </layer-list>
     </item>

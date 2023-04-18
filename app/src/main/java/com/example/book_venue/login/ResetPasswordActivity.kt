@@ -10,14 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.example.book_venue.R
 import com.example.book_venue.databinding.ActivityResetPasswordBinding
+import com.example.book_venue.databinding.ErrorDialogBinding
+import com.example.book_venue.databinding.SuccessDialogBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.jakewharton.rxbinding2.widget.RxTextView
 
@@ -28,28 +26,29 @@ class ResetPasswordActivity : AppCompatActivity() {
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityResetPasswordBinding.inflate(layoutInflater)
+        binding = ActivityResetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar?.hide()
-        auth=FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
 
-        val mail=intent.getStringExtra("Mail")
+        val mail = intent.getStringExtra("Mail")
         binding.etMail.setText(mail)
 
-        val emailStream= RxTextView.textChanges(binding.etMail)
+        val emailStream = RxTextView.textChanges(binding.etMail)
             .skipInitialValue()
             .map { mail -> !Patterns.EMAIL_ADDRESS.matcher(mail).matches() }
-        emailStream.subscribe{ showEmailValidAlert(it) }
+        emailStream.subscribe { showEmailValidAlert(it) }
 
         binding.resetPwBtn.setOnClickListener {
-            val mail=binding.etMail.text.toString().trim()
-            if(isOnline()){
+            val mail = binding.etMail.text.toString().trim()
+            if (isOnline()) {
                 auth.sendPasswordResetEmail(mail)
-                    .addOnCompleteListener(this){ reset ->
-                        if(reset.isSuccessful){
+                    .addOnCompleteListener(this) { reset ->
+                        if (reset.isSuccessful) {
                             Intent(this, LoginActivity::class.java).also {
-                                it.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                it.flags =
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 showSuccessDialog("Password reset link is sent to your mail")
                                 startActivity(it)
                             }
@@ -58,8 +57,11 @@ class ResetPasswordActivity : AppCompatActivity() {
                         }
                     }
             } else {
-                try { showErrorDialog(resources.getString(R.string.network_error_text)) }
-                catch (e: Exception) { e.printStackTrace() }
+                try {
+                    showErrorDialog(resources.getString(R.string.network_error_text))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
 
@@ -69,14 +71,15 @@ class ResetPasswordActivity : AppCompatActivity() {
     }
 
     private fun showEmailValidAlert(isNotValid: Boolean) {
-        if(isNotValid){
-            binding.etMail.error="Email is not valid"
-            binding.resetPwBtn.isEnabled=false
-            binding.resetPwBtn.backgroundTintList= ContextCompat.getColorStateList(this,android.R.color.darker_gray)
+        if (isNotValid) {
+            binding.etMail.error = "Email is not valid"
+            binding.resetPwBtn.isEnabled = false
+            binding.resetPwBtn.backgroundTintList =
+                ContextCompat.getColorStateList(this, android.R.color.darker_gray)
         } else {
-            binding.etMail.error=null
-            binding.resetPwBtn.isEnabled=true
-            binding.resetPwBtn.backgroundTintList=ContextCompat.getColorStateList(this,
+            binding.etMail.error = null
+            binding.resetPwBtn.isEnabled = true
+            binding.resetPwBtn.backgroundTintList = ContextCompat.getColorStateList(this,
                 R.color.primary_color)
         }
     }
@@ -92,46 +95,47 @@ class ResetPasswordActivity : AppCompatActivity() {
         return true
     }
 
-    private fun showSuccessDialog(message:String){
-        val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(this)
-            .inflate(R.layout.success_dialog,
-                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+    private fun showErrorDialog(message: String) {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val ebinding: ErrorDialogBinding = ErrorDialogBinding.bind(LayoutInflater.from(this)
+            .inflate(R.layout.error_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.success_title)
-        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
-        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
+        builder.setView(ebinding.root)
+        ebinding.textTitle.text = resources.getString(R.string.network_error_title)
+        ebinding.textMessage.text = message
+        ebinding.buttonAction.text = resources.getString(R.string.okay)
+        ebinding.imageIcon.setImageResource(R.drawable.error)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
-            alertDialog.dismiss()
-            finish()
-            //Toast.makeText(this@AddVenueActivity, "Success", Toast.LENGTH_SHORT).show()
-        }
+        ebinding.buttonAction.setOnClickListener { alertDialog.dismiss() }
+
         if (alertDialog.window != null) {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
         }
+
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
 
-    private fun showErrorDialog(message: String) {
+    private fun showSuccessDialog(message: String) {
         val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(this)
-            .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+        val sbinding: SuccessDialogBinding = SuccessDialogBinding.bind(LayoutInflater.from(this)
+            .inflate(R.layout.success_dialog,
+                this.findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
-        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
-        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+        builder.setView(sbinding.root)
+        sbinding.textTitle.text = resources.getString(R.string.success_title)
+        sbinding.textMessage.text = message
+        sbinding.buttonAction.text = resources.getString(R.string.okay)
+        sbinding.imageIcon.setImageResource(R.drawable.done)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+        sbinding.buttonAction.setOnClickListener {
             alertDialog.dismiss()
+            finish()
         }
+
         if (alertDialog.window != null) {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
         }

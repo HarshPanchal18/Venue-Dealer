@@ -7,7 +7,7 @@ import com.example.book_venue.R
 import com.example.book_venue.data.Venue
 import com.example.book_venue.databinding.VenueCardBinding
 
-class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
+class VenueViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var binding = VenueCardBinding.bind(itemView)
 
@@ -24,12 +24,10 @@ class VenueViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
             availableTimeCard.text = venue.Availability
             typesCard.text = venue.Types.removePrefix("[").removeSuffix("]")
 
-            val imageUrl = if(venue.url0 != "") venue.url0 else R.drawable.logo
+            val imageUrl = if (venue.url0 != "") venue.url0 else R.drawable.logo
 
             // Load image into ImageView using Glide library
-            Glide.with(itemView)
-                .load(imageUrl)
-                .into(venueHeadImage)
+            Glide.with(itemView).load(imageUrl).into(venueHeadImage)
 
         }
     }

@@ -24,4 +24,5 @@
     <color name="colorWarning">#F8C441</color>
     <color name="colorError">#F44336</color>
     <color name="transparent">#00F44336</color>
+    <color name="skyblue">#FC36A7F3</color>
 </resources>

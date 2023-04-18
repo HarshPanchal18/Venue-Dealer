@@ -52,7 +52,6 @@ class VenueAdapter() : RecyclerView.Adapter<VenueViewHolder>() {
             val recycler = dialogView.findViewById<RecyclerView>(R.id.venueImgRecycler)
             recycler.layoutManager =
                 LinearLayoutManager(context)
-            //LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             recycler.adapter = VenueImageAdapter(currentVenue.images)
 
             AlertDialog.Builder(context).setView(dialogView)

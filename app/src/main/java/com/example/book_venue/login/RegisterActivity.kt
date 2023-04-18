@@ -12,15 +12,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.example.book_venue.R
 import com.example.book_venue.databinding.ActivityRegisterBinding
+import com.example.book_venue.databinding.ErrorDialogBinding
+import com.example.book_venue.databinding.SuccessDialogBinding
 import com.example.book_venue.ui.HomeActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -187,8 +186,8 @@ class RegisterActivity : AppCompatActivity() {
         val user=auth.currentUser
         if(user!=null) {
             user.sendEmailVerification().addOnCompleteListener {
-                showSuccessDialog("Verification mail has been sent, verify and login")
-                //Toast.makeText(applicationContext,"Verification mail is sent, verify and login again",Toast.LENGTH_SHORT).show()
+                //showSuccessDialog("Verification mail has been sent, verify and login")
+                Toast.makeText(applicationContext,"Verification mail is sent, verify and login again",Toast.LENGTH_SHORT).show()
                 auth.signOut()
                 finish()
             }
@@ -227,43 +226,45 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun showErrorDialog(message: String) {
         val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(this)
-            .inflate(R.layout.error_dialog, findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+        val ebinding: ErrorDialogBinding = ErrorDialogBinding.bind(LayoutInflater.from(this)
+            .inflate(R.layout.error_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.network_error_title)
-        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
-        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.error)
+        builder.setView(ebinding.root)
+        ebinding.textTitle.text = resources.getString(R.string.network_error_title)
+        ebinding.textMessage.text = message
+        ebinding.buttonAction.text = resources.getString(R.string.okay)
+        ebinding.imageIcon.setImageResource(R.drawable.error)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
-            alertDialog.dismiss()
-        }
+        ebinding.buttonAction.setOnClickListener { alertDialog.dismiss() }
+
         if (alertDialog.window != null) {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
         }
+
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
 
-    private fun showSuccessDialog(message:String) {
-        val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.AlertDialogTheme)
-        val view: View = LayoutInflater.from(this)
+    private fun showSuccessDialog(message: String) {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val sbinding: SuccessDialogBinding = SuccessDialogBinding.bind(LayoutInflater.from(this)
             .inflate(R.layout.success_dialog,
-                findViewById<ConstraintLayout>(R.id.layoutDialogContainer))
+                this.findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
 
-        builder.setView(view)
-        (view.findViewById<View>(R.id.textTitle) as TextView).text = resources.getString(R.string.success_title)
-        (view.findViewById<View>(R.id.textMessage) as TextView).text = message
-        (view.findViewById<View>(R.id.buttonAction) as Button).text = resources.getString(R.string.okay)
-        (view.findViewById<View>(R.id.imageIcon) as ImageView).setImageResource(R.drawable.done)
+        builder.setView(sbinding.root)
+        sbinding.textTitle.text = resources.getString(R.string.success_title)
+        sbinding.textMessage.text = message
+        sbinding.buttonAction.text = resources.getString(R.string.okay)
+        sbinding.imageIcon.setImageResource(R.drawable.done)
 
         val alertDialog = builder.create()
-        view.findViewById<View>(R.id.buttonAction).setOnClickListener {
+        sbinding.buttonAction.setOnClickListener {
             alertDialog.dismiss()
             finish()
         }
+
         if (alertDialog.window != null) {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
         }

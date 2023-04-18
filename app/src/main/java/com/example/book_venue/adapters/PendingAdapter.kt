@@ -23,16 +23,16 @@ import com.example.book_venue.ui.HomeActivity
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
-@SuppressLint("NotifyDataSetChanged","CutPasteId", "SetTextI18n", "UnspecifiedImmutableFlag")
+@SuppressLint("NotifyDataSetChanged", "CutPasteId", "SetTextI18n", "UnspecifiedImmutableFlag")
 class PendingAdapter() :
     RecyclerView.Adapter<PendingViewHolder>() {
     private lateinit var db: FirebaseFirestore
-    private var activity : HomeActivity = HomeActivity()
+    private var activity: HomeActivity = HomeActivity()
     private lateinit var context: Context
     private lateinit var items: ArrayList<Pending>
     private lateinit var documentRef: DocumentReference
 
-    constructor( activity: HomeActivity, context: Context, items: ArrayList<Pending>) : this() {
+    constructor(activity: HomeActivity, context: Context, items: ArrayList<Pending>) : this() {
         this.activity = activity
         this.context = context
         this.items = items
@@ -40,7 +40,7 @@ class PendingAdapter() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PendingViewHolder {
         val binding = PendingCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return  PendingViewHolder(binding.root)
+        return PendingViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: PendingViewHolder, position: Int) {
@@ -82,7 +82,8 @@ class PendingAdapter() :
                             notifyRemoved(position)
                         }
                         .addOnFailureListener {
-                            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT)
+                                .show()
                         }
                 }
                 alertDialog.show()
@@ -105,7 +106,8 @@ class PendingAdapter() :
                             refreshPager()
                         }
                         .addOnFailureListener {
-                            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT)
+                                .show()
                         }
                 }
                 alertDialog.show()
@@ -131,13 +133,13 @@ class PendingAdapter() :
         activity.adapterBooking.notifyDataSetChanged()
         activity.binding.confirmPager.adapter?.notifyDataSetChanged()
 
-        if(items.isEmpty()) {
+        if (items.isEmpty()) {
             activity.binding.pendingTxt.visibility = View.VISIBLE
             activity.binding.pendingHead.visibility = View.INVISIBLE
         }
     }
 
-    private fun showSuccessDialog(message:String) {
+    private fun showSuccessDialog(message: String) {
         val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
         val sbinding: SuccessDialogBinding = SuccessDialogBinding.bind(LayoutInflater.from(context)
             .inflate(R.layout.success_dialog,
@@ -152,10 +154,11 @@ class PendingAdapter() :
         val alertDialog = builder.create()
         sbinding.buttonAction.setOnClickListener { alertDialog.dismiss() }
 
-        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
 
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
-
 }

@@ -54,6 +54,7 @@
     <string name="indian_ruppee2">\u20B9</string>
 
     <string name="okay">Okay</string>
+    <string name="i_understand">I understand</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
@@ -63,6 +64,7 @@
     <string name="network_error_title">Oops! something went wrong</string>
     <string name="network_error_text">You\'re not connected with Internet! Check your connection and retry.</string>
     <string name="success_title">Success</string>
+    <string name="info_title">Attention</string>
     <string name="delete_venue">Delete Venue</string>
     <string name="delete_venue_text">Are you sure you want to delete the venue?</string>
     <string name="venue_added">New venue is added</string>

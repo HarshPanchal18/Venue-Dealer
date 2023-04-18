@@ -5,12 +5,14 @@
       <map>
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/about_app.xml" value="0.161" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/add_location_24.xml" value="0.161" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/add_venue.xml" value="0.184" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/arrow_down.xml" value="0.1085" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/bg_btn.xml" value="0.1455" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/bg_gradient.xml" value="0.1495" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/bg_text_field.xml" value="0.1455" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/bottom_tab_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_error_bg.xml" value="0.153" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_info_bg.xml" value="0.184" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_neutral_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_success_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/btn_warning_bg.xml" value="0.153" />
@@ -23,10 +25,17 @@
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/gradient_spinner.xml" value="0.1085" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_account.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_back_24.xml" value="0.106" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_baseline_add_home_work_24.xml" value="0.184" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_baseline_delete_outline_24.xml" value="0.184" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.184" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_circle_account.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_email.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_lock.xml" value="0.1" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_round_insert_photo_24.xml" value="0.184" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/ic_search_24.xml" value="0.184" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/info_bg.xml" value="0.184" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/logout.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/round_corners.xml" value="0.106" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/search_view_bg.xml" value="0.153" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/drawable/spinner_background.xml" value="0.1085" />
@@ -43,7 +52,7 @@
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_main.xml" value="0.209375" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_preview.xml" value="0.209375" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_preview_venue_image.xml" value="0.33" />
-        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_register.xml" value="0.5" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_register.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_reset_password.xml" value="0.209375" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_splash.xml" value="0.22" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/activity_view_venue.xml" value="0.2" />
@@ -53,6 +62,7 @@
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/dialog_image_slider.xml" value="0.13223684210526315" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/dropdown_item.xml" value="0.20833333333333334" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/error_dialog.xml" value="0.25" />
+        <entry key="..\:/dev/BookVenue/app/src/main/res/layout/info_dialog.xml" value="0.13223684210526315" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/item_image.xml" value="0.1" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/pending_card.xml" value="0.22" />
         <entry key="..\:/dev/BookVenue/app/src/main/res/layout/showimageslayout.xml" value="0.209375" />

@@ -9,11 +9,11 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/viewVenueToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
         android:background="#BAEFB68B"
         app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        app:contentInsetStart="0dp">
 
         <ImageButton
             android:id="@+id/goBack"
@@ -27,8 +27,8 @@
             android:id="@+id/searchVenue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8sp"
             android:layout_marginHorizontal="10sp"
+            android:layout_marginVertical="8sp"
             android:background="@drawable/search_view_bg"
             app:iconifiedByDefault="false"
             app:queryHint="Search venue here..." />
@@ -39,36 +39,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/viewVenueToolbar"
-        android:paddingHorizontal="8sp"
         android:overScrollMode="never"
-        android:paddingVertical="2sp"/>
+        android:paddingHorizontal="8sp"
+        android:paddingVertical="2sp" />
 
     <ProgressBar
         android:id="@+id/loadingVenue"
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
     <TextView
         android:id="@+id/zeroVenues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="There are no venues to display here.\nPress the Add button to add a new venue."
         android:textAlignment="center"
-        android:visibility="gone"
-        android:textSize="20sp"
         android:textColor="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:textSize="20sp"
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addVenueFAB"
-        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
         android:backgroundTint="#30FA3A"
         android:src="@drawable/ic_baseline_add_home_work_24"
-        app:maxImageSize="30sp"
-        android:layout_marginEnd="25dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:maxImageSize="30sp" />
 </RelativeLayout>

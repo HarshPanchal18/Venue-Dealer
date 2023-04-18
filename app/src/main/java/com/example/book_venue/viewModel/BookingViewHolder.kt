@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BookingViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
+class BookingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var binding = BookedCardBinding.bind(itemView)
     val user = FirebaseAuth.getInstance().currentUser
 
@@ -27,9 +27,9 @@ class BookingViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             val miliSeconds = booked.enddate.toDate().time - booked.startdate.toDate().time
             val seconds = miliSeconds / 1000
-            val minutes = seconds / (60*1000)
-            val hours = minutes / (60*60*1000)
-            val days = miliSeconds  / (24*60*60*1000)
+            val minutes = seconds / (60 * 1000)
+            val hours = minutes / (60 * 60 * 1000)
+            val days = miliSeconds / (24 * 60 * 60 * 1000)
             val duration = "$days days, $hours hours"//, $minutes minutes"
             bookingDuration.text = duration
 
@@ -45,7 +45,7 @@ class BookingViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
                     enddate.toDate())
             bookingEndDate.text = formattedDate
 
-            if(booked.startdate >= Timestamp.now()) {
+            if (booked.startdate >= Timestamp.now()) {
                 activeStatusCard.visibility = View.GONE
             } else {
                 upcomingStatusCard.visibility = View.GONE

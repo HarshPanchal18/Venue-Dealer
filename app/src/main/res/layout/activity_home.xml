@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.HomeActivity"
-    android:id="@+id/homeLayout"
-    android:orientation="vertical"
     android:gravity="center"
-    android:padding="12sp">
+    android:orientation="vertical"
+    android:padding="12sp"
+    tools:context=".ui.HomeActivity">
 
     <ImageView
         android:id="@+id/userPhoto"
@@ -27,21 +27,21 @@
 
     <TextView
         android:id="@+id/account_name"
-        android:layout_toEndOf="@id/home_title"
-        android:layout_marginStart="5sp"
+        style="@style/Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        style="@style/Title"/>
+        android:layout_marginStart="5sp"
+        android:layout_toEndOf="@id/home_title"
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/account_mail"
-        android:layout_toEndOf="@id/userPhoto"
-        android:layout_marginStart="5sp"
-        android:visibility="gone"
+        style="@style/Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Title"/>
+        android:layout_marginStart="5sp"
+        android:layout_toEndOf="@id/userPhoto"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/home_subtitle"
@@ -50,9 +50,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/home_title"
         android:layout_marginTop="5sp"
-        android:textColor="@color/black"
         android:layout_toEndOf="@id/userPhoto"
         android:text="@string/home_subtitle"
+        android:textColor="@color/black"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -76,9 +76,9 @@
                 android:layout_marginStart="5sp"
                 android:fontFamily="@font/montserrat"
                 android:text="Your pendings:"
-                android:visibility="gone"
                 android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/pendingPager"
@@ -91,10 +91,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="There are no pending requests"
                 android:fontFamily="@font/montserrat"
-                android:textSize="18sp"
+                android:text="There are no pending requests"
                 android:textColor="@color/black"
+                android:textSize="18sp"
                 android:visibility="gone" />
         </RelativeLayout>
 
@@ -111,9 +111,9 @@
                 android:layout_marginStart="5sp"
                 android:fontFamily="@font/montserrat"
                 android:text="Your bookings:"
-                android:visibility="gone"
                 android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/confirmPager"
@@ -126,10 +126,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="There are no upcoming bookings"
                 android:fontFamily="@font/montserrat"
-                android:textSize="18sp"
+                android:text="There are no upcoming bookings"
                 android:textColor="@color/black"
+                android:textSize="18sp"
                 android:visibility="gone" />
         </RelativeLayout>
     </LinearLayout>
@@ -248,14 +248,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
+
     <TextView
         android:id="@+id/bookingsLoadingText"
-        android:text="Getting a few things ready for you..."
-        android:textColor="@color/black"
-        android:fontFamily="@font/montserrat"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/bookingsLoading"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bookingsLoading"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/montserrat"
+        android:text="Getting a few things ready for you..."
+        android:textColor="@color/black" />
 
 </RelativeLayout>

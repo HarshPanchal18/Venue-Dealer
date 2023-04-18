@@ -22,11 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
     private lateinit var db: FirebaseFirestore
-    private var activity : HomeActivity = HomeActivity()
+    private var activity: HomeActivity = HomeActivity()
     private lateinit var context: Context
     private var items = ArrayList<Booked>()
 
-    constructor( activity: HomeActivity, context: Context, items: ArrayList<Booked>) : this() {
+    constructor(activity: HomeActivity, context: Context, items: ArrayList<Booked>) : this() {
         this.activity = activity
         this.context = context
         this.items = items
@@ -34,7 +34,7 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookingViewHolder {
         val binding = BookedCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return  BookingViewHolder(binding.root)
+        return BookingViewHolder(binding.root)
     }
 
     @SuppressLint("SetTextI18n")
@@ -70,7 +70,8 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
                             notifyRemoved(position)
                         }
                         .addOnFailureListener {
-                            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT)
+                                .show()
                         }
                 }
 
@@ -96,20 +97,13 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
         notifyItemRemoved(position)
         activity.binding.confirmPager.adapter?.notifyDataSetChanged()
 
-        if(items.isEmpty()) {
+        if (items.isEmpty()) {
             activity.binding.confirmTxt.visibility = View.VISIBLE
             activity.binding.bookingHead.visibility = View.INVISIBLE
         }
-
-        /*if(items.isEmpty()) {
-            val intent = Intent(context, HomeActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
-            pendingIntent.send()
-            activity.finish()
-        }*/
     }
 
-    private fun showSuccessDialog(message:String) {
+    private fun showSuccessDialog(message: String) {
         val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
         val sbinding: SuccessDialogBinding = SuccessDialogBinding.bind(LayoutInflater.from(context)
             .inflate(R.layout.success_dialog,
@@ -124,10 +118,11 @@ class BookingAdapter() : RecyclerView.Adapter<BookingViewHolder>() {
         val alertDialog = builder.create()
         sbinding.buttonAction.setOnClickListener { alertDialog.dismiss() }
 
-        if (alertDialog.window != null) { alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0)) }
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
 
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
-
 }

@@ -23,10 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.book_venue.R
 import com.example.book_venue.adapters.ImageAdapter
-import com.example.book_venue.databinding.ActivityAddVenueBinding
-import com.example.book_venue.databinding.ErrorDialogBinding
-import com.example.book_venue.databinding.SuccessDialogBinding
-import com.example.book_venue.databinding.WarningDialogBinding
+import com.example.book_venue.databinding.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
@@ -75,7 +72,7 @@ class AddVenueActivity : AppCompatActivity() {
             if (bundle != null) {
                 docId = bundle!!.getString("docId").toString()
 
-                toolbarText.text = "Update "+bundle!!.getString("name")
+                toolbarText.text = "Update " + bundle!!.getString("name")
                 addUpdateVenueBtn.text = "Update Venue"
                 venueTitle.setText(bundle!!.getString("name"))
                 venueDescription.setText(bundle!!.getString("description"))
@@ -134,7 +131,9 @@ class AddVenueActivity : AppCompatActivity() {
                     if (isOnline()) { // checking connectivity
                         if (bundle != null) {
                             setHashMapForUpdate()
-                            if(bundle?.getString("url0").isNullOrEmpty() && urls?.isNotEmpty()==true)
+                            if (bundle?.getString("url0")
+                                    .isNullOrEmpty() && urls?.isNotEmpty() == true
+                            )
                                 summaryResult["url0"] = urls?.first()?.get("url") ?: ""
 
                             updateToFireStore(docId, summaryResult)
@@ -143,7 +142,7 @@ class AddVenueActivity : AppCompatActivity() {
                         } // if(bundle!=null)
                     } else {
                         try {
-                            showErrorDialog( "You\\'re not connected with Internet! Check your connection and retry.")
+                            showErrorDialog("You\\'re not connected with Internet! Check your connection and retry.")
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -172,11 +171,11 @@ class AddVenueActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
                 2)
         }
-        openFileChooser()
+        showInfoDialog("Pay attention\nYou can\'t delete the photos once uploaded.")
     }
 
     private fun createNewVenue(summaryResult: HashMap<String, Any>) {
-        if(bundle?.getString("url0").isNullOrEmpty() && urls?.isNotEmpty()==true)
+        if (bundle?.getString("url0").isNullOrEmpty() && urls?.isNotEmpty() == true)
             summaryResult["url0"] = urls?.first()?.get("url") ?: ""
 
         if (urls?.isNotEmpty() == true)
@@ -334,8 +333,8 @@ class AddVenueActivity : AppCompatActivity() {
                     put("Availability", availability)
                     put("userId", user.uid)
 
-                    if(additionalTextbox.text.toString().isNotEmpty())
-                        put("Notes",additionalTextbox.text.toString())
+                    if (additionalTextbox.text.toString().isNotEmpty())
+                        put("Notes", additionalTextbox.text.toString())
                 }
                 return true
             }
@@ -344,8 +343,10 @@ class AddVenueActivity : AppCompatActivity() {
     } // end of validateAndBind()
 
     private fun isOnline(): Boolean {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network = connectivityManager.activeNetwork // returns a 'Network' object representing the currently active network.
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network =
+            connectivityManager.activeNetwork // returns a 'Network' object representing the currently active network.
         // retrieve the network capabilities using the getNetworkCapabilities() method which returns a NetworkCapabilities object that provides information about the network.
         val capabilities = connectivityManager.getNetworkCapabilities(network)
         // NET_CAPABILITY_INTERNET capability, indicates that the device has an internet connection available or not
@@ -391,6 +392,31 @@ class AddVenueActivity : AppCompatActivity() {
 
         val alertDialog = builder.create()
         ebinding.buttonAction.setOnClickListener { alertDialog.dismiss() }
+
+        if (alertDialog.window != null) {
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+        }
+
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun showInfoDialog(message: String) {
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        val ebinding: InfoDialogBinding = InfoDialogBinding.bind(LayoutInflater.from(this)
+            .inflate(R.layout.info_dialog,
+                findViewById<ConstraintLayout>(R.id.layoutDialogContainer)))
+
+        builder.setView(ebinding.root)
+        ebinding.textTitle.text = resources.getString(R.string.info_title)
+        ebinding.textMessage.text = message
+        ebinding.buttonAction.text = resources.getString(R.string.i_understand)
+
+        val alertDialog = builder.create()
+        ebinding.buttonAction.setOnClickListener {
+            alertDialog.dismiss()
+            openFileChooser()
+        }
 
         if (alertDialog.window != null) {
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(0))
@@ -466,7 +492,9 @@ class AddVenueActivity : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         binding.goBack.setOnClickListener { finish() }
-        binding.dealerPhNo.setText(user.email.toString())
+
+        if (user.email.toString() != null)
+            binding.dealerPhNo.setText(user.email.toString())
     }
 
     private fun mailMobileValidate(text: String?): Boolean {
@@ -553,8 +581,8 @@ class AddVenueActivity : AppCompatActivity() {
                 put("Availability",
                     if (dayTimeAvailability.isChecked) "Yes" else "No")
 
-                if(additionalTextbox.text.toString().isNotEmpty())
-                    put("Notes",additionalTextbox.text.toString())
+                if (additionalTextbox.text.toString().isNotEmpty())
+                    put("Notes", additionalTextbox.text.toString())
             }
         } // end of binding.apply{}
     } // end of setHashmapForUpdate()

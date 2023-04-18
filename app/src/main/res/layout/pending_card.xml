@@ -52,8 +52,8 @@
             android:layout_above="@id/buttonLayer"
             android:layout_below="@id/pendingUsername"
             android:layout_marginBottom="5sp"
-            android:scrollbarStyle="outsideOverlay"
-            android:overScrollMode="never">
+            android:overScrollMode="never"
+            android:scrollbarStyle="outsideOverlay">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -76,8 +76,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/pendingVenuename"
-                    android:layout_marginStart="10sp"
                     android:layout_marginVertical="2sp"
+                    android:layout_marginStart="10sp"
                     android:text="LANDMARK"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -87,8 +87,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/pendingLandmark"
-                    android:layout_marginStart="10sp"
                     android:layout_marginVertical="2sp"
+                    android:layout_marginStart="10sp"
                     android:text="CITY"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -121,8 +121,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/pendingCity"
-                    android:layout_marginStart="10sp"
                     android:layout_marginVertical="2sp"
+                    android:layout_marginStart="10sp"
                     android:layout_toEndOf="@id/pendingStartDateText"
                     android:text="START DATE"
                     android:textColor="@color/black"
@@ -133,8 +133,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/pendingStartDate"
-                    android:layout_marginStart="10sp"
                     android:layout_marginVertical="2sp"
+                    android:layout_marginStart="10sp"
                     android:text="To"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -144,8 +144,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/pendingStartDate"
-                    android:layout_marginStart="10sp"
                     android:layout_marginVertical="2sp"
+                    android:layout_marginStart="10sp"
                     android:layout_toEndOf="@id/pendingEndDateText"
                     android:text="END DATE"
                     android:textColor="@color/black"
@@ -156,8 +156,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/pendingDurationText"
-                    android:layout_marginStart="10sp"
                     android:layout_marginVertical="2sp"
+                    android:layout_marginStart="10sp"
                     android:text="Client Contact"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -167,8 +167,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/pendingDurationText"
-                    android:layout_marginStart="10sp"
                     android:layout_marginVertical="2sp"
+                    android:layout_marginStart="10sp"
                     android:layout_toEndOf="@id/pendingUserMailText"
                     android:text="USER MAIL"
                     android:textColor="@color/black"

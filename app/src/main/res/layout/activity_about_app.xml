@@ -17,49 +17,50 @@
 
         <ImageButton
             android:id="@+id/goHomeBtn"
-            android:padding="10sp"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
             android:backgroundTint="@color/white"
+            android:padding="10sp"
             android:src="@drawable/ic_back_24" />
 
         <TextView
-            android:text="@string/app_name"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_toEndOf="@id/goHomeBtn"
             android:gravity="start|center"
             android:paddingStart="10sp"
+            android:text="@string/app_name"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_toEndOf="@id/goHomeBtn"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"/>
+            android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
     <TextView
-        android:layout_below="@id/toolBar"
         android:id="@+id/appDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolBar"
         android:layout_marginTop="5sp"
         android:padding="5sp"
-        android:textSize="16sp"
         android:text="@string/app_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:textSize="16sp" />
+
     <TextView
         android:id="@+id/devContact"
-        android:text="@string/devContact"
-        android:layout_marginTop="5sp"
-        android:textSize="16sp"
-        android:padding="5sp"
-        android:layout_below="@id/appDescription"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appDescription"
+        android:layout_marginTop="5sp"
+        android:padding="5sp"
+        android:text="@string/devContact"
+        android:textSize="16sp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/devMailBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/devContact"
-        android:layout_marginTop="5sp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="5sp"
         android:drawableStart="@drawable/ic_email"
         android:drawablePadding="6dp"
         android:text="Send Mail to Developer" />
