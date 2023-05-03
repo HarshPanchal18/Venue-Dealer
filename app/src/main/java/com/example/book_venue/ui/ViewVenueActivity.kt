@@ -82,6 +82,7 @@ class ViewVenueActivity : AppCompatActivity() {
                 || item.City.lowercase().contains(searchKeyword.lowercase())
                 || item.Types.lowercase().contains(searchKeyword.lowercase())
                 || item.State.lowercase().contains(searchKeyword.lowercase())
+                || item.Description.lowercase().contains(searchKeyword.lowercase())
             ) {
                 filteredList.add(item)
             }

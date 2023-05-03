@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.book_venue.databinding.ItemImageBinding
 import com.example.book_venue.databinding.VenueImageBinding
 
 class VenueImageAdapter(private val images: ArrayList<HashMap<String, String>>) :
@@ -16,7 +15,7 @@ class VenueImageAdapter(private val images: ArrayList<HashMap<String, String>>) 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val binding = ItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = VenueImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ImageViewHolder(binding.root)
     }
 

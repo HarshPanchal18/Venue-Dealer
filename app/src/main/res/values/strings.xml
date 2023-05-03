@@ -34,7 +34,7 @@
     <string name="logoutbtn">Logout</string>
 
     <string name="home_title">Hello,</string>
-    <string name="home_subtitle">Welcome to Home</string>
+    <string name="home_subtitle">Welcome to Dashboard</string>
 
     <string name="reset_title">Reset your password</string>
     <string name="reset_subtitle">

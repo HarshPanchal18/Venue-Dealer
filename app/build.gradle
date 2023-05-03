@@ -5,7 +5,7 @@ plugins {
     id 'com.google.gms.google-services'
     //id 'com.google.gms.google-services'
     // Add the Performance Monitoring Gradle plugin
-    id 'com.google.firebase.firebase-perf'
+    //id 'com.google.firebase.firebase-perf'
 }
 
 android {
@@ -71,7 +71,7 @@ dependencies {
     //implementation 'com.google.firebase:firebase-database:20.1.0'
     // Add the dependency for the Performance Monitoring library
     // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation 'com.google.firebase:firebase-perf-ktx'
+    //implementation 'com.google.firebase:firebase-perf-ktx'
 
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     // annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
